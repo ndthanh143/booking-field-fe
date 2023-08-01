@@ -1,5 +1,5 @@
-import { LoginInput, AuthResponse } from './auth.dto';
 import Cookies from 'js-cookie';
+import { LoginInput, AuthResponse } from './auth.dto';
 import axiosInstance from '@/utils/axiosConfig';
 
 export const postLogin = async (payload: LoginInput) => {
