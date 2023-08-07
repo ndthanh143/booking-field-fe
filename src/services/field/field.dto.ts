@@ -1,19 +1,18 @@
+import { Rating } from '../rating/rating.dto';
 import { SubField } from '../sub-field/sub-field.dto';
-import { BaseData, BasePaginationResponse, BaseResponse } from '@/common/dtos/base.dto';
+import { BaseData, BasePaginationResponse, BaseResponse, PaginationQuery } from '@/common/dtos/base.dto';
 
 export type FieldsResponse = BasePaginationResponse<Field>;
 export type FieldResponse = BaseResponse<Field>;
 export type SearchFieldResponse = BasePaginationResponse<SearchFieldData>;
 
 export type SearchFieldQuery = {
-  page?: number;
-  limit?: number;
   order?: string;
   keyword?: string;
   category?: number;
   minPrice?: number;
   maxPrice?: number;
-};
+} & PaginationQuery;
 
 export type Field = {
   name: string;
@@ -23,10 +22,9 @@ export type Field = {
   province: string;
   district: string;
   price: Price;
-  rating: number;
-  totalReview: number;
   subFields: SubField[];
   imageList: FieldImage[];
+  ratings: Rating[];
   openAt: string;
   closeAt: string;
   slug: string;

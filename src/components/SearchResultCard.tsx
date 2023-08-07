@@ -55,8 +55,8 @@ export const SearchResultCard = ({ data, ...props }: ISearchResultCardProps) => 
               <Box display='flex' justifyContent='space-between'>
                 <Box display='flex' alignItems='center' marginY={1}>
                   <StarIcon sx={{ color: 'primary.main', marginRight: 1 }} />
-                  {data.rating}
-                  <Typography marginX={1}>({data.totalReview} Đánh giá)</Typography>
+                  {/* {data.} */}
+                  <Typography marginX={1}>(Đánh giá)</Typography>
                 </Box>
                 <Typography variant='body1' color='primary.main'>
                   1 giờ

@@ -30,7 +30,14 @@ export const ImageLibrary = ({ imageList }: IImageLibraryProps) => {
       <Grid item xs={4} height='100%' position='relative' paddingLeft={2}>
         <Box width='100%' height='100%'>
           {imageList.slice(1, 4).map((item) => (
-            <Box component='img' width='100%' height='33%' sx={{ objectFit: 'cover' }} src={item.imagePath} />
+            <Box
+              component='img'
+              width='100%'
+              height='33%'
+              sx={{ objectFit: 'cover' }}
+              src={item.imagePath}
+              key={item.imagePath}
+            />
           ))}
         </Box>
         <Fab

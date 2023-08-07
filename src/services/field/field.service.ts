@@ -13,8 +13,8 @@ export const getFields = async (query: SearchFieldQuery) => {
   return data;
 };
 
-export const getField = async () => {
-  const { data } = await axiosInstance.get<FieldResponse>('/fields/1');
+export const getField = async (slug: string) => {
+  const { data } = await axiosInstance.get<FieldResponse>(`/fields/${slug}`);
 
   return data.data;
 };

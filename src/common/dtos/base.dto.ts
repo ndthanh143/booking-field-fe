@@ -23,3 +23,8 @@ export type BaseData = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type PaginationQuery = {
+  page?: number;
+  limit?: number;
+};
