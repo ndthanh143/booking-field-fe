@@ -11,14 +11,14 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ImageLibrary } from '@/components/ImageLibrary';
-import { getField } from '@/services/field/field.service';
-import { getRatingsByField } from '@/services/rating/rating.service';
-import { getSubFieldsByField } from '@/services/sub-field/sub-field.service';
+import { getPitchesByVenueDetail } from '@/services/pitch/pitch.service';
+import { getRatingsByVenue } from '@/services/rating/rating.service';
+import { getVenue } from '@/services/venue/venue.service';
 import convertToAMPM from '@/utils/convertTimestamp';
 import { formatDate } from '@/utils/fortmatDate';
 
 const RATING_PAGE_LIMIT = 6;
-export const FieldDetail = () => {
+export const VenueDetail = () => {
   const navigate = useNavigate();
 
   const [tab, setTab] = useState(0);
@@ -26,31 +26,31 @@ export const FieldDetail = () => {
 
   const { slug } = useParams();
 
-  const { data: field, mutate: fieldMutation } = useMutation({
-    mutationKey: ['field'],
-    mutationFn: (slug: string) => getField(slug),
+  const { data: venue, mutate: venueMutation } = useMutation({
+    mutationKey: ['venue'],
+    mutationFn: (slug: string) => getVenue(slug),
   });
 
-  const { data: subFields } = useQuery({
-    queryKey: ['subFields'],
+  const { data: pitches } = useQuery({
+    queryKey: ['pitches-venue'],
     queryFn: () => {
-      if (field) {
-        const { _id } = field;
-        return getSubFieldsByField(_id);
+      if (venue) {
+        const { _id } = venue;
+        return getPitchesByVenueDetail(_id);
       }
     },
-    enabled: !!field,
+    enabled: !!venue,
   });
 
   const { data: ratings } = useQuery({
     queryKey: ['ratings'],
     queryFn: () => {
-      if (field) {
-        const { _id } = field;
-        return getRatingsByField(_id, { page: ratingPage, limit: RATING_PAGE_LIMIT });
+      if (venue) {
+        const { _id } = venue;
+        return getRatingsByVenue(_id, { page: ratingPage, limit: RATING_PAGE_LIMIT });
       }
     },
-    enabled: !!field,
+    enabled: !!venue,
   });
 
   const center = useMemo(
@@ -75,15 +75,15 @@ export const FieldDetail = () => {
 
   useEffect(() => {
     if (slug) {
-      fieldMutation(slug);
+      venueMutation(slug);
     }
-  }, [slug, fieldMutation]);
+  }, [slug, venueMutation]);
 
   return (
-    field && (
+    venue && (
       <Box marginY={8}>
         <Box display='flex' justifyContent='space-between'>
-          <Typography variant='h3'>{field.name}</Typography>
+          <Typography variant='h3'>{venue.name}</Typography>
           <Box display='flex' alignItems='center'>
             <FavoriteBorderIcon sx={{ marginX: 2 }} />
             <Typography variant='body1'>Yêu thích</Typography>
@@ -92,14 +92,14 @@ export const FieldDetail = () => {
         <Box display='flex' justifyContent='space-between' marginY={1}>
           <Box display='flex' alignItems='center'>
             <PlaceIcon sx={{ marginX: 1, color: 'primary.main' }} />
-            <Typography variant='body1'>{field.address}</Typography>{' '}
+            <Typography variant='body1'>{venue.address}</Typography>{' '}
           </Box>
           <Box display='flex' alignItems='center'>
             <StarIcon sx={{ marginX: 1, color: 'primary.main' }} />
             <Typography variant='body1'>{rateAverage}/5</Typography>
           </Box>
         </Box>
-        <ImageLibrary imageList={field.imageList} />
+        <ImageLibrary imageList={venue.imageList} />
 
         <Box position='sticky' top={0} bgcolor='primary.contrastText' zIndex={1}>
           <Tabs value={tab} onChange={handleChange}>
@@ -111,8 +111,8 @@ export const FieldDetail = () => {
         </Box>
         <Box marginY={4}>
           <Typography variant='h4'>Danh sách sân</Typography>
-          {subFields &&
-            subFields.map((item) => (
+          {pitches &&
+            pitches.map((item) => (
               <Grid
                 container
                 paddingY={4}
@@ -123,7 +123,7 @@ export const FieldDetail = () => {
                     borderBottom: 0,
                   },
                 }}
-                key={item.category_id}
+                key={item.pitchCategory_id}
               >
                 <Grid item md={3}>
                   <Box
@@ -181,7 +181,11 @@ export const FieldDetail = () => {
                   <Typography variant='h5' fontWeight={500} marginY={2}>
                     {`${item.price}đ`}
                   </Typography>
-                  <Button variant='contained' sx={{ marginY: 2 }} onClick={() => navigate(`/booking/${field.slug}`)}>
+                  <Button
+                    variant='contained'
+                    sx={{ marginY: 2 }}
+                    onClick={() => navigate(`/booking/${venue.slug}?pitchCategory=${item.pitchCategory_id}`)}
+                  >
                     Đặt sân
                   </Button>
                 </Grid>
@@ -294,13 +298,13 @@ export const FieldDetail = () => {
               <Typography variant='h6' fontWeight={500}>
                 Mở cửa
               </Typography>
-              <Typography variant='body1'>{convertToAMPM(field.openAt)}</Typography>
+              <Typography variant='body1'>{convertToAMPM(venue.openAt)}</Typography>
             </Box>
             <Box textAlign='center'>
               <Typography variant='h6' fontWeight={500}>
                 Đóng cửa
               </Typography>
-              <Typography variant='body1'>{convertToAMPM(field.closeAt)}</Typography>
+              <Typography variant='body1'>{convertToAMPM(venue.closeAt)}</Typography>
             </Box>
             <Box textAlign='center'>
               <Typography variant='h6' fontWeight={500}>

@@ -1,4 +1,4 @@
 export interface IStripePaymentPayload {
-  paymentMethodId: string;
+  currency: string;
   amount: number;
 }

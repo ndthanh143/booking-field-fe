@@ -1,23 +1,23 @@
 import { Container } from '@mui/material';
-import { PropsWithChildren } from 'react';
+import { Outlet } from 'react-router-dom';
 import { Footer } from './Footer';
 import { Header } from './Header';
 
-export const MainLayout = ({ children }: PropsWithChildren) => {
+export const MainLayout = () => {
   return (
     <Container maxWidth='xl'>
       <Header />
-      {children}
+      <Outlet />
       <Footer />
     </Container>
   );
 };
 
-export const SecondaryLayout = ({ children }: PropsWithChildren) => {
+export const SecondaryLayout = () => {
   return (
     <Container maxWidth='xl'>
       <Header />
-      {children}
+      <Outlet />
     </Container>
   );
 };

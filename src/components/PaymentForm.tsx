@@ -8,7 +8,12 @@ export default function PaymentForm() {
   return (
     <FormControl onSubmit={handleSubmit} sx={{ width: '100%' }}>
       <PaymentElement />
-      <Button variant='contained' disabled={isProcessing || !stripe || !elements} sx={{ marginY: 2 }}>
+      <Button
+        variant='contained'
+        disabled={isProcessing || !stripe || !elements}
+        sx={{ marginY: 2 }}
+        onClick={handleSubmit}
+      >
         Xác nhận thanh toán
       </Button>
       {message && <Typography>{message}</Typography>}

@@ -2,7 +2,7 @@ import { Box, Card, CardContent, CardMedia, ImageList, Typography } from '@mui/m
 import { useQuery } from '@tanstack/react-query';
 import { SearchBox } from '@/components/SearchBox';
 import { Slider } from '@/components/Slider';
-import { getAllCategories } from '@/services/category/category.service';
+import { getAllCategories } from '@/services/pitch_category/pitch-category.service';
 
 export const Home = () => {
   const { data: categories } = useQuery({ queryKey: ['categories'], queryFn: getAllCategories, staleTime: 1000 });

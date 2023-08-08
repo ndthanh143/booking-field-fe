@@ -19,7 +19,7 @@ export type BasePaginationResponse<T> = {
 };
 
 export type BaseData = {
-  _id: string;
+  _id: number;
   createdAt: Date;
   updatedAt: Date;
 };

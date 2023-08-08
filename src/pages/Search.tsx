@@ -10,15 +10,15 @@ import { SearchFilter } from '@/components/SearchFilter';
 import { SearchResultCard } from '@/components/SearchResultCard';
 import { SearchSort } from '@/components/SearchSort';
 import { useBoolean } from '@/hooks';
-import { getAllCategories } from '@/services/category/category.service';
-import { searchFields } from '@/services/field/field.service';
+import { getAllCategories } from '@/services/pitch_category/pitch-category.service';
+import { searchVenues } from '@/services/venue/venue.service';
 
 const STALE_TIME = 5 * 1000;
 const PAGE_LIMIT = 10;
 export const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const categoryParams = searchParams.get('category') || '1';
+  const categoryParams = searchParams.get('pitchCategory') || '1';
   const locationParams = searchParams.get('location') || 'Hồ Chí Minh';
   const sortParams = searchParams.get('sort') || 'ASC';
   const minPrice = Number(searchParams.get('minPrice')) || DEFAULT_MIN_PRICE;
@@ -29,16 +29,20 @@ export const Search = () => {
 
   const [page, setPage] = useState(1);
 
-  const { data: categories } = useQuery({ queryKey: ['categories'], queryFn: getAllCategories, staleTime: STALE_TIME });
-  const { data: fields, refetch } = useQuery({
-    queryKey: ['search-fields'],
+  const { data: pitchCategories } = useQuery({
+    queryKey: ['pitchCategories'],
+    queryFn: getAllCategories,
+    staleTime: STALE_TIME,
+  });
+  const { data: venues, refetch } = useQuery({
+    queryKey: ['search-venues'],
     queryFn: () =>
-      searchFields({
+      searchVenues({
         keyword: locationParams,
         page,
         limit: PAGE_LIMIT,
         order: sortParams,
-        category: Number(categoryParams),
+        pitchCategory: Number(categoryParams),
         minPrice,
         maxPrice,
       }),
@@ -65,12 +69,12 @@ export const Search = () => {
       <Divider sx={{ marginY: 2 }} />
       <Grid container display='flex' justifyContent='space-between' marginY={2}>
         <Grid item xs={4} display='flex' gap={2}>
-          {categories?.data.map((category) => (
+          {pitchCategories?.data.map((category) => (
             <Button
               variant={categoryParams == category._id ? 'contained' : 'outlined'}
               key={category._id}
               onClick={() => {
-                searchParams.set('category', category._id);
+                searchParams.set('pitchCategory', category._id);
                 setSearchParams((prev) => [...prev]);
               }}
             >
@@ -90,18 +94,18 @@ export const Search = () => {
       </Grid>
       <Grid container borderTop={1} paddingY={2} bgcolor='footer.light'>
         <Grid item md={7} padding={2} alignItems='center' sx={{ overflowY: 'scroll' }} height='100vh'>
-          {fields?.data && fields.data.length > 0 ? (
+          {venues?.data && venues.data.length > 0 ? (
             <>
-              <Typography variant='body2'>Có {fields.data.length} sân bóng phù hợp dành cho bạn</Typography>
+              <Typography variant='body2'>Có {venues.data.length} sân bóng phù hợp dành cho bạn</Typography>
               <Box>
-                {fields.data.map((item) => (
+                {venues.data.map((item) => (
                   <SearchResultCard data={item} key={item._id} />
                 ))}
               </Box>
-              {fields.pageInfo.pageCount > 1 && (
+              {venues.pageInfo.pageCount > 1 && (
                 <Pagination
                   sx={{ display: 'flex', justifyContent: 'center' }}
-                  count={fields.pageInfo.pageCount}
+                  count={venues.pageInfo.pageCount}
                   page={page}
                   onChange={(_, value) => setPage(value)}
                 />
@@ -128,7 +132,7 @@ export const Search = () => {
         <Grid item md={5}>
           {isLoaded && (
             <GoogleMap mapContainerStyle={{ width: '100%', height: '100vh' }} center={center} zoom={10}>
-              {fields?.data.map((item) => (
+              {venues?.data.map((item) => (
                 <Marker position={{ lat: item.location.lat, lng: item.location.lng }} key={item._id} />
               ))}
             </GoogleMap>
