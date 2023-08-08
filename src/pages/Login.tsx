@@ -1,5 +1,3 @@
-import { useAuth } from '@/hooks/useAuth';
-import { LoginInput } from '@/services/auth/auth.dto';
 import { yupResolver } from '@hookform/resolvers/yup';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { LoadingButton } from '@mui/lab';
@@ -8,6 +6,8 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
+import { useAuth } from '@/hooks/useAuth';
+import { LoginInput } from '@/services/auth/auth.dto';
 
 const schema = object({
   username: string().required(),

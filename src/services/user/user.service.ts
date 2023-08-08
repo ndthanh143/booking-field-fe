@@ -1,6 +1,6 @@
-import { SignInPayload } from './user.dto';
-import { AuthResponse } from '../auth/auth.dto';
 import Cookies from 'js-cookie';
+import { AuthResponse } from '../auth/auth.dto';
+import { SignInPayload } from './user.dto';
 import axiosInstance from '@/utils/axiosConfig';
 
 export const postRegister = async (payload: SignInPayload) => {

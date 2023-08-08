@@ -1,6 +1,3 @@
-import { useAuth } from '@/hooks/useAuth';
-import { SignInPayload } from '@/services/user/user.dto';
-import { postRegister } from '@/services/user/user.service';
 import { yupResolver } from '@hookform/resolvers/yup';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {
@@ -20,6 +17,9 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { object, ref, string } from 'yup';
+import { useAuth } from '@/hooks/useAuth';
+import { SignInPayload } from '@/services/user/user.dto';
+import { postRegister } from '@/services/user/user.service';
 
 type RegisterInput = SignInPayload & {
   confirmPassword: string;
@@ -118,7 +118,7 @@ export const Register = () => {
                   <TextField {...register('lastName')} required fullWidth id='lastName' label='Last Name' />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField {...register('username')} required fullWidth id='username' label='Username' autoFocus />
+                  <TextField {...register('username')} required fullWidth id='username' label='Username' />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
