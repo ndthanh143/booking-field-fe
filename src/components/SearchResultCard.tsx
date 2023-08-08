@@ -3,11 +3,11 @@ import StarIcon from '@mui/icons-material/Star';
 import { Box, Grid, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link } from './Link';
-import { SearchFieldData } from '@/services/field/field.dto';
+import { SearchVenueData } from '@/services/venue/venue.dto';
 import convertToAMPM from '@/utils/convertTimestamp';
 
 export interface ISearchResultCardProps {
-  data: SearchFieldData;
+  data: SearchVenueData;
 }
 
 export const SearchResultCard = ({ data, ...props }: ISearchResultCardProps) => {
@@ -21,7 +21,7 @@ export const SearchResultCard = ({ data, ...props }: ISearchResultCardProps) => 
         duration: 0.3,
       }}
     >
-      <Link href={`/field/${data.slug}`}>
+      <Link href={`/venue/${data.slug}`}>
         <Grid container bgcolor='primary.contrastText' borderRadius={2} padding={2} marginY={2} {...props}>
           <Grid item md={3}>
             <Link href='/'>
@@ -55,8 +55,8 @@ export const SearchResultCard = ({ data, ...props }: ISearchResultCardProps) => 
               <Box display='flex' justifyContent='space-between'>
                 <Box display='flex' alignItems='center' marginY={1}>
                   <StarIcon sx={{ color: 'primary.main', marginRight: 1 }} />
-                  {/* {data.} */}
-                  <Typography marginX={1}>(Đánh giá)</Typography>
+                  {data.rating}
+                  <Typography marginX={1}>({data.totalReview} Đánh giá)</Typography>
                 </Box>
                 <Typography variant='body1' color='primary.main'>
                   1 giờ

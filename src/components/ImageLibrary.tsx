@@ -5,10 +5,10 @@ import { Navigation, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperType } from 'swiper/types';
 import { useBoolean } from '@/hooks';
-import { FieldImage } from '@/services/field/field.dto';
+import { VenueImage } from '@/services/venue/venue.dto';
 
 export interface IImageLibraryProps {
-  imageList: FieldImage[];
+  imageList: VenueImage[];
 }
 
 export const ImageLibrary = ({ imageList }: IImageLibraryProps) => {
@@ -21,7 +21,7 @@ export const ImageLibrary = ({ imageList }: IImageLibraryProps) => {
         <Box
           component='img'
           src={imageList[0].imagePath}
-          // alt={imageList[0].title}
+          alt={imageList[0].imagePath}
           width='100%'
           height='100%'
           sx={{ objectFit: 'cover' }}

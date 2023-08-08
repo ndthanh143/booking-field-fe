@@ -7,51 +7,37 @@ import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import StarIcon from '@mui/icons-material/Star';
 import { Avatar, Box, Button, Grid, Rating, Tab, Tabs, Typography } from '@mui/material';
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { SyntheticEvent, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { ImageLibrary } from '@/components/ImageLibrary';
-import { getField } from '@/services/field/field.service';
-import { getRatingsByField } from '@/services/rating/rating.service';
-import { getSubFieldsByField } from '@/services/sub-field/sub-field.service';
+import { getPitchesByVenue } from '@/services/pitch/pitch.service';
+import { getVenue } from '@/services/venue/venue.service';
 import convertToAMPM from '@/utils/convertTimestamp';
-import { formatDate } from '@/utils/fortmatDate';
 
-const RATING_PAGE_LIMIT = 6;
-export const FieldDetail = () => {
-  const navigate = useNavigate();
+export const VenueDetail = () => {
+  const { slug } = useParams();
+  const { data: venue } = useQuery({
+    queryKey: ['venue'],
+    queryFn: () => {
+      if (slug) {
+        return getVenue(slug);
+      }
+    },
+    enabled: !!slug,
+  });
+  const { data: pitches } = useQuery({
+    queryKey: ['pitches'],
+    queryFn: () => {
+      if (venue) {
+        const { _id } = venue;
+        return getPitchesByVenue(_id);
+      }
+    },
+    enabled: !!venue,
+  });
 
   const [tab, setTab] = useState(0);
-  const [ratingPage, setRatingPage] = useState(1);
-
-  const { slug } = useParams();
-
-  const { data: field, mutate: fieldMutation } = useMutation({
-    mutationKey: ['field'],
-    mutationFn: (slug: string) => getField(slug),
-  });
-
-  const { data: subFields } = useQuery({
-    queryKey: ['subFields'],
-    queryFn: () => {
-      if (field) {
-        const { _id } = field;
-        return getSubFieldsByField(_id);
-      }
-    },
-    enabled: !!field,
-  });
-
-  const { data: ratings } = useQuery({
-    queryKey: ['ratings'],
-    queryFn: () => {
-      if (field) {
-        const { _id } = field;
-        return getRatingsByField(_id, { page: ratingPage, limit: RATING_PAGE_LIMIT });
-      }
-    },
-    enabled: !!field,
-  });
 
   const center = useMemo(
     () => ({
@@ -69,21 +55,11 @@ export const FieldDetail = () => {
     setTab(newValue);
   };
 
-  const rateAverage = ratings
-    ? (ratings.data.reduce((acc, cur) => acc + Number(cur.rate), 0) / ratings.data.length).toFixed(1)
-    : 0;
-
-  useEffect(() => {
-    if (slug) {
-      fieldMutation(slug);
-    }
-  }, [slug, fieldMutation]);
-
   return (
-    field && (
+    venue && (
       <Box marginY={8}>
         <Box display='flex' justifyContent='space-between'>
-          <Typography variant='h3'>{field.name}</Typography>
+          <Typography variant='h3'>{venue.name}</Typography>
           <Box display='flex' alignItems='center'>
             <FavoriteBorderIcon sx={{ marginX: 2 }} />
             <Typography variant='body1'>Yêu thích</Typography>
@@ -92,14 +68,14 @@ export const FieldDetail = () => {
         <Box display='flex' justifyContent='space-between' marginY={1}>
           <Box display='flex' alignItems='center'>
             <PlaceIcon sx={{ marginX: 1, color: 'primary.main' }} />
-            <Typography variant='body1'>{field.address}</Typography>{' '}
+            <Typography variant='body1'>{venue.address}</Typography>{' '}
           </Box>
           <Box display='flex' alignItems='center'>
             <StarIcon sx={{ marginX: 1, color: 'primary.main' }} />
-            <Typography variant='body1'>{rateAverage}/5</Typography>
+            <Typography variant='body1'>{venue.rating}/5</Typography>
           </Box>
         </Box>
-        <ImageLibrary imageList={field.imageList} />
+        {venue.imageList.length > 0 && <ImageLibrary imageList={venue.imageList} />}
 
         <Box position='sticky' top={0} bgcolor='primary.contrastText' zIndex={1}>
           <Tabs value={tab} onChange={handleChange}>
@@ -111,8 +87,8 @@ export const FieldDetail = () => {
         </Box>
         <Box marginY={4}>
           <Typography variant='h4'>Danh sách sân</Typography>
-          {subFields &&
-            subFields.map((item) => (
+          {pitches &&
+            pitches.map((item) => (
               <Grid
                 container
                 paddingY={4}
@@ -123,7 +99,6 @@ export const FieldDetail = () => {
                     borderBottom: 0,
                   },
                 }}
-                key={item.category_id}
               >
                 <Grid item md={3}>
                   <Box
@@ -181,99 +156,85 @@ export const FieldDetail = () => {
                   <Typography variant='h5' fontWeight={500} marginY={2}>
                     {`${item.price}đ`}
                   </Typography>
-                  <Button variant='contained' sx={{ marginY: 2 }} onClick={() => navigate(`/booking/${field.slug}`)}>
+                  <Button variant='contained' sx={{ marginY: 2 }}>
                     Đặt sân
                   </Button>
                 </Grid>
               </Grid>
             ))}
         </Box>
-
         <Box marginY={4}>
           <Typography variant='h4'>Đánh giá</Typography>
-          {ratings && ratings.data.length > 0 ? (
-            <>
-              <Box display='flex' alignItems='center' marginY={2}>
-                <Box display='flex' alignItems='center'>
-                  <StarIcon sx={{ fontSize: 44, color: 'primary.main' }} />
-                  <Typography variant='h3' fontWeight={500}>
-                    {rateAverage}
-                  </Typography>
-                </Box>
-                <Typography fontWeight={500} variant='h6'>
-                  /5
-                </Typography>
+          <Box display='flex' alignItems='center' marginY={2}>
+            <Box display='flex' alignItems='center'>
+              <StarIcon sx={{ fontSize: 44, color: 'primary.main' }} />
+              <Typography variant='h3' fontWeight={500}>
+                {venue.rating}
+              </Typography>
+            </Box>
+            <Typography fontWeight={500} variant='h6'>
+              /5
+            </Typography>
 
-                <Box display='flex' alignItems='center' marginX={2}>
-                  <FiberManualRecordIcon sx={{ fontSize: 8 }} />
-                  <Typography variant='h5' marginX={1}>
-                    {ratings.data.length} Đánh giá
-                  </Typography>
-                </Box>
-              </Box>
-              <Grid container spacing={6}>
-                {ratings.data.map((rating) => (
-                  <Grid item xs={12} md={6}>
-                    <Box display='flex' justifyContent='space-between' alignItems='center'>
-                      <Box display='flex' alignItems='center'>
-                        <Avatar sx={{ bgcolor: 'primary.main', marginRight: 2, width: 56, height: 56 }}>
-                          {rating.lastName.charAt(0)}
-                        </Avatar>
-                        <Box>
-                          <Typography variant='body1' sx={{ opacity: 0.6 }}>
-                            {formatDate(rating.createdAt, 'L')}
-                          </Typography>
-                          <Box display='flex'>
-                            <Typography variant='body1'>Khách hàng:</Typography>
-                            <Typography variant='body1' fontWeight={500} marginX={1}>
-                              {`${rating.lastName} ${rating.firstName}`}
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </Box>
-                      <Box>
-                        <Box display='flex' alignItems='center'>
-                          <Typography variant='body1' marginX={1}>
-                            Loại:
-                          </Typography>
-                          <Typography fontWeight={500}>{rating.category_name}</Typography>
-                        </Box>
-                        <Box display='flex' alignItems='center'>
-                          <Typography variant='body1' marginX={1}>
-                            Đánh giá
-                          </Typography>
-                          <Rating
-                            name='simple-controlled'
-                            value={rating.rate}
-                            readOnly
-                            sx={{ color: 'primary.main' }}
-                          />
-                        </Box>
+            <Box display='flex' alignItems='center' marginX={2}>
+              <FiberManualRecordIcon sx={{ fontSize: 8 }} />
+              <Typography variant='h5' marginX={1}>
+                {venue.totalReview} Đánh giá
+              </Typography>
+            </Box>
+          </Box>
+          <Grid container spacing={6}>
+            {Array.from(Array(4).keys()).map(() => (
+              <Grid item xs={12} md={6}>
+                <Box display='flex' justifyContent='space-between' alignItems='center'>
+                  <Box display='flex' alignItems='center'>
+                    <Avatar sx={{ bgcolor: 'primary.main', marginRight: 2, width: 56, height: 56 }}>A</Avatar>
+                    <Box>
+                      <Typography variant='body1' sx={{ opacity: 0.6 }}>
+                        01/07/2023
+                      </Typography>
+                      <Box display='flex'>
+                        <Typography variant='body1'>Khách hàng:</Typography>
+                        <Typography variant='body1' fontWeight={500} marginX={1}>
+                          ALex
+                        </Typography>
                       </Box>
                     </Box>
-                    <Typography marginY={1}>{rating.content}</Typography>
-                  </Grid>
-                ))}
-                <Grid
-                  item
-                  display='flex'
-                  alignItems='center'
-                  sx={{
-                    cursor: 'pointer',
-                    ':hover': {
-                      color: 'primary.light',
-                    },
-                  }}
-                  xs={12}
-                >
-                  <Typography sx={{ textDecoration: 1 }}>Hiển thị thêm</Typography>
-                  <KeyboardArrowRightIcon />
-                </Grid>
+                  </Box>
+                  <Box>
+                    <Box display='flex' alignItems='center'>
+                      <Typography variant='body1' marginX={1}>
+                        Loại sân:
+                      </Typography>
+                      <Typography fontWeight={500}>5</Typography>
+                    </Box>
+                    <Box display='flex' alignItems='center'>
+                      <Typography variant='body1' marginX={1}>
+                        Đánh giá
+                      </Typography>
+                      <Rating name='simple-controlled' value={2} readOnly sx={{ color: 'primary.main' }} />
+                    </Box>
+                  </Box>
+                </Box>
+                <Typography marginY={1}>Rất là ok luôn, mốt sẽ ủng hộ</Typography>
               </Grid>
-            </>
-          ) : (
-            <Box marginY={2}>Chưa có đánh giá nào</Box>
-          )}
+            ))}
+            <Grid
+              item
+              display='flex'
+              alignItems='center'
+              sx={{
+                cursor: 'pointer',
+                ':hover': {
+                  color: 'primary.light',
+                },
+              }}
+              xs={12}
+            >
+              <Typography sx={{ textDecoration: 1 }}>Hiển thị thêm</Typography>
+              <KeyboardArrowRightIcon />
+            </Grid>
+          </Grid>
         </Box>
 
         <Box marginY={4}>
@@ -294,13 +255,13 @@ export const FieldDetail = () => {
               <Typography variant='h6' fontWeight={500}>
                 Mở cửa
               </Typography>
-              <Typography variant='body1'>{convertToAMPM(field.openAt)}</Typography>
+              <Typography variant='body1'>{convertToAMPM(venue.openAt)}</Typography>
             </Box>
             <Box textAlign='center'>
               <Typography variant='h6' fontWeight={500}>
                 Đóng cửa
               </Typography>
-              <Typography variant='body1'>{convertToAMPM(field.closeAt)}</Typography>
+              <Typography variant='body1'>{convertToAMPM(venue.closeAt)}</Typography>
             </Box>
             <Box textAlign='center'>
               <Typography variant='h6' fontWeight={500}>
