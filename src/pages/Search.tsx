@@ -10,8 +10,8 @@ import { SearchFilter } from '@/components/SearchFilter';
 import { SearchResultCard } from '@/components/SearchResultCard';
 import { SearchSort } from '@/components/SearchSort';
 import { useBoolean } from '@/hooks';
+import { getPitches } from '@/services/pitch/pitch.service';
 import { getAllCategories } from '@/services/pitch_category/pitch-category.service';
-import { searchVenues } from '@/services/venue/venue.service';
 
 const STALE_TIME = 5 * 1000;
 const PAGE_LIMIT = 10;
@@ -34,10 +34,10 @@ export const Search = () => {
     queryFn: getAllCategories,
     staleTime: STALE_TIME,
   });
-  const { data: venues, refetch } = useQuery({
-    queryKey: ['search-venues'],
+  const { data: pitches, refetch } = useQuery({
+    queryKey: ['search-pitches'],
     queryFn: () =>
-      searchVenues({
+      getPitches({
         keyword: locationParams,
         page,
         limit: PAGE_LIMIT,
@@ -94,18 +94,18 @@ export const Search = () => {
       </Grid>
       <Grid container borderTop={1} paddingY={2} bgcolor='footer.light'>
         <Grid item md={7} padding={2} alignItems='center' sx={{ overflowY: 'scroll' }} height='100vh'>
-          {venues?.data && venues.data.length > 0 ? (
+          {pitches?.data && pitches.data.length > 0 ? (
             <>
-              <Typography variant='body2'>Có {venues.data.length} sân bóng phù hợp dành cho bạn</Typography>
+              <Typography variant='body2'>Có {pitches.data.length} sân bóng phù hợp dành cho bạn</Typography>
               <Box>
-                {venues.data.map((item) => (
+                {pitches.data.map((item) => (
                   <SearchResultCard data={item} key={item._id} />
                 ))}
               </Box>
-              {venues.pageInfo.pageCount > 1 && (
+              {pitches.pageInfo.pageCount > 1 && (
                 <Pagination
                   sx={{ display: 'flex', justifyContent: 'center' }}
-                  count={venues.pageInfo.pageCount}
+                  count={pitches.pageInfo.pageCount}
                   page={page}
                   onChange={(_, value) => setPage(value)}
                 />
@@ -132,8 +132,8 @@ export const Search = () => {
         <Grid item md={5}>
           {isLoaded && (
             <GoogleMap mapContainerStyle={{ width: '100%', height: '100vh' }} center={center} zoom={10}>
-              {venues?.data.map((item) => (
-                <Marker position={{ lat: item.location.lat, lng: item.location.lng }} key={item._id} />
+              {pitches?.data.map((item) => (
+                <Marker position={{ lat: item.venue.location.lat, lng: item.venue.location.lng }} key={item._id} />
               ))}
             </GoogleMap>
           )}

@@ -1,14 +1,14 @@
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useQuery } from '@tanstack/react-query';
-import PaymentForm from './PaymentForm';
+import PaymentForm, { IPaymentFormProps } from './PaymentForm';
 import { getClientSecret } from '@/services/stripe/stripe.service';
 
-export interface ISripeContainerProps {
+export interface ISripeContainerProps extends IPaymentFormProps {
   currency: string;
   amount: number;
 }
-export default function StripeContainer({ currency, amount }: ISripeContainerProps) {
+export default function StripeContainer({ currency, amount, onSubmit }: ISripeContainerProps) {
   const STRIPE_PUBLIC_KEY =
     'pk_test_51NcKR1LDtYPH3BFaBLNrHLRTIzM59sjFue1gM6PftXHg3ySDAEBMdQdez1e0WtDIcNPGMKL6bEJK8FYRIG7dyExd00tVWZhaOq';
 
@@ -23,7 +23,7 @@ export default function StripeContainer({ currency, amount }: ISripeContainerPro
     <>
       {clientSecret && stripePromise && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
-          <PaymentForm />
+          <PaymentForm onSubmit={onSubmit} />
         </Elements>
       )}
     </>

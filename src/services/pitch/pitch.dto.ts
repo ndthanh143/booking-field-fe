@@ -1,6 +1,6 @@
 import { PitchCategory } from '../pitch_category/pitch-category.dto';
 import { Venue } from '../venue/venue.dto';
-import { BaseData, BasePaginationResponse, BaseResponse } from '@/common/dtos/base.dto';
+import { BaseData, BasePaginationResponse, BaseResponse, PaginationQuery } from '@/common/dtos/base.dto';
 
 export type PitchesResponse = BasePaginationResponse<Pitch>;
 export type GetPitchesByVenueResponse = BaseResponse<Pitch[]>;
@@ -25,3 +25,11 @@ export type GetPitchByVenueDetailData = {
 export type GetPitchesByVenueQuery = {
   pitchCategoryId?: number;
 };
+
+export type SearchPitchesQuery = {
+  order?: string;
+  keyword?: string;
+  pitchCategory?: number;
+  minPrice?: number;
+  maxPrice?: number;
+} & PaginationQuery;

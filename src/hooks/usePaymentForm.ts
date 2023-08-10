@@ -20,7 +20,6 @@ export const usePaymentForm = () => {
     const { error: stripeError } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        // Make sure to change this to your payment completion page
         return_url: `${window.location.origin}/booking/success`,
       },
     });

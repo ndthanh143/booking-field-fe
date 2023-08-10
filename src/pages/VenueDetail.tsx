@@ -8,6 +8,7 @@ import StarIcon from '@mui/icons-material/Star';
 import { Avatar, Box, Button, Grid, Rating, Tab, Tabs, Typography } from '@mui/material';
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ImageLibrary } from '@/components/ImageLibrary';
@@ -15,7 +16,6 @@ import { getPitchesByVenueDetail } from '@/services/pitch/pitch.service';
 import { getRatingsByVenue } from '@/services/rating/rating.service';
 import { getVenue } from '@/services/venue/venue.service';
 import convertToAMPM from '@/utils/convertTimestamp';
-import { formatDate } from '@/utils/fortmatDate';
 
 const RATING_PAGE_LIMIT = 6;
 export const VenueDetail = () => {
@@ -99,7 +99,7 @@ export const VenueDetail = () => {
             <Typography variant='body1'>{rateAverage}/5</Typography>
           </Box>
         </Box>
-        <ImageLibrary imageList={venue.imageList} />
+        {venue.imageList && venue.imageList.length > 0 && <ImageLibrary imageList={venue.imageList} />}
 
         <Box position='sticky' top={0} bgcolor='primary.contrastText' zIndex={1}>
           <Tabs value={tab} onChange={handleChange}>
@@ -225,7 +225,7 @@ export const VenueDetail = () => {
                         </Avatar>
                         <Box>
                           <Typography variant='body1' sx={{ opacity: 0.6 }}>
-                            {formatDate(rating.createdAt, 'L')}
+                            {dayjs(rating.createdAt).format('L')}
                           </Typography>
                           <Box display='flex'>
                             <Typography variant='body1'>Khách hàng:</Typography>

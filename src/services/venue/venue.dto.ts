@@ -6,14 +6,6 @@ export type VenuesResponse = BasePaginationResponse<Venue>;
 export type VenueResponse = BaseResponse<Venue>;
 export type SearchVenueResponse = BasePaginationResponse<SearchVenueData>;
 
-export type SearchVenueQuery = {
-  order?: string;
-  keyword?: string;
-  pitchCategory?: number;
-  minPrice?: number;
-  maxPrice?: number;
-} & PaginationQuery;
-
 export type Venue = {
   name: string;
   description: string;
@@ -47,4 +39,8 @@ export type SearchVenueData = Venue & {
 
 export type VenueImage = {
   imagePath: string;
+};
+
+export type VenueQuery = {
+  keyword: string;
 };

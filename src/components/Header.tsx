@@ -28,7 +28,7 @@ export const Header = () => {
             src='/logo.png'
             onClick={() => navigate('/')}
           />
-          <Button variant='text' onClick={openCategory}>
+          <Button variant='text' onClick={openCategory} color='secondary'>
             Danh mục sân bóng
             <KeyboardArrowDownIcon />
           </Button>
@@ -50,8 +50,12 @@ export const Header = () => {
       </Grid>
       <Grid item xs={6} md={3}>
         <Box display='flex' justifyContent='space-between' alignItems='center'>
-          <Button variant='text'>Tiếng Việt</Button>
-          <Button variant='outlined'>Dành cho đối tác</Button>
+          <Button variant='text' color='secondary'>
+            Tiếng Việt
+          </Button>
+          <Button variant='outlined' color='secondary'>
+            Dành cho đối tác
+          </Button>
           <Button variant='contained' onClick={openMenu}>
             <Person sx={{ opacity: 0.5 }} />
             <MenuIcon />

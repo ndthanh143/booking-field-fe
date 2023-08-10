@@ -1,6 +1,6 @@
-import { BaseData, BaseResponse } from '@/common/dtos/base.dto';
+import { BaseData, BasePaginationResponse } from '@/common/dtos/base.dto';
 
-export type BookingsResponse = BaseResponse<Booking[]>;
+export type BookingsResponse = BasePaginationResponse<Booking>;
 
 export type Booking = {
   startTime: Date;
@@ -12,4 +12,10 @@ export type Booking = {
 export type GetBookingOfPitchByDayDto = {
   pitchId: number;
   date: string;
+};
+
+export type CreateBookingDto = {
+  startTime: Date;
+  endTime: Date;
+  pitch: number;
 };
