@@ -3,11 +3,10 @@ import { Box, Slider, TextField } from '@mui/material';
 export interface IPriceFilterProps {
   priceRange: number[];
   onChange: (data: number[]) => void;
+  minDistance: number;
 }
 
-export const PriceFilter = ({ priceRange, onChange }: IPriceFilterProps) => {
-  const minDistance = 100000;
-
+export const PriceFilter = ({ priceRange, onChange, minDistance }: IPriceFilterProps) => {
   const handlePriceRangeChange = (_: Event, newValue: number | number[], activeThumb: number) => {
     if (!Array.isArray(newValue)) {
       return;
@@ -26,7 +25,7 @@ export const PriceFilter = ({ priceRange, onChange }: IPriceFilterProps) => {
     }
   };
 
-  const valuetext = (value: number) => {
+  const valueText = (value: number) => {
     return `${value}đ`;
   };
 
@@ -36,7 +35,7 @@ export const PriceFilter = ({ priceRange, onChange }: IPriceFilterProps) => {
         value={priceRange}
         onChange={handlePriceRangeChange}
         valueLabelDisplay='auto'
-        getAriaValueText={valuetext}
+        getAriaValueText={valueText}
         max={1000000}
         min={0}
         step={10000}

@@ -1,4 +1,4 @@
 export enum OrderEnum {
-  Desc = 'desc',
-  Asc = 'asc',
+  Desc = 'DESC',
+  Asc = 'ASC',
 }

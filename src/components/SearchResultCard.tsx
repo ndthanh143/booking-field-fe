@@ -3,11 +3,11 @@ import StarIcon from '@mui/icons-material/Star';
 import { Box, Grid, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link } from './Link';
-import { SearchVenueData } from '@/services/venue/venue.dto';
+import { Pitch } from '@/services/pitch/pitch.dto';
 import convertToAMPM from '@/utils/convertTimestamp';
 
 export interface ISearchResultCardProps {
-  data: SearchVenueData;
+  data: Pitch;
 }
 
 export const SearchResultCard = ({ data, ...props }: ISearchResultCardProps) => {
@@ -21,7 +21,7 @@ export const SearchResultCard = ({ data, ...props }: ISearchResultCardProps) => 
         duration: 0.3,
       }}
     >
-      <Link href={`/venue/${data.slug}`}>
+      <Link href={`/venue/${data.venue.slug}`}>
         <Grid container bgcolor='primary.contrastText' borderRadius={2} padding={2} marginY={2} {...props}>
           <Grid item md={3}>
             <Link href='/'>
@@ -38,7 +38,7 @@ export const SearchResultCard = ({ data, ...props }: ISearchResultCardProps) => 
           </Grid>
           <Grid item md={9} paddingX={2} display='flex' flexDirection='column' justifyContent='space-between'>
             <Box>
-              <Typography variant='h6'>{data.name}</Typography>
+              <Typography variant='h6'>{data.venue.name}</Typography>
               <Box display='flex' gap={2} marginY={1} flexWrap='wrap'>
                 <Typography variant='body2'>Sân 5</Typography>
                 <Typography variant='body2'>Sân 7</Typography>
@@ -46,8 +46,8 @@ export const SearchResultCard = ({ data, ...props }: ISearchResultCardProps) => 
                 <Typography variant='body2'>Sân Futsal</Typography>
               </Box>
               <Box>
-                <Typography variant='body2'>Open: {convertToAMPM(data.openAt)}</Typography>
-                <Typography variant='body2'>Close: {convertToAMPM(data.closeAt)}</Typography>
+                <Typography variant='body2'>Open: {convertToAMPM(data.venue.openAt)}</Typography>
+                <Typography variant='body2'>Close: {convertToAMPM(data.venue.closeAt)}</Typography>
               </Box>
             </Box>
 
@@ -55,8 +55,8 @@ export const SearchResultCard = ({ data, ...props }: ISearchResultCardProps) => 
               <Box display='flex' justifyContent='space-between'>
                 <Box display='flex' alignItems='center' marginY={1}>
                   <StarIcon sx={{ color: 'primary.main', marginRight: 1 }} />
-                  {data.rating}
-                  <Typography marginX={1}>({data.totalReview} Đánh giá)</Typography>
+                  {/* {data.} */}
+                  <Typography marginX={1}>(Đánh giá)</Typography>
                 </Box>
                 <Typography variant='body1' color='primary.main'>
                   1 giờ
@@ -65,7 +65,7 @@ export const SearchResultCard = ({ data, ...props }: ISearchResultCardProps) => 
               <Box display='flex' justifyContent='space-between'>
                 <Box display='flex' alignItems='center'>
                   <PlaceIcon sx={{ marginRight: 1 }} />
-                  {data.district}
+                  {data.venue.district}
                 </Box>
                 <Typography variant='body1' fontWeight={500}>
                   {data.price.toLocaleString('vi')}đ

@@ -21,7 +21,7 @@ export const ImageLibrary = ({ imageList }: IImageLibraryProps) => {
         <Box
           component='img'
           src={imageList[0].imagePath}
-          alt={imageList[0].imagePath}
+          // alt={imageList[0].title}
           width='100%'
           height='100%'
           sx={{ objectFit: 'cover' }}

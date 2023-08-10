@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { SelectBox } from './SelectBox';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { DefaultLocations } from '@/common/datas/location.data';
-import { getAllPitchCategories } from '@/services/category/category.service';
+import { getAllCategories } from '@/services/pitch_category/pitch-category.service';
 import { getVenues } from '@/services/venue/venue.service';
 
 export const SearchBox = () => {
@@ -21,11 +21,7 @@ export const SearchBox = () => {
   const [searchPitchCategory, setSearchPitchCategory] = useState<string>('');
   const [searchAdress, setSearchAdress] = useState<string>('');
 
-  const { data: categories } = useQuery({
-    queryKey: ['categories'],
-    queryFn: getAllPitchCategories,
-    staleTime: Infinity,
-  });
+  const { data: categories } = useQuery({ queryKey: ['categories'], queryFn: getAllCategories, staleTime: Infinity });
 
   const { data: venues, mutate: getVenuesMutate } = useMutation({
     mutationKey: ['venues'],

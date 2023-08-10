@@ -1,19 +1,10 @@
 import { Pitch } from '../pitch/pitch.dto';
-import { BaseData, BasePaginationResponse, BaseResponse } from '@/common/dtos/base.dto';
+import { Rating } from '../rating/rating.dto';
+import { BaseData, BasePaginationResponse, BaseResponse, PaginationQuery } from '@/common/dtos/base.dto';
 
 export type VenuesResponse = BasePaginationResponse<Venue>;
 export type VenueResponse = BaseResponse<Venue>;
-export type SearchVenuesResponse = BasePaginationResponse<SearchVenueData>;
-
-export type SearchVenueQuery = {
-  page?: number;
-  limit?: number;
-  order?: string;
-  keyword?: string;
-  category?: number;
-  minPrice?: number;
-  maxPrice?: number;
-};
+export type SearchVenueResponse = BasePaginationResponse<SearchVenueData>;
 
 export type Venue = {
   name: string;
@@ -23,10 +14,9 @@ export type Venue = {
   province: string;
   district: string;
   price: Price;
-  rating: number;
-  totalReview: number;
   pitches: Pitch[];
   imageList: VenueImage[];
+  ratings: Rating[];
   openAt: string;
   closeAt: string;
   slug: string;
@@ -49,4 +39,8 @@ export type SearchVenueData = Venue & {
 
 export type VenueImage = {
   imagePath: string;
+};
+
+export type VenueQuery = {
+  keyword: string;
 };

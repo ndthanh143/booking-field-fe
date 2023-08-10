@@ -1,5 +1,6 @@
 import { Close } from '@mui/icons-material';
 import { Box, Button, Divider, FormControlLabel, Modal, Radio, RadioGroup, Typography } from '@mui/material';
+import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { PriceFilter } from './PriceFilter';
@@ -30,7 +31,19 @@ export const SearchFilter = ({ isOpen, priceRange, onClose }: ISearchFilterProps
       aria-describedby='parent-modal-description'
       sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
-      <Box minWidth={600} paddingX={3} bgcolor='primary.contrastText' borderRadius={4}>
+      <Box
+        minWidth={600}
+        paddingX={3}
+        bgcolor='primary.contrastText'
+        borderRadius={4}
+        component={motion.div}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{
+          duration: 0.3,
+        }}
+      >
         <Typography
           id='parent-modal-title'
           textAlign='center'
@@ -55,7 +68,7 @@ export const SearchFilter = ({ isOpen, priceRange, onClose }: ISearchFilterProps
         <Divider />
         <Box marginY={2}>
           <Typography variant='body1'>Khoảng giá</Typography>
-          <PriceFilter priceRange={price} onChange={(value) => setPrice(value)} />
+          <PriceFilter priceRange={price} onChange={(value) => setPrice(value)} minDistance={100000} />
         </Box>
         <Divider />
         <Box marginY={2}>

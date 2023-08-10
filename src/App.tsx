@@ -5,7 +5,8 @@ import { useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { MainLayout, SecondaryLayout } from './components/Layout';
-import { Home, Login, Register, Search } from './pages';
+import { BookingComplete, Home, Login, Register, Search } from './pages';
+import { BookingPage } from './pages/Booking';
 import { VenueDetail } from './pages/VenueDetail';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -21,40 +22,73 @@ import './App.css';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <MainLayout>
-        <Home />
-      </MainLayout>
-    ),
-  },
-  {
-    path: '/login',
-    element: <Login />,
-  },
-  {
-    path: '/register',
-    element: <Register />,
-  },
-  {
-    path: '/search',
-    element: (
-      <SecondaryLayout>
-        <Search />
-      </SecondaryLayout>
-    ),
-  },
-  {
-    path: '/venue/:slug',
-    element: (
-      <MainLayout>
-        <VenueDetail />
-      </MainLayout>
-    ),
+    children: [
+      {
+        element: <MainLayout />,
+        children: [
+          {
+            index: true,
+            element: <Home />,
+          },
+        ],
+      },
+      {
+        children: [
+          {
+            path: 'login',
+            element: <Login />,
+          },
+          {
+            path: 'register',
+            element: <Register />,
+          },
+        ],
+      },
+      {
+        path: 'search',
+        element: <SecondaryLayout />,
+        children: [
+          {
+            index: true,
+            element: <Search />,
+          },
+        ],
+      },
+      {
+        path: 'venue',
+        element: <MainLayout />,
+        children: [
+          {
+            path: ':slug',
+            element: <VenueDetail />,
+          },
+        ],
+      },
+      {
+        path: 'booking',
+        children: [
+          {
+            element: <MainLayout />,
+            children: [
+              {
+                path: ':slug',
+                element: <BookingPage />,
+              },
+            ],
+          },
+          {
+            path: 'success',
+            element: <BookingComplete />,
+          },
+        ],
+      },
+    ],
   },
 ]);
 
 function App() {
   const [queryClient] = useState(() => new QueryClient({}));
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <ToastContainer />
