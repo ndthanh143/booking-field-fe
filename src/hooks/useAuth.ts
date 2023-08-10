@@ -17,7 +17,7 @@ function getUserInfo(): User | null {
 export const useAuth = () => {
   const navigate = useNavigate();
 
-  const { data: profile, isLoading, refetch } = useQuery({ queryKey: ['profile'], queryFn: () => getUserInfo() });
+  const { data: profile, isLoading, refetch } = useQuery({ queryKey: ['profile'], queryFn: getUserInfo });
 
   const {
     mutate: loginMutation,

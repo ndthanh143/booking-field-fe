@@ -14,7 +14,14 @@ export const Header = () => {
   const { anchorEl: anchorMenu, isOpen: isOpenMenu, onClose: closeMenu, onOpen: openMenu } = useMenu();
   const { anchorEl: anchorCategory, isOpen: isOpenCategory, onClose: closeCategory, onOpen: openCategory } = useMenu();
   return (
-    <Grid container alignItems='center' justifyContent='space-between' marginY={1}>
+    <Grid
+      container
+      alignItems='center'
+      justifyContent='space-between'
+      paddingY={2}
+      borderBottom={1}
+      borderColor='secondary.light'
+    >
       <Grid item xs={6} md={4} alignItems='center' justifyContent='space-between'>
         <Box display='flex' justifyContent='space-between' alignItems='center'>
           <Box
@@ -48,8 +55,8 @@ export const Header = () => {
           </Menu>
         </Box>
       </Grid>
-      <Grid item xs={6} md={3}>
-        <Box display='flex' justifyContent='space-between' alignItems='center'>
+      <Grid item xs={6}>
+        <Box display='flex' justifyContent='end' alignItems='center' gap={2}>
           <Button variant='text' color='secondary'>
             Tiếng Việt
           </Button>
@@ -71,7 +78,10 @@ export const Header = () => {
           >
             {profile ? (
               <Box>
-                <MenuItem sx={{ borderBottom: 1, borderColor: '#ccc', padding: 2 }}>
+                <MenuItem
+                  sx={{ borderBottom: 1, borderColor: '#ccc', padding: 2 }}
+                  onClick={() => navigate('/account/profile')}
+                >
                   <Avatar />
                   <Box marginLeft={2}>
                     <Typography fontWeight={500}>{`${profile.firstName} ${profile.lastName}`}</Typography>
