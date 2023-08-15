@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { MainLayout, SecondaryLayout } from './components/Layout';
-import { BookingComplete, Home, Login, Register, Search, AccountProfile } from './pages';
+import { BookingComplete, Home, Login, Register, Search, AccountProfile, AccountBooking } from './pages';
 import { BookingPage } from './pages/Booking';
 import { VenueDetail } from './pages/VenueDetail';
 import '@fontsource/roboto/300.css';
@@ -89,6 +89,10 @@ const router = createBrowserRouter([
           {
             path: 'profile',
             element: <AccountProfile />,
+          },
+          {
+            path: 'my-booking',
+            element: <AccountBooking />,
           },
         ],
       },

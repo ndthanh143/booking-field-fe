@@ -1,5 +1,4 @@
-import { Person, Menu as MenuIcon } from '@mui/icons-material';
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import { Person, Menu as MenuIcon, LogoutOutlined } from '@mui/icons-material';
 import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Avatar, Box, Button, Grid, Menu, MenuItem, Typography } from '@mui/material';
@@ -88,21 +87,19 @@ export const Header = () => {
                     <Typography>Xem hồ sơ</Typography>
                   </Box>
                 </MenuItem>
-                <MenuItem sx={{ paddingY: 1.5 }}>
+                <MenuItem sx={{ paddingY: 1.5 }} onClick={() => navigate('/account/my-booking')}>
                   <HistoryOutlinedIcon sx={{ marginRight: 2 }} />
                   Đặt sân của tôi
                 </MenuItem>
-                <MenuItem sx={{ paddingY: 1.5 }}>
-                  <FavoriteBorderOutlinedIcon sx={{ marginRight: 2 }} />
-                  Danh sách yêu thích
-                </MenuItem>
+
                 <MenuItem
-                  sx={{ paddingY: 1.5 }}
+                  sx={{ paddingY: 1.5, color: 'error.main' }}
                   onClick={() => {
                     closeMenu();
                     logout();
                   }}
                 >
+                  <LogoutOutlined sx={{ marginRight: 2 }} />
                   Đăng xuất
                 </MenuItem>
               </Box>

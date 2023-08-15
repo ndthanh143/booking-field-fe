@@ -15,3 +15,5 @@ export * from './StatusBox';
 export * from './TimeSelection';
 export * from './PaymentForm';
 export * from './StripeContainer';
+export * from './RatingBox';
+export * from './TextArea';

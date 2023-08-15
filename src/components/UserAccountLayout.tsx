@@ -1,4 +1,4 @@
-import { AccountBoxOutlined, FavoriteOutlined, LogoutOutlined, RestoreOutlined } from '@mui/icons-material';
+import { AccountBoxOutlined, LogoutOutlined, RestoreOutlined } from '@mui/icons-material';
 import {
   Avatar,
   Box,
@@ -12,10 +12,15 @@ import {
   Typography,
 } from '@mui/material';
 import { PropsWithChildren } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks';
 
 export const UserAccountLayout = ({ children }: PropsWithChildren) => {
-  const { profile } = useAuth();
+  const { profile, logout } = useAuth();
+
+  const navigate = useNavigate();
+
+  const { pathname } = useLocation();
 
   return (
     profile && (
@@ -40,26 +45,26 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
               {profile.phone}
             </Typography>
             <List sx={{ fontSize: 20 }}>
-              <ListItemButton>
-                <ListItemIcon>
+              <ListItemButton
+                onClick={() => navigate('/account/profile')}
+                sx={{ color: pathname === '/account/profile' ? 'primary.main' : '' }}
+              >
+                <ListItemIcon sx={{ color: 'inherit' }}>
                   <AccountBoxOutlined />
                 </ListItemIcon>
                 <ListItemText primary='Hồ sơ của tôi' />
               </ListItemButton>
-              <ListItemButton>
-                <ListItemIcon>
+              <ListItemButton
+                onClick={() => navigate('/account/my-booking')}
+                sx={{ color: pathname === '/account/my-booking' ? 'primary.main' : '' }}
+              >
+                <ListItemIcon sx={{ color: 'inherit' }}>
                   <RestoreOutlined />
                 </ListItemIcon>
                 <ListItemText primary='Đặt sân của tôi' />
               </ListItemButton>
-              <ListItemButton>
-                <ListItemIcon>
-                  <FavoriteOutlined />
-                </ListItemIcon>
-                <ListItemText primary='Danh sách yêu thích' />
-              </ListItemButton>
               <Divider sx={{ marginY: 2 }} />
-              <ListItemButton>
+              <ListItemButton onClick={logout}>
                 <ListItemIcon>
                   <LogoutOutlined />
                 </ListItemIcon>
@@ -67,7 +72,7 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
               </ListItemButton>
             </List>
           </Grid>
-          <Grid item xs={7}>
+          <Grid item xs={7} position='relative'>
             {children}
           </Grid>
         </Grid>

@@ -13,3 +13,9 @@ export type Rating = {
 export type GetRatingFieldData = Rating & {
   category_name: string;
 } & User;
+
+export type CreateRatingPayload = {
+  booking: number;
+  content: string;
+  rate: number;
+};

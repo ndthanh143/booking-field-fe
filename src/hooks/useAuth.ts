@@ -41,5 +41,5 @@ export const useAuth = () => {
     refetch({ queryKey: ['profile'] });
   }
 
-  return { profile, login, logout, isLoading, loginLoading, loginError };
+  return { profile, login, logout, isLoading, loginLoading, loginError, refetch };
 };
