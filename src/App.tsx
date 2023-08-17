@@ -5,7 +5,8 @@ import { useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { MainLayout, SecondaryLayout } from './components/Layout';
-import { BookingComplete, Home, Login, Register, Search } from './pages';
+import { VenueManagementLayout } from './components/VenueManagementLayout';
+import { BookingComplete, BookingManagement, Dashboard, Home, Login, Register, Search, VenueManagement } from './pages';
 import { BookingPage } from './pages/Booking';
 import { VenueDetail } from './pages/VenueDetail';
 import '@fontsource/roboto/300.css';
@@ -79,6 +80,24 @@ const router = createBrowserRouter([
           {
             path: 'success',
             element: <BookingComplete />,
+          },
+        ],
+      },
+      {
+        path: 'venue-management',
+        element: <VenueManagementLayout />,
+        children: [
+          {
+            path: 'dashboard',
+            element: <Dashboard />,
+          },
+          {
+            path: 'your-venue',
+            element: <VenueManagement />,
+          },
+          {
+            path: 'bookings',
+            element: <BookingManagement />,
           },
         ],
       },

@@ -1,9 +1,13 @@
 import {
+  CreatePitchDto,
   GetPitchesByVenueDetailResponse,
   GetPitchesByVenueQuery,
   GetPitchesByVenueResponse,
+  PitchResponse,
   PitchesResponse,
   SearchPitchesQuery,
+  UpdatePitchDto,
+  UpdatePitchPayload,
 } from './pitch.dto';
 import axiosInstance from '@/utils/axiosConfig';
 
@@ -48,4 +52,22 @@ export const getPitchesByVenue = async (venueId: number, query?: GetPitchesByVen
     response = await axiosInstance.get<GetPitchesByVenueResponse>(`/pitches/venue/${venueId}`);
   }
   return response.data.data;
+};
+
+export const createPitch = async (payload: CreatePitchDto) => {
+  const { data } = await axiosInstance.post<PitchResponse>('/pitches', payload);
+
+  return data;
+};
+
+export const updatePitch = async (payload: UpdatePitchPayload) => {
+  const { id, data: pitchData } = payload;
+
+  const { data } = await axiosInstance.put<PitchResponse>(`/pitches/${id}`, pitchData);
+
+  return data;
+};
+
+export const deletePitch = async (id: number) => {
+  await axiosInstance.delete(`/pitches/${id}`);
 };

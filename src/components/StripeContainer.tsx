@@ -9,8 +9,7 @@ export interface ISripeContainerProps extends IPaymentFormProps {
   amount: number;
 }
 export default function StripeContainer({ currency, amount, onSubmit }: ISripeContainerProps) {
-  const STRIPE_PUBLIC_KEY =
-    'pk_test_51NcKR1LDtYPH3BFaBLNrHLRTIzM59sjFue1gM6PftXHg3ySDAEBMdQdez1e0WtDIcNPGMKL6bEJK8FYRIG7dyExd00tVWZhaOq';
+  const STRIPE_PUBLIC_KEY = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
 
   const stripePromise = loadStripe(STRIPE_PUBLIC_KEY);
 

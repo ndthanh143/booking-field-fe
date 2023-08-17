@@ -117,7 +117,7 @@ export const SearchBox = () => {
                 {categories.data.map((item) => (
                   <Box
                     onClick={() => {
-                      setSearchPitchCategory(item._id);
+                      setSearchPitchCategory(item._id.toString());
                       setPitchCategory(item.name);
                     }}
                     display='flex'

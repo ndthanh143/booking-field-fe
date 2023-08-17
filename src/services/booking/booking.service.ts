@@ -20,6 +20,12 @@ export const getBookingOfPitchByDay = async (payload: GetBookingOfPitchByDayDto)
   return data;
 };
 
+export const getBookingOfVenue = async (venueId: number) => {
+  const { data } = await axiosInstance.get<BookingsResponse>(`/bookings/venue/${venueId}`);
+
+  return data;
+};
+
 export const createBooking = async (payload: CreateBookingDto) => {
   await axiosInstance.post('/bookings', payload);
 };

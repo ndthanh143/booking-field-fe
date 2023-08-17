@@ -1,4 +1,4 @@
-import { Person, Menu as MenuIcon } from '@mui/icons-material';
+import { Person, Menu as MenuIcon, HouseOutlined } from '@mui/icons-material';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -53,7 +53,12 @@ export const Header = () => {
           <Button variant='text' color='secondary'>
             Tiếng Việt
           </Button>
-          <Button variant='outlined' color='secondary'>
+          <Button
+            variant='outlined'
+            href='https://docs.google.com/forms/d/e/1FAIpQLScCtwnRHg0BcfpQ_I2fKWAMY5CDwFytHWhx1oI8YlOA99wu2Q/viewform'
+            color='secondary'
+            target='_blank'
+          >
             Dành cho đối tác
           </Button>
           <Button variant='contained' onClick={openMenu}>
@@ -85,6 +90,13 @@ export const Header = () => {
                 <MenuItem sx={{ paddingY: 1.5 }}>
                   <FavoriteBorderOutlinedIcon sx={{ marginRight: 2 }} />
                   Danh sách yêu thích
+                </MenuItem>
+                <MenuItem
+                  sx={{ paddingY: 1.5, fontWeight: 700 }}
+                  onClick={() => navigate('/venue-management/dashboard')}
+                >
+                  <HouseOutlined sx={{ marginRight: 2 }} />
+                  Quản lý sân bóng
                 </MenuItem>
                 <MenuItem
                   sx={{ paddingY: 1.5 }}

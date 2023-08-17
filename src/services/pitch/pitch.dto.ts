@@ -3,8 +3,23 @@ import { Venue } from '../venue/venue.dto';
 import { BaseData, BasePaginationResponse, BaseResponse, PaginationQuery } from '@/common/dtos/base.dto';
 
 export type PitchesResponse = BasePaginationResponse<Pitch>;
+export type PitchResponse = BaseResponse<Pitch>;
 export type GetPitchesByVenueResponse = BaseResponse<Pitch[]>;
 export type GetPitchesByVenueDetailResponse = BaseResponse<GetPitchByVenueDetailData[]>;
+
+export type CreatePitchDto = {
+  no: number;
+  price: number;
+  pitchCategory: number;
+  venue: number;
+};
+
+export type UpdatePitchPayload = {
+  id: number;
+  data: UpdatePitchDto;
+};
+
+export type UpdatePitchDto = Partial<Omit<CreatePitchDto, 'venue'>>;
 
 export type Pitch = {
   no: number;

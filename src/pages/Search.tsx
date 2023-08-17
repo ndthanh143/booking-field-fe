@@ -49,7 +49,7 @@ export const Search = () => {
   });
 
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: import.meta.env.GOOGLE_MAPS_API_KEY || '',
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
   });
 
   const center = useMemo(
@@ -71,10 +71,10 @@ export const Search = () => {
         <Grid item xs={4} display='flex' gap={2}>
           {pitchCategories?.data.map((category) => (
             <Button
-              variant={categoryParams == category._id ? 'contained' : 'outlined'}
+              variant={Number(categoryParams) == category._id ? 'contained' : 'outlined'}
               key={category._id}
               onClick={() => {
-                searchParams.set('pitchCategory', category._id);
+                searchParams.set('pitchCategory', category._id.toString());
                 setSearchParams((prev) => [...prev]);
               }}
             >
