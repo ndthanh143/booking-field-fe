@@ -8,8 +8,8 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { Stepper } from '@/components';
 import StripeContainer from '@/components/StripeContainer';
 import { TimeSelect } from '@/components/TimeSelect';
-import { CreateBookingDto, GetBookingOfPitchByDayDto } from '@/services/booking/booking.dto';
-import { createBooking, getBookingOfPitchByDay } from '@/services/booking/booking.service';
+import { CreateBookingDto, GetBookingsOfVenueDto } from '@/services/booking/booking.dto';
+import { createBooking, getBookings } from '@/services/booking/booking.service';
 import { Pitch } from '@/services/pitch/pitch.dto';
 import { getPitchesByVenue } from '@/services/pitch/pitch.service';
 import { getVenue } from '@/services/venue/venue.service';
@@ -35,7 +35,7 @@ export const BookingPage = () => {
 
   const { data: bookings, mutate: getBookingMutate } = useMutation({
     mutationKey: ['booking-pitch-by-day'],
-    mutationFn: ({ pitchId, date }: GetBookingOfPitchByDayDto) => getBookingOfPitchByDay({ pitchId, date }),
+    mutationFn: ({ pitchId, date }: GetBookingsOfVenueDto) => getBookings({ pitchId, date }),
   });
 
   const { mutate: createBookingMutate } = useMutation({

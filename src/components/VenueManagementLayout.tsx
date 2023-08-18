@@ -97,8 +97,6 @@ export const VenueManagementLayout = () => {
     navigate('/');
   }
 
-  console.log(pathname);
-
   return (
     profile && (
       <>

@@ -3,16 +3,16 @@ import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
 import { useState } from 'react';
 import { useAuth } from '@/hooks';
-import { getBookingOfVenue } from '@/services/booking/booking.service';
+import { getBookings, getBookingsOfVenue } from '@/services/booking/booking.service';
 
 export const BookingManagement = () => {
   const { profile } = useAuth();
 
   const { data: bookings } = useQuery({
-    queryKey: ['bookings-venue'],
+    queryKey: ['venue-bookings'],
     queryFn: () => {
       if (profile) {
-        return getBookingOfVenue(profile._id);
+        return getBookings({ venueId: profile.venue._id });
       }
     },
     enabled: !!profile,

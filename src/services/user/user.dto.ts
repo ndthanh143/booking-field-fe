@@ -1,3 +1,5 @@
+import { Venue } from '../venue/venue.dto';
+
 export type User = {
   _id: number;
   firstName: string;
@@ -7,6 +9,7 @@ export type User = {
   phone: string;
   createdAt: Date;
   updatedAt: Date;
+  venue: Venue;
 };
 
 export type SignInPayload = {

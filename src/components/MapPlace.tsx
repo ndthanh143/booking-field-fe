@@ -1,4 +1,4 @@
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { LocationOn } from '@mui/icons-material';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -21,7 +21,7 @@ function loadScript(src: string, position: HTMLElement | null, id: string) {
   position.appendChild(script);
 }
 
-const autocompleteService = { current: null };
+const autocompleteService = { current: {} as google.maps.places.AutocompleteService };
 
 interface MainTextMatchedSubstrings {
   offset: number;
@@ -70,8 +70,8 @@ export const MapPlace = ({ onChange }: IMapPlaceProps) => {
   useEffect(() => {
     let active = true;
 
-    if (!autocompleteService.current && (window as any).google) {
-      autocompleteService.current = new (window as any).google.maps.places.AutocompleteService();
+    if (!autocompleteService.current && window.google) {
+      autocompleteService['current'] = new window.google.maps.places.AutocompleteService();
     }
     if (!autocompleteService.current) {
       return undefined;
@@ -117,7 +117,7 @@ export const MapPlace = ({ onChange }: IMapPlaceProps) => {
       filterSelectedOptions
       value={value}
       noOptionsText='No locations'
-      onChange={(_: any, newValue: PlaceType | null) => {
+      onChange={(_, newValue: PlaceType | null) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setValue(newValue);
 
@@ -146,14 +146,14 @@ export const MapPlace = ({ onChange }: IMapPlaceProps) => {
 
         const parts = parse(
           option.structured_formatting.main_text,
-          matches.map((match: any) => [match.offset, match.offset + match.length]),
+          matches.map((match) => [match.offset, match.offset + match.length]),
         );
 
         return (
           <li {...props}>
             <Grid container alignItems='center'>
               <Grid item sx={{ display: 'flex', width: 44 }}>
-                <LocationOnIcon sx={{ color: 'text.secondary' }} />
+                <LocationOn sx={{ color: 'text.secondary' }} />
               </Grid>
               <Grid item sx={{ width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
                 {parts.map((part, index) => (
