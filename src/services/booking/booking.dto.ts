@@ -11,7 +11,7 @@ export type Booking = {
   endTime: Date;
   pitch: Pitch;
   user: User;
-  total_price: number;
+  totalPrice: number;
 } & BaseData;
 
 export type GetBookingsDto = {

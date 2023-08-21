@@ -1,4 +1,4 @@
-import { Box, Button, Input, TextField, Typography } from '@mui/material';
+import { Box, Button, Input, Typography } from '@mui/material';
 import { useState } from 'react';
 import MapPicker from 'react-google-map-picker';
 import { LocationMap } from '@/services/venue/venue.dto';
@@ -6,12 +6,12 @@ import { LocationMap } from '@/services/venue/venue.dto';
 const DefaultLocation = { lat: 10, lng: 106 };
 const DefaultZoom = 10;
 
-export interface ILocationPickerProps {
+export interface LocationPickerProps {
   location: LocationMap;
   onChange: (value: LocationMap) => void;
 }
 
-export const LocationPicker = ({ location, onChange }: ILocationPickerProps) => {
+export const LocationPicker = ({ location, onChange }: LocationPickerProps) => {
   const [defaultLocation, setDefaultLocation] = useState(DefaultLocation);
 
   const [zoom, setZoom] = useState(DefaultZoom);
@@ -52,8 +52,7 @@ export const LocationPicker = ({ location, onChange }: ILocationPickerProps) => 
       <MapPicker
         defaultLocation={defaultLocation}
         zoom={zoom}
-        // mapTypeId="roadmap"
-        style={{ height: '700px' }}
+        style={{ height: '60vh' }}
         onChangeLocation={handleChangeLocation}
         onChangeZoom={handleChangeZoom}
         apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}

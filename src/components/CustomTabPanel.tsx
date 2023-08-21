@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { ReactNode } from 'react';
 
 interface TabPanelProps {
@@ -10,6 +10,8 @@ interface TabPanelProps {
 export const CustomTabPanel = (props: TabPanelProps) => {
   const { children, value, index, ...other } = props;
 
+  const isSelected = value === index;
+
   return (
     <Box
       role='tabpanel'
@@ -18,7 +20,7 @@ export const CustomTabPanel = (props: TabPanelProps) => {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ padding: 3 }}>{children}</Box>}
+      {isSelected && <Box sx={{ padding: 3 }}>{children}</Box>}
     </Box>
   );
 };

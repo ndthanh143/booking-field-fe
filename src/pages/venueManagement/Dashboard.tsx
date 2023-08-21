@@ -7,7 +7,7 @@ import { Chart as ChartJS } from 'chart.js/auto';
 import { useEffect, useState } from 'react';
 import { Line, Pie } from 'react-chartjs-2';
 import CountUp from 'react-countup';
-import { FilterChartEnum } from '@/common/enums/filter-chart.enum';
+import { TimePeriodFilter } from '@/common/enums/filter-chart.enum';
 import { useVenueByUserQuery } from '@/hooks';
 import { GetAnalystBookingIncomeDto } from '@/services/booking/booking.dto';
 import { getAnalystBookingCategory, getAnalystBookingIncome, getBookings } from '@/services/booking/booking.service';
@@ -17,10 +17,10 @@ import { getMonthsAgoFromDate } from '@/utils/getMonthsAgo';
 ChartJS.register(CategoryScale);
 
 export const FilterChartOptions = [
-  { label: '1 tháng gần nhất', value: FilterChartEnum.Month },
-  { label: '3 tháng gần nhất', value: FilterChartEnum.Quarter },
-  { label: '6 tháng gần nhất', value: FilterChartEnum.HalfYear },
-  { label: '1 năm gần nhất', value: FilterChartEnum.Year },
+  { label: '1 tháng gần nhất', value: TimePeriodFilter.Month },
+  { label: '3 tháng gần nhất', value: TimePeriodFilter.Quarter },
+  { label: '6 tháng gần nhất', value: TimePeriodFilter.HalfYear },
+  { label: '1 năm gần nhất', value: TimePeriodFilter.Year },
 ];
 
 const currentDate = new Date();
@@ -46,9 +46,7 @@ export const Dashboard = () => {
   });
 
   const [year, setYear] = useState<number>(currentDate.getFullYear());
-  const [selectedIncome, setSelectedIncome] = useState<FilterChartEnum>(FilterChartOptions[0].value);
-
-  console.log(incomeData);
+  const [selectedIncome, setSelectedIncome] = useState<TimePeriodFilter>(FilterChartOptions[0].value);
 
   const currentFilterDate = currentDate;
   currentFilterDate.setFullYear(year);
@@ -64,23 +62,9 @@ export const Dashboard = () => {
       {
         label: 'Thu nhập thường ngày',
         data: filteData?.map((item) => item.total) || [],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-          'rgba(255, 205, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-        ],
-        borderColor: [
-          'rgb(255, 99, 132)',
-          'rgb(255, 159, 64)',
-          'rgb(255, 205, 86)',
-          'rgb(75, 192, 192)',
-          'rgb(54, 162, 235)',
-          'rgb(153, 102, 255)',
-        ],
-        borderWidth: 1,
+        fill: false,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1,
       },
     ],
   };
@@ -117,7 +101,7 @@ export const Dashboard = () => {
       getBookingIncomeMutation({ year, venueId: venue._id });
       getBookingCategoryMutation({ year, venueId: venue._id });
     }
-  }, [venue, year]);
+  }, [getBookingIncomeMutation, getBookingCategoryMutation, venue, year]);
 
   return (
     <Grid container spacing={2}>
@@ -126,7 +110,7 @@ export const Dashboard = () => {
           <CardContent>
             <CreditCard />
             <Box>
-              <CountUp end={bookings?.data.reduce((acc, cur) => acc + cur.total_price, 0) || 0} duration={1} />đ{' '}
+              <CountUp end={bookings?.data.reduce((acc, cur) => acc + cur.totalPrice, 0) || 0} duration={1} />đ{' '}
             </Box>
             <Typography variant='body2'>Tổng thu nhập</Typography>
           </CardContent>
@@ -167,7 +151,7 @@ export const Dashboard = () => {
                 value={selectedIncome}
                 label='Lọc'
                 sx={{ minWidth: 150 }}
-                onChange={(e) => setSelectedIncome(e.target.value as FilterChartEnum)}
+                onChange={(e) => setSelectedIncome(e.target.value as TimePeriodFilter)}
               >
                 {FilterChartOptions.map((item) => (
                   <MenuItem value={item.value}>{item.label}</MenuItem>
@@ -175,7 +159,7 @@ export const Dashboard = () => {
               </Select>
             </Box>
             <Typography paddingTop={2}>
-              Tổng: {convertCurrency(bookings?.data.reduce((acc, cur) => acc + cur.total_price, 0) || 0)}
+              Tổng: {convertCurrency(filteData?.reduce((acc, cur) => acc + cur.total, 0) || 0)}
             </Typography>
             <Line data={lineData} options={lineOptions} />
           </CardContent>

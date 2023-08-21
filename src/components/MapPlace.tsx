@@ -21,7 +21,7 @@ function loadScript(src: string, position: HTMLElement | null, id: string) {
   position.appendChild(script);
 }
 
-const autocompleteService = { current: {} as google.maps.places.AutocompleteService };
+const autocompleteService = { current: null };
 
 interface MainTextMatchedSubstrings {
   offset: number;
@@ -37,11 +37,11 @@ interface PlaceType {
   structured_formatting: StructuredFormatting;
 }
 
-interface IMapPlaceProps {
+interface MapPlaceProps {
   onChange: (locationValue: LocationMap | null) => void;
 }
 
-export const MapPlace = ({ onChange }: IMapPlaceProps) => {
+export const MapPlace = ({ onChange }: MapPlaceProps) => {
   const [value, setValue] = useState<PlaceType | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState<readonly PlaceType[]>([]);
@@ -71,7 +71,7 @@ export const MapPlace = ({ onChange }: IMapPlaceProps) => {
     let active = true;
 
     if (!autocompleteService.current && window.google) {
-      autocompleteService['current'] = new window.google.maps.places.AutocompleteService();
+      autocompleteService['current'] = new window.google.maps.places.AutocompleteService() as any;
     }
     if (!autocompleteService.current) {
       return undefined;
@@ -93,8 +93,6 @@ export const MapPlace = ({ onChange }: IMapPlaceProps) => {
         if (results) {
           newOptions = [...newOptions, ...results];
         }
-
-        console.log(value);
 
         setOptions(newOptions);
       }
@@ -128,7 +126,6 @@ export const MapPlace = ({ onChange }: IMapPlaceProps) => {
               if (place?.geometry?.location) {
                 const lat = place.geometry.location.lat();
                 const lng = place.geometry.location.lng();
-                // setSelectedLatLng({ lat, lng });
                 onChange({ lat, lng });
               }
             }

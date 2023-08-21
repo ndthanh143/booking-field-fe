@@ -2,11 +2,11 @@ import { Button, FormControl, Typography } from '@mui/material';
 import { PaymentElement } from '@stripe/react-stripe-js';
 import { usePaymentForm } from '@/hooks';
 
-export interface IPaymentFormProps {
+export interface PaymentFormProps {
   onSubmit: () => void;
 }
 
-export default function PaymentForm({ onSubmit }: IPaymentFormProps) {
+export default function PaymentForm({ onSubmit }: PaymentFormProps) {
   const { handleSubmit, isProcessing, message, stripe, elements } = usePaymentForm();
 
   return (

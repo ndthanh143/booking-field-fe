@@ -1,13 +1,13 @@
 import { Box, Typography } from '@mui/material';
 
-export interface IStatusBoxProps {
+export interface StatusBoxProps {
   time: string;
   price: number;
   duration: number;
   isBooked?: boolean;
 }
 
-export const StatusBox = ({ time, price, duration, isBooked }: IStatusBoxProps) => {
+export const StatusBox = ({ time, price, duration, isBooked }: StatusBoxProps) => {
   return (
     <Box
       bgcolor={!isBooked ? 'primary.light' : 'footer.main'}

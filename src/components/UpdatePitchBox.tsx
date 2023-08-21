@@ -10,7 +10,7 @@ import { SelectBox } from './SelectBox';
 import { Pitch, UpdatePitchDto } from '@/services/pitch/pitch.dto';
 import { getAllCategories } from '@/services/pitch_category/pitch-category.service';
 
-export interface ISearchSortProps {
+export interface SearchSortProps {
   pitch: Pitch;
   isOpen: boolean;
   onClose: () => void;
@@ -23,7 +23,7 @@ const schema = object({
   pitchCategory: number(),
 });
 
-export const UpdatePitchBox = ({ pitch, isOpen, onClose, onSubmit }: ISearchSortProps) => {
+export const UpdatePitchBox = ({ pitch, isOpen, onClose, onSubmit }: SearchSortProps) => {
   const { data: categories } = useQuery({ queryKey: ['categories'], queryFn: getAllCategories, staleTime: Infinity });
 
   const [pitchCategory, setPitchCategory] = useState<string>('');

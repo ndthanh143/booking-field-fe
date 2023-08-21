@@ -6,11 +6,11 @@ import { Link } from './Link';
 import { Pitch } from '@/services/pitch/pitch.dto';
 import convertToAMPM from '@/utils/convertTimestamp';
 
-export interface ISearchResultCardProps {
+export interface SearchResultCardProps {
   data: Pitch;
 }
 
-export const SearchResultCard = ({ data, ...props }: ISearchResultCardProps) => {
+export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
   return (
     <Box
       component={motion.div}

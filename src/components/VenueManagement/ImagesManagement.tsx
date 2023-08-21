@@ -2,31 +2,37 @@ import { Delete } from '@mui/icons-material';
 import { Backdrop, Box, CircularProgress, Grid, IconButton } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { ConfirmBox } from '../ConfirmBox';
 import { ImageUpload } from '../ImageUpload';
-import { useVenueByUserQuery, useVenueMutation } from '@/hooks';
+import { useBoolean, useVenueByUserQuery, useVenueMutation } from '@/hooks';
 import { uploadImages } from '@/services/media/media.service';
 import { VenueImage } from '@/services/venue/venue.dto';
 
 export const ImagesManagement = () => {
   const { data: venue } = useVenueByUserQuery();
 
-  const { updateVenueMutation, resetUpdateState } = useVenueMutation();
+  const { updateVenueMutation } = useVenueMutation();
 
   const [files, setFiles] = useState<FileList | null>();
+
+  const [seletedImage, setSeletedImage] = useState<VenueImage | null>();
+
+  const { value: isOpenConfirmBox, setTrue: openConfirmBox, setFalse: closeConfirmBox } = useBoolean(false);
 
   const {
     data: uploadData,
     mutate: uploadImageMutation,
     isSuccess: isUploadSucess,
     isLoading: isUploading,
+    reset: resetStateUpload,
   } = useMutation({
     mutationKey: ['upload-images'],
     mutationFn: (files: FileList) => uploadImages(files),
   });
 
-  const handleDelete = (image: VenueImage) => {
+  const handleDelete = () => {
     if (venue) {
-      const newImageList = venue.imageList.filter((item) => item !== image);
+      const newImageList = venue.imageList.filter((item) => item !== seletedImage);
 
       updateVenueMutation({
         id: venue._id,
@@ -34,6 +40,8 @@ export const ImagesManagement = () => {
           imageList: newImageList,
         },
       });
+
+      closeConfirmBox();
     }
   };
 
@@ -59,9 +67,9 @@ export const ImagesManagement = () => {
           ],
         },
       });
-      resetUpdateState();
+      resetStateUpload();
     }
-  }, [isUploadSucess, resetUpdateState, updateVenueMutation, uploadData, venue]);
+  }, [isUploadSucess, resetStateUpload, updateVenueMutation, uploadData, venue]);
 
   return (
     venue && (
@@ -103,7 +111,10 @@ export const ImagesManagement = () => {
                   bgcolor='rgba(0, 0, 0, 0.4)'
                 >
                   <IconButton
-                    onClick={() => handleDelete(item)}
+                    onClick={() => {
+                      setSeletedImage(item);
+                      openConfirmBox();
+                    }}
                     sx={{ display: 'flex', float: 'right', margin: 1, bgcolor: 'primary.contrastText' }}
                   >
                     <Delete sx={{ color: 'error.main' }} fontSize='medium' />
@@ -118,6 +129,13 @@ export const ImagesManagement = () => {
         <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isUploading}>
           <CircularProgress color='inherit' />
         </Backdrop>
+        <ConfirmBox
+          title='Bạn có chắc muốn xóa'
+          subTitle='Bạn sẽ không thể khôi phục dữ liệu sau khi đã xóa'
+          isOpen={isOpenConfirmBox}
+          onClose={closeConfirmBox}
+          onAccept={handleDelete}
+        />
       </Grid>
     )
   );

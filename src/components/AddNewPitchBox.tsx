@@ -11,7 +11,7 @@ import { CreatePitchDto } from '@/services/pitch/pitch.dto';
 import { getAllCategories } from '@/services/pitch_category/pitch-category.service';
 import { Venue } from '@/services/venue/venue.dto';
 
-export interface ISearchSortProps {
+export interface SearchSortProps {
   venue: Venue;
   isOpen: boolean;
   onClose: () => void;
@@ -24,12 +24,18 @@ const schema = object({
   pitchCategory: number().required(),
   venue: number().required(),
 });
-export const AddNewPitchBox = ({ venue, isOpen, onClose, onSubmit }: ISearchSortProps) => {
+export const AddNewPitchBox = ({ venue, isOpen, onClose, onSubmit }: SearchSortProps) => {
   const { data: categories } = useQuery({ queryKey: ['categories'], queryFn: getAllCategories, staleTime: Infinity });
 
   const [pitchCategory, setPitchCategory] = useState<string>('');
 
-  const { handleSubmit, register, setValue, reset } = useForm<CreatePitchDto>({ resolver: yupResolver(schema) });
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm<CreatePitchDto>({ resolver: yupResolver(schema) });
 
   const onSubmitHandler = (data: CreatePitchDto) => {
     onSubmit(data);
@@ -67,12 +73,22 @@ export const AddNewPitchBox = ({ venue, isOpen, onClose, onSubmit }: ISearchSort
           <Divider />
           <Box padding={4}>
             <Box paddingY={2}>
-              <Typography>Số sân</Typography>
+              <Typography>Tên sân</Typography>
               <TextField placeholder='...' type='number' fullWidth {...register('no')} />
+              {errors.no && (
+                <Typography variant='caption' color='error.main'>
+                  * Vui lòng nhập tên sân
+                </Typography>
+              )}
             </Box>
             <Box paddingY={2}>
               <Typography>Giá sân theo giờ</Typography>
               <TextField placeholder='...' type='number' fullWidth {...register('price')} />
+              {errors.price && (
+                <Typography variant='caption' color='error.main'>
+                  * Vui lòng nhập giá sân
+                </Typography>
+              )}
             </Box>
             <Box paddingY={2}>
               <Typography>Loại Sân</Typography>
@@ -98,6 +114,11 @@ export const AddNewPitchBox = ({ venue, isOpen, onClose, onSubmit }: ISearchSort
                   </Box>
                 ))}
               </SelectBox>
+              {errors.pitchCategory && (
+                <Typography variant='caption' color='error.main'>
+                  * Vui lòng chọn loại sân
+                </Typography>
+              )}
             </Box>
             <Box display='flex' justifyContent='end' gap={2} paddingY={2}>
               <Button variant='contained' type='submit'>

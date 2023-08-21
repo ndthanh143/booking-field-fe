@@ -1,10 +1,10 @@
 import { CloudUpload } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 
-export interface IImageUploadProps {
+export interface ImageUploadProps {
   onChange: (files: FileList) => void;
 }
-export const ImageUpload = ({ onChange }: IImageUploadProps) => {
+export const ImageUpload = ({ onChange }: ImageUploadProps) => {
   return (
     <Box
       component='label'

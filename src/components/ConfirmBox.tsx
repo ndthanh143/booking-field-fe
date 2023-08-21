@@ -2,14 +2,14 @@ import { ErrorOutline } from '@mui/icons-material';
 import { Box, Button, Modal, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 
-export interface ISearchSortProps {
+export interface ConfirmBoxProps {
   title: string;
   subTitle?: string;
   isOpen: boolean;
   onClose: () => void;
   onAccept: () => void;
 }
-export const ConfirmBox = ({ title, subTitle, isOpen, onClose, onAccept }: ISearchSortProps) => {
+export const ConfirmBox = ({ title, subTitle, isOpen, onClose, onAccept }: ConfirmBoxProps) => {
   return (
     <Modal
       open={isOpen}

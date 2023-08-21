@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
 import { useState } from 'react';
 import { useAuth } from '@/hooks';
-import { getBookings, getBookingsOfVenue } from '@/services/booking/booking.service';
+import { getBookings } from '@/services/booking/booking.service';
 
 export const BookingManagement = () => {
   const { profile } = useAuth();
