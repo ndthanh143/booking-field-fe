@@ -1,5 +1,4 @@
-import { Person, Menu as MenuIcon } from '@mui/icons-material';
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import { Person, Menu as MenuIcon, LogoutOutlined } from '@mui/icons-material';
 import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Avatar, Box, Button, Grid, Menu, MenuItem, Typography } from '@mui/material';
@@ -14,7 +13,14 @@ export const Header = () => {
   const { anchorEl: anchorMenu, isOpen: isOpenMenu, onClose: closeMenu, onOpen: openMenu } = useMenu();
   const { anchorEl: anchorCategory, isOpen: isOpenCategory, onClose: closeCategory, onOpen: openCategory } = useMenu();
   return (
-    <Grid container alignItems='center' justifyContent='space-between' marginY={1}>
+    <Grid
+      container
+      alignItems='center'
+      justifyContent='space-between'
+      paddingY={2}
+      borderBottom={1}
+      borderColor='secondary.light'
+    >
       <Grid item xs={6} md={4} alignItems='center' justifyContent='space-between'>
         <Box display='flex' justifyContent='space-between' alignItems='center'>
           <Box
@@ -48,8 +54,8 @@ export const Header = () => {
           </Menu>
         </Box>
       </Grid>
-      <Grid item xs={6} md={3}>
-        <Box display='flex' justifyContent='space-between' alignItems='center'>
+      <Grid item xs={6}>
+        <Box display='flex' justifyContent='end' alignItems='center' gap={2}>
           <Button variant='text' color='secondary'>
             Tiếng Việt
           </Button>
@@ -71,28 +77,29 @@ export const Header = () => {
           >
             {profile ? (
               <Box>
-                <MenuItem sx={{ borderBottom: 1, borderColor: '#ccc', padding: 2 }}>
+                <MenuItem
+                  sx={{ borderBottom: 1, borderColor: '#ccc', padding: 2 }}
+                  onClick={() => navigate('/account/profile')}
+                >
                   <Avatar />
                   <Box marginLeft={2}>
                     <Typography fontWeight={500}>{`${profile.firstName} ${profile.lastName}`}</Typography>
                     <Typography>Xem hồ sơ</Typography>
                   </Box>
                 </MenuItem>
-                <MenuItem sx={{ paddingY: 1.5 }}>
+                <MenuItem sx={{ paddingY: 1.5 }} onClick={() => navigate('/account/my-booking')}>
                   <HistoryOutlinedIcon sx={{ marginRight: 2 }} />
                   Đặt sân của tôi
                 </MenuItem>
-                <MenuItem sx={{ paddingY: 1.5 }}>
-                  <FavoriteBorderOutlinedIcon sx={{ marginRight: 2 }} />
-                  Danh sách yêu thích
-                </MenuItem>
+
                 <MenuItem
-                  sx={{ paddingY: 1.5 }}
+                  sx={{ paddingY: 1.5, color: 'error.main' }}
                   onClick={() => {
                     closeMenu();
                     logout();
                   }}
                 >
+                  <LogoutOutlined sx={{ marginRight: 2 }} />
                   Đăng xuất
                 </MenuItem>
               </Box>

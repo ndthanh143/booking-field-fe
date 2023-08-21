@@ -1,3 +1,7 @@
+import { BaseResponse } from '@/common/dtos/base.dto';
+
+export type UpdateUserResponse = BaseResponse<User>;
+
 export type User = {
   _id: number;
   firstName: string;
@@ -16,4 +20,15 @@ export type SignInPayload = {
   email: string;
   phone: string;
   password: string;
+};
+
+export type UpdateUserPayload = {
+  id: number;
+  data: UpdateUserData;
+};
+
+export type UpdateUserData = {
+  firstName: string;
+  lastName: string;
+  phone: string;
 };
