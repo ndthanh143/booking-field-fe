@@ -6,7 +6,18 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { MainLayout, SecondaryLayout } from './components/Layout';
 import { VenueManagementLayout } from './components/VenueManagementLayout';
-import { BookingComplete, BookingManagement, Dashboard, Home, Login, Register, Search, VenueManagement } from './pages';
+import {
+  AccountBooking,
+  AccountProfile,
+  BookingComplete,
+  BookingManagement,
+  Dashboard,
+  Home,
+  Login,
+  Register,
+  Search,
+  VenueManagement,
+} from './pages';
 import { BookingPage } from './pages/Booking';
 import { VenueDetail } from './pages/VenueDetail';
 import '@fontsource/roboto/300.css';
@@ -98,6 +109,20 @@ const router = createBrowserRouter([
           {
             path: 'bookings',
             element: <BookingManagement />,
+          },
+        ],
+      },
+      {
+        path: 'account',
+        element: <SecondaryLayout />,
+        children: [
+          {
+            path: 'profile',
+            element: <AccountProfile />,
+          },
+          {
+            path: 'my-booking',
+            element: <AccountBooking />,
           },
         ],
       },

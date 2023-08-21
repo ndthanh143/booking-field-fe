@@ -6,3 +6,5 @@ export * from './BookingComplete';
 export * from './venueManagement/Dashboard';
 export * from './venueManagement/VenueManagement';
 export * from './venueManagement/BookingManagement';
+export * from './AccountProfile';
+export * from './AccountBooking';

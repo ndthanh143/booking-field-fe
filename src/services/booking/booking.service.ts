@@ -63,3 +63,9 @@ export const getBookingsOfVenue = async (venueId: number) => {
 export const createBooking = async (payload: CreateBookingDto) => {
   await axiosInstance.post('/bookings', payload);
 };
+
+export const getUserBookings = async (id: number) => {
+  const { data } = await axiosInstance.get<BookingsResponse>(`/bookings/user/${id}`);
+
+  return data;
+};

@@ -22,3 +22,5 @@ export * from './VenueManagement/InfoManagement';
 export * from './VenueManagement/ImagesManagement';
 export * from './VenueManagement/LocationManagement';
 export * from './VenueManagement/LocationManagement';
+export * from './RatingBox';
+export * from './TextArea';
