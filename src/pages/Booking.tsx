@@ -2,17 +2,18 @@ import { ReportOutlined } from '@mui/icons-material';
 import { Box, Button, Divider, Grid, Tooltip, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { Stepper } from '@/components';
 import StripeContainer from '@/components/StripeContainer';
 import { TimeSelect } from '@/components/TimeSelect';
-import { CreateBookingDto, GetBookingsDto } from '@/services/booking/booking.dto';
-import { createBooking, getBookings } from '@/services/booking/booking.service';
+import { CreateBookingDto } from '@/services/booking/booking.dto';
+import { bookingKeys } from '@/services/booking/booking.query';
+import { createBooking } from '@/services/booking/booking.service';
 import { Pitch } from '@/services/pitch/pitch.dto';
-import { getPitchesByVenue } from '@/services/pitch/pitch.service';
-import { getVenue } from '@/services/venue/venue.service';
+import { pitchKeys } from '@/services/pitch/pitch.query';
+import { venueKeys } from '@/services/venue/venue.query';
 import { convertCurrency } from '@/utils/convertCurrency';
 import { findFreeTime } from '@/utils/findBookingFreeTime';
 import { convertDecimalToTime } from '@/utils/formatTime';
@@ -24,40 +25,38 @@ export const BookingPage = () => {
 
   const [totalPrice, setTotalPrice] = useState(0);
 
+  const [selectedDate, setSelectedDate] = useState<Date | null>();
+  const [selectedTime, setSelectedTime] = useState<number[] | null>();
+  const [selectedPitch, setSelectedPitch] = useState<Pitch>();
+
   const { slug } = useParams();
 
   const [searchParams, _] = useSearchParams();
 
-  const { data: venue, mutate: venueMutation } = useMutation({
-    mutationKey: ['venue'],
-    mutationFn: (slug: string) => getVenue(slug),
+  const venueInstance = venueKeys.detail(slug);
+  const { data: venue, refetch: venueRefetch } = useQuery({ ...venueInstance, enabled: !!slug });
+
+  const bookingInstance = bookingKeys.list({
+    pitchId: selectedPitch?._id,
+    date: moment(selectedDate).format('YYYY-MM-DD'),
   });
 
-  const { data: bookings, mutate: getBookingMutate } = useMutation({
-    mutationKey: ['booking-pitch-by-day'],
-    mutationFn: ({ pitchId, date }: GetBookingsDto) => getBookings({ pitchId, date }),
+  const { data: bookings, refetch: bookingsRefetch } = useQuery({
+    ...bookingInstance,
+    enabled: !!selectedPitch && !!selectedDate,
   });
 
   const { mutate: createBookingMutate } = useMutation({
-    mutationKey: ['create-booking'],
     mutationFn: (payload: CreateBookingDto) => createBooking(payload),
   });
 
+  const pitchCategoryId = Number(searchParams.get('pitchCategory'));
+
+  const pitchInstance = pitchKeys.list({ venueId: venue?._id, pitchCategoryId });
   const { data: pitches } = useQuery({
-    queryKey: ['pitches'],
-    queryFn: () => {
-      if (venue) {
-        const { _id } = venue;
-        const pitchCategoryId = Number(searchParams.get('pitchCategory'));
-        return getPitchesByVenue(_id, { pitchCategoryId });
-      }
-    },
+    ...pitchInstance,
     enabled: !!venue,
   });
-
-  const [selectedDate, setSelectedDate] = useState<Date | null>();
-  const [selectedTime, setSelectedTime] = useState<number[] | null>();
-  const [selectedPitch, setSelectedPitch] = useState<Pitch>();
 
   const times = bookings && findFreeTime(bookings.data);
 
@@ -88,10 +87,10 @@ export const BookingPage = () => {
   const handleSubmit = () => {
     if (selectedTime && selectedPitch) {
       const startTimeNumber = selectedTime[0];
-      const startDayString = dayjs(selectedDate).format('YYYY-MM-DD');
+      const startDayString = moment(selectedDate).format('YYYY-MM-DD');
 
       const endTimeNumber = selectedTime[1];
-      const endDayString = dayjs(selectedDate).format('YYYY-MM-DD');
+      const endDayString = moment(selectedDate).format('YYYY-MM-DD');
 
       const startTime = convertToDate(startDayString, startTimeNumber);
       const endTime = convertToDate(endDayString, endTimeNumber);
@@ -105,10 +104,8 @@ export const BookingPage = () => {
   };
 
   useEffect(() => {
-    if (slug) {
-      venueMutation(slug);
-    }
-  }, [slug, venueMutation]);
+    venueRefetch();
+  }, [slug, venueRefetch]);
 
   useEffect(() => {
     if (selectedPitch && selectedTime) {
@@ -118,10 +115,9 @@ export const BookingPage = () => {
 
   useEffect(() => {
     if (selectedDate && selectedPitch) {
-      setSelectedTime(null);
-      getBookingMutate({ pitchId: selectedPitch._id, date: dayjs(selectedDate).format('YYYY-MM-DD') });
+      bookingsRefetch();
     }
-  }, [selectedDate, selectedPitch, getBookingMutate]);
+  }, [selectedDate, selectedPitch, bookingsRefetch]);
 
   return (
     pitches && (
@@ -130,10 +126,10 @@ export const BookingPage = () => {
         {step === 0 && (
           <>
             <Typography textAlign='center' variant='h5' marginY={4}>
-              Loại sân: {pitches[0].pitchCategory.name}
+              Loại sân: {pitches.data?.[0].pitchCategory.name}
             </Typography>
             <Grid container spacing={4} border={1} paddingBottom={4} borderColor='secondary.light' marginTop={1}>
-              {pitches.map((item) => (
+              {pitches.data.map((item) => (
                 <Grid item xs={3} position='relative' key={item._id}>
                   <Box onClick={() => setSelectedPitch(item)}>
                     <Box
@@ -285,7 +281,7 @@ export const BookingPage = () => {
               <Box display='flex' marginBottom={2}>
                 <Box
                   component='img'
-                  src={pitches[0].venue.imageList[0].imagePath}
+                  src={pitches.data[0].venue.imageList[0].imagePath}
                   alt='venue'
                   width='20%'
                   height='30%'
@@ -294,10 +290,10 @@ export const BookingPage = () => {
                 />
                 <Box paddingX={2}>
                   <Typography fontWeight={500} variant='h5'>
-                    {pitches[0].venue.name}
+                    {pitches.data?.[0].venue.name}
                   </Typography>
                   <Typography fontWeight={300} variant='body2' fontStyle='italic'>
-                    {pitches[0].venue.address}
+                    {pitches.data?.[0].venue.address}
                   </Typography>
                 </Box>
               </Box>
@@ -305,12 +301,12 @@ export const BookingPage = () => {
               <Box marginY={2}>
                 <Box display='flex'>
                   <Typography fontWeight={500}>Loại:</Typography>
-                  <Typography marginX={1}>{pitches?.[0].pitchCategory.name}</Typography>
+                  <Typography marginX={1}>{pitches.data?.[0].pitchCategory.name}</Typography>
                 </Box>
                 {selectedDate && (
                   <Box display='flex'>
                     <Typography fontWeight={500}>Ngày:</Typography>
-                    <Typography marginX={1}>{dayjs(selectedDate).format('DD/MM/YYYY')}</Typography>
+                    <Typography marginX={1}>{moment(selectedDate).format('DD/MM/YYYY')}</Typography>
                   </Box>
                 )}
                 <Box display='flex'>

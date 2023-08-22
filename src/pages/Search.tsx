@@ -10,8 +10,8 @@ import { SearchFilter } from '@/components/SearchFilter';
 import { SearchResultCard } from '@/components/SearchResultCard';
 import { SearchSort } from '@/components/SearchSort';
 import { useBoolean } from '@/hooks';
-import { getPitches } from '@/services/pitch/pitch.service';
-import { getAllCategories } from '@/services/pitch_category/pitch-category.service';
+import { pitchKeys } from '@/services/pitch/pitch.query';
+import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
 
 const STALE_TIME = 5 * 1000;
 const PAGE_LIMIT = 10;
@@ -29,24 +29,19 @@ export const Search = () => {
 
   const [page, setPage] = useState(1);
 
-  const { data: pitchCategories } = useQuery({
-    queryKey: ['pitchCategories'],
-    queryFn: getAllCategories,
-    staleTime: STALE_TIME,
+  const pitchCategoryInstace = pitchCategoryKeys.list();
+  const { data: pitchCategories } = useQuery({ ...pitchCategoryInstace, staleTime: STALE_TIME });
+
+  const pitchInstance = pitchKeys.list({
+    keyword: locationParams,
+    page,
+    limit: PAGE_LIMIT,
+    order: sortParams,
+    pitchCategoryId: Number(categoryParams),
+    minPrice,
+    maxPrice,
   });
-  const { data: pitches, refetch } = useQuery({
-    queryKey: ['search-pitches'],
-    queryFn: () =>
-      getPitches({
-        keyword: locationParams,
-        page,
-        limit: PAGE_LIMIT,
-        order: sortParams,
-        pitchCategory: Number(categoryParams),
-        minPrice,
-        maxPrice,
-      }),
-  });
+  const { data: pitches, refetch } = useQuery(pitchInstance);
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',

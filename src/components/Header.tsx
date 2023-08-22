@@ -1,6 +1,11 @@
-import { Person, Menu as MenuIcon, LogoutOutlined, HouseOutlined } from '@mui/icons-material';
-import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import {
+  Person,
+  Menu as MenuIcon,
+  LogoutOutlined,
+  HouseOutlined,
+  HistoryOutlined,
+  KeyboardArrowDown,
+} from '@mui/icons-material';
 import { Avatar, Box, Button, Grid, Menu, MenuItem, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth, useMenu } from '@/hooks';
@@ -36,7 +41,7 @@ export const Header = () => {
           />
           <Button variant='text' onClick={openCategory} color='secondary'>
             Danh mục sân bóng
-            <KeyboardArrowDownIcon />
+            <KeyboardArrowDown />
           </Button>
           <Menu
             id='category-menu'
@@ -93,7 +98,7 @@ export const Header = () => {
                   </Box>
                 </MenuItem>
                 <MenuItem sx={{ paddingY: 1.5 }} onClick={() => navigate('/account/my-booking')}>
-                  <HistoryOutlinedIcon sx={{ marginRight: 2 }} />
+                  <HistoryOutlined sx={{ marginRight: 2 }} />
                   Đặt sân của tôi
                 </MenuItem>
 

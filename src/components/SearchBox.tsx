@@ -4,14 +4,15 @@ import RoomOutlinedIcon from '@mui/icons-material/RoomOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import { Box, Button, Grid, Typography } from '@mui/material';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SelectBox } from './SelectBox';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { DefaultLocations } from '@/common/datas/location.data';
-import { getAllCategories } from '@/services/pitch_category/pitch-category.service';
-import { getVenues } from '@/services/venue/venue.service';
+import { useDebounce } from '@/hooks';
+import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
+import { venueKeys } from '@/services/venue/venue.query';
 
 export const SearchBox = () => {
   const navigate = useNavigate();
@@ -19,37 +20,34 @@ export const SearchBox = () => {
   const [pitchCategory, setPitchCategory] = useState<string>('');
 
   const [searchPitchCategory, setSearchPitchCategory] = useState<string>('');
+
   const [searchAdress, setSearchAdress] = useState<string>('');
 
-  const { data: categories } = useQuery({ queryKey: ['categories'], queryFn: getAllCategories, staleTime: Infinity });
+  const pitchCategoryInstance = pitchCategoryKeys.list();
 
-  const { data: venues, mutate: getVenuesMutate } = useMutation({
-    mutationKey: ['venues'],
-    mutationFn: (value: string) => getVenues({ keyword: value }),
+  const { data: pitchCategories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
+
+  const debounceSearchAddress = useDebounce(searchAdress);
+
+  const venueInstance = venueKeys.list({ location: debounceSearchAddress });
+
+  const { data: venues } = useQuery({
+    ...venueInstance,
+    enabled: !!debounceSearchAddress,
   });
 
   const searchHandler = () => {
     if (DefaultLocations.some((item) => item === searchAdress)) {
       navigate(
         `/search?location=${searchAdress || DefaultLocations[0]}&pitchCategory=${
-          searchPitchCategory || categories?.data[0]._id
+          searchPitchCategory || pitchCategories?.data[0]._id
         }&minPrice=${DEFAULT_MIN_PRICE}&maxPrice=${DEFAULT_MAX_PRICE}`,
       );
     }
   };
 
-  useEffect(() => {
-    const getData = setTimeout(() => {
-      if (searchAdress !== '') {
-        getVenuesMutate(searchAdress);
-      }
-    }, 1000);
-
-    return () => clearTimeout(getData);
-  }, [searchAdress, getVenuesMutate]);
-
   return (
-    categories && (
+    pitchCategories && (
       <Box display='flex' paddingY={1} marginX={20} borderRadius={4} boxShadow={4} bgcolor='primary.contrastText'>
         <Grid container marginX={8} marginY={4} borderRadius={50} border={1} paddingY={1}>
           <Grid item xs={4} display='flex' justifyContent='center' alignItems='center'>
@@ -114,7 +112,7 @@ export const SearchBox = () => {
                 onChange={(data) => setPitchCategory(data)}
                 placeHolder='Loại sân bạn muốn đặt'
               >
-                {categories.data.map((item) => (
+                {pitchCategories.data.map((item) => (
                   <Box
                     onClick={() => {
                       setSearchPitchCategory(item._id.toString());

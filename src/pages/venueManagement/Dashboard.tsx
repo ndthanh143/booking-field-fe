@@ -10,6 +10,7 @@ import CountUp from 'react-countup';
 import { TimePeriodFilter } from '@/common/enums/filter-chart.enum';
 import { useVenueByUserQuery } from '@/hooks';
 import { GetAnalystBookingIncomeDto } from '@/services/booking/booking.dto';
+import { bookingKeys } from '@/services/booking/booking.query';
 import { getAnalystBookingCategory, getAnalystBookingIncome, getBookings } from '@/services/booking/booking.service';
 import { convertCurrency } from '@/utils/convertCurrency';
 import { getMonthsAgoFromDate } from '@/utils/getMonthsAgo';
@@ -27,13 +28,9 @@ const currentDate = new Date();
 export const Dashboard = () => {
   const { data: venue } = useVenueByUserQuery();
 
+  const bookingInstance = bookingKeys.list({ venueId: venue?._id });
   const { data: bookings } = useQuery({
-    queryKey: ['venue-bookings'],
-    queryFn: () => {
-      if (venue) {
-        return getBookings({ venueId: venue._id });
-      }
-    },
+    ...bookingInstance,
     enabled: !!venue,
   });
 

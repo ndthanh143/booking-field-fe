@@ -7,17 +7,19 @@ import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import StarIcon from '@mui/icons-material/Star';
 import { Avatar, Box, Button, Grid, Rating, Tab, Tabs, Typography } from '@mui/material';
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import dayjs from 'dayjs';
-import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import moment from 'moment';
+import { SyntheticEvent, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { RATING_PAGE_LIMIT } from '@/common/constants';
 import { ImageLibrary } from '@/components/ImageLibrary';
-import { getPitchesByVenueDetail } from '@/services/pitch/pitch.service';
-import { getRatingsByVenue } from '@/services/rating/rating.service';
-import { getVenue } from '@/services/venue/venue.service';
+import { pitchKeys } from '@/services/pitch/pitch.query';
+import { ratingKeys } from '@/services/rating/rating.query';
+import { venueKeys } from '@/services/venue/venue.query';
+import { convertCurrency } from '@/utils/convertCurrency';
 import convertToAMPM from '@/utils/convertTimestamp';
+import { groupBy } from '@/utils/groupBy';
 
-const RATING_PAGE_LIMIT = 6;
 export const VenueDetail = () => {
   const navigate = useNavigate();
 
@@ -26,32 +28,17 @@ export const VenueDetail = () => {
 
   const { slug } = useParams();
 
-  const { data: venue, mutate: venueMutation } = useMutation({
-    mutationKey: ['venue'],
-    mutationFn: (slug: string) => getVenue(slug),
+  const venueInstance = venueKeys.detail(slug);
+  const { data: venue } = useQuery({
+    ...venueInstance,
+    enabled: !!slug,
   });
 
-  const { data: pitches } = useQuery({
-    queryKey: ['pitches-venue'],
-    queryFn: () => {
-      if (venue) {
-        const { _id } = venue;
-        return getPitchesByVenueDetail(_id);
-      }
-    },
-    enabled: !!venue,
-  });
+  const pitchInstance = pitchKeys.list({ venueId: venue?._id });
+  const { data: pitches } = useQuery({ ...pitchInstance, enabled: !!venue });
 
-  const { data: ratings } = useQuery({
-    queryKey: ['ratings'],
-    queryFn: () => {
-      if (venue) {
-        const { _id } = venue;
-        return getRatingsByVenue(_id, { page: ratingPage, limit: RATING_PAGE_LIMIT });
-      }
-    },
-    enabled: !!venue,
-  });
+  const ratingInstance = ratingKeys.list({ venueId: venue?._id, page: ratingPage, limit: RATING_PAGE_LIMIT });
+  const { data: ratings } = useQuery({ ...ratingInstance, enabled: !!venue });
 
   const center = useMemo(
     () => ({
@@ -73,11 +60,7 @@ export const VenueDetail = () => {
     ? (ratings.data.reduce((acc, cur) => acc + Number(cur.rate), 0) / ratings.data.length).toFixed(1)
     : 0;
 
-  useEffect(() => {
-    if (slug) {
-      venueMutation(slug);
-    }
-  }, [slug, venueMutation]);
+  const groupByCategory = pitches && groupBy(pitches.data, (item) => item.pitchCategory.name);
 
   return (
     venue && (
@@ -111,8 +94,8 @@ export const VenueDetail = () => {
         </Box>
         <Box marginY={4}>
           <Typography variant='h4'>Danh sách sân</Typography>
-          {pitches &&
-            pitches.map((item) => (
+          {groupByCategory &&
+            groupByCategory.map((item) => (
               <Grid
                 container
                 paddingY={4}
@@ -123,7 +106,7 @@ export const VenueDetail = () => {
                     borderBottom: 0,
                   },
                 }}
-                key={item.pitchCategory_id}
+                key={item.key}
               >
                 <Grid item md={3}>
                   <Box
@@ -137,7 +120,7 @@ export const VenueDetail = () => {
                     alignItems='center'
                     fontSize={24}
                   >
-                    {item.name}
+                    {item.key}
                   </Box>
                 </Grid>
                 <Grid item md={3}>
@@ -168,7 +151,7 @@ export const VenueDetail = () => {
                     borderColor='primary.main'
                     color='primary.main'
                   >
-                    {item.quantity}
+                    {item.values.length}
                   </Box>
                 </Grid>
                 <Grid item md={3}>
@@ -179,12 +162,12 @@ export const VenueDetail = () => {
                     1 Giờ
                   </Typography>
                   <Typography variant='h5' fontWeight={500} marginY={2}>
-                    {`${item.price}đ`}
+                    {convertCurrency(item.values[0].price)}
                   </Typography>
                   <Button
                     variant='contained'
                     sx={{ marginY: 2 }}
-                    onClick={() => navigate(`/booking/${venue.slug}?pitchCategory=${item.pitchCategory_id}`)}
+                    onClick={() => navigate(`/booking/${venue.slug}?pitchCategory=${item.values[0].pitchCategory._id}`)}
                   >
                     Đặt sân
                   </Button>
@@ -217,20 +200,20 @@ export const VenueDetail = () => {
               </Box>
               <Grid container spacing={6}>
                 {ratings.data.map((rating) => (
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12} md={6} key={rating._id}>
                     <Box display='flex' justifyContent='space-between' alignItems='center'>
                       <Box display='flex' alignItems='center'>
                         <Avatar sx={{ bgcolor: 'primary.main', marginRight: 2, width: 56, height: 56 }}>
-                          {rating.lastName.charAt(0)}
+                          {rating.booking.user.lastName.charAt(0)}
                         </Avatar>
                         <Box>
                           <Typography variant='body1' sx={{ opacity: 0.6 }}>
-                            {dayjs(rating.createdAt).format('L')}
+                            {moment(rating.createdAt).format('DD/MM/YYYY')}
                           </Typography>
                           <Box display='flex'>
                             <Typography variant='body1'>Khách hàng:</Typography>
                             <Typography variant='body1' fontWeight={500} marginX={1}>
-                              {`${rating.lastName} ${rating.firstName}`}
+                              {`${rating.booking.user.lastName} ${rating.booking.user.firstName}`}
                             </Typography>
                           </Box>
                         </Box>
@@ -240,7 +223,7 @@ export const VenueDetail = () => {
                           <Typography variant='body1' marginX={1}>
                             Loại:
                           </Typography>
-                          <Typography fontWeight={500}>{rating.category_name}</Typography>
+                          <Typography fontWeight={500}>{rating.booking.pitch.pitchCategory.name}</Typography>
                         </Box>
                         <Box display='flex' alignItems='center'>
                           <Typography variant='body1' marginX={1}>

@@ -1,6 +1,7 @@
-import { BasePaginationResponse } from '@/common/dtos/base.dto';
+import { BasePaginationResponse, BaseResponse } from '@/common/dtos/base.dto';
 
 export type PitchCategoriesResponse = BasePaginationResponse<PitchCategory>;
+export type PitchCategoryResponse = BaseResponse<PitchCategory>;
 
 export type PitchCategory = {
   _id: number;

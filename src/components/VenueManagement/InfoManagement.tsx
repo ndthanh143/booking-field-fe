@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { object, string } from 'yup';
 import { useBoolean, useVenueByUserQuery, useVenueMutation } from '@/hooks';
+import { locationKeys } from '@/services/location/location.query';
 import { getProvinces } from '@/services/location/location.service';
 import { UpdateVenueData } from '@/services/venue/venue.dto';
 
@@ -29,10 +30,9 @@ export const InfoManagement = () => {
 
   const { data: venue } = useVenueByUserQuery();
 
-  const { data: provinces } = useQuery({
-    queryKey: ['provinces'],
-    queryFn: getProvinces,
-  });
+  const locationInstace = locationKeys.list();
+
+  const { data: provinces } = useQuery(locationInstace);
 
   const onSubmitHandler = (data: UpdateVenueData) => {
     if (venue) {

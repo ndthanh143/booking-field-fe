@@ -5,6 +5,7 @@ import {
   HistoryOutlined,
   House,
   HouseOutlined,
+  LogoutOutlined,
   Menu as MenuIcon,
   Notifications,
   ShoppingBag,
@@ -144,21 +145,21 @@ export const VenueManagementLayout = () => {
                 }}
               >
                 <Box>
-                  <MenuItem sx={{ borderBottom: 1, borderColor: '#ccc', padding: 2 }}>
+                  <MenuItem
+                    sx={{ borderBottom: 1, borderColor: '#ccc', padding: 2 }}
+                    onClick={() => navigate('/account/profile')}
+                  >
                     <Avatar />
                     <Box marginLeft={2}>
                       <Typography fontWeight={500}>{`${profile.firstName} ${profile.lastName}`}</Typography>
                       <Typography>Xem hồ sơ</Typography>
                     </Box>
                   </MenuItem>
-                  <MenuItem sx={{ paddingY: 1.5 }}>
+                  <MenuItem sx={{ paddingY: 1.5 }} onClick={() => navigate('/account/my-booking')}>
                     <HistoryOutlined sx={{ marginRight: 2 }} />
                     Đặt sân của tôi
                   </MenuItem>
-                  <MenuItem sx={{ paddingY: 1.5 }}>
-                    <FavoriteBorderOutlined sx={{ marginRight: 2 }} />
-                    Danh sách yêu thích
-                  </MenuItem>
+
                   <MenuItem
                     sx={{ paddingY: 1.5, fontWeight: 700 }}
                     onClick={() => navigate('/venue-management/dashboard')}
@@ -173,6 +174,7 @@ export const VenueManagementLayout = () => {
                       logout();
                     }}
                   >
+                    <LogoutOutlined sx={{ marginRight: 2 }} />
                     Đăng xuất
                   </MenuItem>
                 </Box>

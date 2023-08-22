@@ -1,23 +1,15 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { LoginInput } from '@/services/auth/auth.dto';
 import { doLogout, postLogin } from '@/services/auth/auth.service';
-import { User } from '@/services/user/user.dto';
-
-function getUserInfo(): User | null {
-  const user = Cookies.get('user');
-  if (user) {
-    return JSON.parse(user);
-  }
-  return null;
-}
+import { userKeys } from '@/services/user/user.query';
 
 export const useAuth = () => {
   const navigate = useNavigate();
 
-  const { data: profile, isLoading, refetch } = useQuery({ queryKey: ['profile'], queryFn: getUserInfo });
+  const userInstance = userKeys.profile();
+  const { data: profile, isLoading, refetch } = useQuery(userInstance);
 
   const {
     mutate: loginMutation,
@@ -26,7 +18,7 @@ export const useAuth = () => {
   } = useMutation({
     mutationFn: (payload: LoginInput) => postLogin(payload),
     onSuccess: () => {
-      refetch({ queryKey: ['profile'] });
+      refetch();
       navigate('/');
     },
   });
@@ -38,7 +30,7 @@ export const useAuth = () => {
   function logout() {
     doLogout();
     toast.success('Logout successfully');
-    refetch({ queryKey: ['profile'] });
+    refetch();
   }
 
   return { profile, login, logout, isLoading, loginLoading, loginError, refetch };

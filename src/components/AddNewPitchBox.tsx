@@ -8,7 +8,8 @@ import { useForm } from 'react-hook-form';
 import { number, object } from 'yup';
 import { SelectBox } from './SelectBox';
 import { CreatePitchDto } from '@/services/pitch/pitch.dto';
-import { getAllCategories } from '@/services/pitch_category/pitch-category.service';
+import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
+import { getPitchCategories } from '@/services/pitch_category/pitch-category.service';
 import { Venue } from '@/services/venue/venue.dto';
 
 export interface SearchSortProps {
@@ -24,8 +25,11 @@ const schema = object({
   pitchCategory: number().required(),
   venue: number().required(),
 });
+
 export const AddNewPitchBox = ({ venue, isOpen, onClose, onSubmit }: SearchSortProps) => {
-  const { data: categories } = useQuery({ queryKey: ['categories'], queryFn: getAllCategories, staleTime: Infinity });
+  const pitchCategoryInstance = pitchCategoryKeys.list();
+
+  const { data: categories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
   const [pitchCategory, setPitchCategory] = useState<string>('');
 

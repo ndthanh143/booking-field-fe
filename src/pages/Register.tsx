@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import { object, ref, string } from 'yup';
 import { useAuth } from '@/hooks/useAuth';
 import { SignInPayload } from '@/services/user/user.dto';
+import { userKeys } from '@/services/user/user.query';
 import { postRegister } from '@/services/user/user.service';
 
 type RegisterInput = SignInPayload & {
@@ -50,7 +51,7 @@ export const Register = () => {
   const mutation = useMutation({
     mutationFn: (payload: SignInPayload) => postRegister(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['profile'] });
+      queryClient.invalidateQueries(userKeys.profiles());
       navigate('/');
     },
   });

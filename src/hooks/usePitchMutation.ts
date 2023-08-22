@@ -10,7 +10,6 @@ export const usePitchMutation = () => {
     isLoading: isDeleteLoading,
     reset: resetDelete,
   } = useMutation({
-    mutationKey: ['delete-pitch'],
     mutationFn: (id: number) => deletePitch(id),
     onSuccess: () => {
       toast.success('Xóa sân bóng thành công');
@@ -23,7 +22,6 @@ export const usePitchMutation = () => {
     isLoading: isCreateLoading,
     reset: resetCreate,
   } = useMutation({
-    mutationKey: ['create-pitch'],
     mutationFn: (data: CreatePitchDto) => createPitch(data),
     onSuccess: () => {
       toast.success('Thêm sân bóng thành công');
@@ -36,7 +34,6 @@ export const usePitchMutation = () => {
     isLoading: isUpdateLoading,
     reset: resetUpdate,
   } = useMutation({
-    mutationKey: ['update-pitch'],
     mutationFn: (payload: UpdatePitchPayload) => updatePitch(payload),
     onSuccess: () => {
       toast.success('Cập nhật sân bóng thành công');

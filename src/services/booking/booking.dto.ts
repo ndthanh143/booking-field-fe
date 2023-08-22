@@ -1,11 +1,12 @@
 import { Pitch } from '../pitch/pitch.dto';
+import { Rating } from '../rating/rating.dto';
 import { User } from '../user/user.dto';
 import { BaseData, BasePaginationResponse, BaseResponse } from '@/common/dtos/base.dto';
 
 export type BookingsResponse = BasePaginationResponse<Booking>;
+export type BookingResponse = BaseResponse<Booking>;
 export type GetAnalystBookingIncomeResponse = BaseResponse<GetAnalystBookingIncomeData[]>;
 export type GetAnalystBookingCategoryResponse = BaseResponse<GetAnalystBookingCategoryData[]>;
-import { Rating } from '../rating/rating.dto';
 
 export type Booking = {
   startTime: Date;

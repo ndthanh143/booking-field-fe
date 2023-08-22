@@ -41,10 +41,11 @@ export type GetPitchesByVenueQuery = {
   pitchCategoryId?: number;
 };
 
-export type SearchPitchesQuery = {
+export type PitchesQuery = {
   order?: string;
   keyword?: string;
-  pitchCategory?: number;
+  pitchCategoryId?: number;
+  venueId?: number;
   minPrice?: number;
   maxPrice?: number;
 } & PaginationQuery;

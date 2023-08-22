@@ -2,11 +2,11 @@ import { UpdateVenuePayload, VenueQuery, VenueResponse, VenuesResponse } from '.
 import axiosInstance from '@/utils/axiosConfig';
 
 export const getVenues = async (query: VenueQuery) => {
-  const { keyword } = query;
+  const { location } = query;
 
   const { data } = await axiosInstance.get<VenuesResponse>('/venues', {
     params: {
-      keyword,
+      location,
     },
   });
 

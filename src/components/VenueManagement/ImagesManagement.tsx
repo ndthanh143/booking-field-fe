@@ -26,7 +26,6 @@ export const ImagesManagement = () => {
     isLoading: isUploading,
     reset: resetStateUpload,
   } = useMutation({
-    mutationKey: ['upload-images'],
     mutationFn: (files: FileList) => uploadImages(files),
   });
 

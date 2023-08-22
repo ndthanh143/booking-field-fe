@@ -1,4 +1,5 @@
 import {
+  BookingResponse,
   BookingsResponse,
   CreateBookingDto,
   GetAnalystBookingCategoryResponse,
@@ -30,6 +31,12 @@ export const getBookings = async (payload: GetBookingsDto) => {
   return data;
 };
 
+export const getBooking = async (id: number) => {
+  const { data } = await axiosInstance.get<BookingResponse>(`/bookings/${id}`);
+
+  return data;
+};
+
 export const getAnalystBookingIncome = async (query: GetAnalystBookingIncomeDto) => {
   const { year, venueId } = query;
   const { data } = await axiosInstance.get<GetAnalystBookingIncomeResponse>('/bookings/analyst', {
@@ -54,18 +61,12 @@ export const getAnalystBookingCategory = async (query: GetAnalystBookingIncomeDt
   return data.data;
 };
 
-export const getBookingsOfVenue = async (venueId: number) => {
-  const { data } = await axiosInstance.get<BookingsResponse>(`/bookings/venue/${venueId}`);
-
-  return data;
-};
-
 export const createBooking = async (payload: CreateBookingDto) => {
   await axiosInstance.post('/bookings', payload);
 };
 
-export const getUserBookings = async (id: number) => {
-  const { data } = await axiosInstance.get<BookingsResponse>(`/bookings/user/${id}`);
+export const getUserBookings = async () => {
+  const { data } = await axiosInstance.get<BookingsResponse>(`/bookings/user`);
 
   return data;
 };

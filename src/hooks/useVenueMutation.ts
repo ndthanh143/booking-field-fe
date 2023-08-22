@@ -11,7 +11,6 @@ export const useVenueMutation = () => {
     isLoading: isUpdating,
     reset: resetUpdateState,
   } = useMutation({
-    mutationKey: ['update-venue'],
     mutationFn: ({ id, data }: UpdateVenuePayload) => updateVenue({ id, data }),
     onSuccess: () => {
       queryClient.invalidateQueries(['venue']);

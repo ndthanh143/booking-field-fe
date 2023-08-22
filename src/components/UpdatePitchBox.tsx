@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { number, object } from 'yup';
 import { SelectBox } from './SelectBox';
 import { Pitch, UpdatePitchDto } from '@/services/pitch/pitch.dto';
-import { getAllCategories } from '@/services/pitch_category/pitch-category.service';
+import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
 
 export interface SearchSortProps {
   pitch: Pitch;
@@ -24,7 +24,9 @@ const schema = object({
 });
 
 export const UpdatePitchBox = ({ pitch, isOpen, onClose, onSubmit }: SearchSortProps) => {
-  const { data: categories } = useQuery({ queryKey: ['categories'], queryFn: getAllCategories, staleTime: Infinity });
+  const pitchCategoryInstance = pitchCategoryKeys.list();
+
+  const { data: categories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
   const [pitchCategory, setPitchCategory] = useState<string>('');
 

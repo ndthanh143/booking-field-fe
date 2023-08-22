@@ -58,5 +58,5 @@ export type VenueImage = {
 };
 
 export type VenueQuery = {
-  keyword: string;
+  location: string;
 };

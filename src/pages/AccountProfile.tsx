@@ -29,10 +29,9 @@ export const AccountProfile = () => {
   });
 
   const { mutate: updateUserMutateion } = useMutation({
-    mutationKey: ['update-user'],
     mutationFn: ({ id, data }: UpdateUserPayload) => updateUserInfo(id, data),
     onSuccess: () => {
-      refetch({ queryKey: ['profile'] });
+      refetch();
       setFalse();
       toast.success('Update user successfully');
     },
