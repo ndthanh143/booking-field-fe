@@ -1,12 +1,17 @@
-import { Box, Card, CardContent, CardMedia, ImageList, Typography } from '@mui/material';
+import { Box, Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
+import { defaultLocations } from '@/common/datas/location.data';
 import { SearchBox } from '@/components/SearchBox';
 import { Slider } from '@/components/Slider';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
 
 export const Home = () => {
+  const navigate = useNavigate();
+
   const pitchCategoryInstance = pitchCategoryKeys.list();
-  const { data: categories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
+  const { data } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
   const SliderSettings = {
     dots: false,
@@ -18,7 +23,7 @@ export const Home = () => {
   };
 
   return (
-    categories && (
+    data && (
       <>
         <Box position='relative' marginBottom={14}>
           <Box component='img' sx={{ width: '100%' }} alt='san co nhan tao so 1' src='banner.jpg' />
@@ -28,17 +33,38 @@ export const Home = () => {
         </Box>
         <Box marginY={2}>
           <Slider {...SliderSettings}>
-            {categories.data.map((category) => (
-              <Box display='flex' justifyContent='center' paddingX={2} height={250} width={100} key={category._id}>
+            {data.data.map((category) => (
+              <Box display='flex' justifyContent='center' maxHeight={200} paddingX={4} key={category._id}>
                 <Box
-                  component='img'
                   borderRadius={4}
-                  width='100%'
-                  height='100%'
                   overflow='hidden'
-                  alt={category.name}
-                  src={category.thumbnail}
-                />
+                  position='relative'
+                  maxHeight={200}
+                  sx={{
+                    ':before': {
+                      content: '""',
+                      position: 'absolute',
+                      inset: 0,
+                      bgcolor: 'rgba(0, 0, 0, 0.6)',
+                      display: 'none',
+                    },
+                    ':hover': {
+                      ':before': {
+                        display: 'block',
+                      },
+                    },
+                    cursor: 'pointer',
+                  }}
+                >
+                  <Box
+                    component='img'
+                    width='100%'
+                    height='100%'
+                    overflow='hidden'
+                    alt={category.name}
+                    src={category.thumbnail}
+                  />
+                </Box>
               </Box>
             ))}
           </Slider>
@@ -48,21 +74,48 @@ export const Home = () => {
           <Typography variant='h5' marginY={2}>
             Danh mục sân bóng
           </Typography>
-          <ImageList sx={{ width: 'full', height: 400 }} cols={categories.data.length} rowHeight={100}>
-            {categories.data.map((category) => (
-              <Card sx={{ maxWidth: 345, borderRadius: 4 }} key={category._id}>
-                <CardMedia sx={{ height: 200 }} image={category.thumbnail} title={category.name} />
-                <CardContent>
-                  <Typography gutterBottom variant='h5' component='div'>
-                    {category.name}
-                  </Typography>
-                  <Typography variant='body2' color='text.secondary'>
-                    {category.description}
-                  </Typography>
-                </CardContent>
-              </Card>
+          <Grid container sx={{ width: 'full' }} spacing={4}>
+            {data.data.map((category) => (
+              <Grid item xs={12} md={6} lg={3}>
+                <Card sx={{ maxWidth: 345, minHeight: 400, borderRadius: 4 }} key={category._id}>
+                  <Box
+                    position='relative'
+                    sx={{
+                      ':before': {
+                        content: '""',
+                        position: 'absolute',
+                        inset: 0,
+                        bgcolor: 'rgba(0, 0, 0, 0.4)',
+                        display: 'none',
+                        zIndex: 1,
+                      },
+                      ':hover': {
+                        ':before': {
+                          display: 'block',
+                        },
+                      },
+                      cursor: 'pointer',
+                    }}
+                    onClick={() =>
+                      navigate(
+                        `/search?location=${defaultLocations[0]}&pitchCategory=${category._id}&minPrice=${DEFAULT_MIN_PRICE}&maxPrice=${DEFAULT_MAX_PRICE}`,
+                      )
+                    }
+                  >
+                    <CardMedia sx={{ height: 200 }} image={category.thumbnail} title={category.name} />
+                  </Box>
+                  <CardContent>
+                    <Typography gutterBottom variant='h5' component='div'>
+                      {category.name}
+                    </Typography>
+                    <Typography variant='body2' color='text.secondary'>
+                      {category.description}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
             ))}
-          </ImageList>
+          </Grid>
         </Box>
       </>
     )

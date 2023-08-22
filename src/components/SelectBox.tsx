@@ -1,6 +1,6 @@
 import { Autocomplete, InputBase, Popper } from '@mui/material';
 import { PropsWithChildren } from 'react';
-import { DefaultLocations } from '@/common/datas/location.data';
+import { defaultLocations } from '@/common/datas/location.data';
 import { useBoolean } from '@/hooks';
 
 export interface SelectBoxProps extends PropsWithChildren {
@@ -9,30 +9,34 @@ export interface SelectBoxProps extends PropsWithChildren {
   placeHolder: string;
 }
 
-export const SelectBox = ({ value, onChange, placeHolder, children }: SelectBoxProps) => {
+export const SelectBox = ({ value, onChange, placeHolder, children, ...props }: SelectBoxProps) => {
   const { value: isOpenSearchVenue, setFalse: closeSearchVenue, setTrue: openSearchVenue } = useBoolean(false);
 
   return (
     <Autocomplete
       disablePortal
       id='combo-box-address'
-      sx={{ flex: 1 }}
-      options={DefaultLocations}
+      options={defaultLocations}
       open={isOpenSearchVenue}
       onClose={closeSearchVenue}
       onOpen={openSearchVenue}
       onInputChange={(_, newValue) => onChange(newValue)}
       value={value}
+      fullWidth
+      {...props}
       PopperComponent={(props) => (
         <Popper
           sx={{
-            minWidth: 250,
+            maxWidth: '80%',
             maxHeight: 500,
             overflowY: 'scroll',
             bgcolor: 'primary.contrastText',
             boxShadow: 4,
             borderRadius: 2,
             paddingY: 1,
+            '&::-webkit-scrollbar': {
+              width: '0',
+            },
           }}
           {...props}
           onMouseDown={(e) => e.preventDefault()}
@@ -42,11 +46,19 @@ export const SelectBox = ({ value, onChange, placeHolder, children }: SelectBoxP
       )}
       renderInput={(params) => (
         <InputBase
-          sx={{ display: 'flex' }}
+          sx={{
+            display: 'flex',
+            height: '100%',
+            paddingTop: 4,
+            paddingLeft: 8,
+            paddingBottom: 1,
+            position: 'relative',
+          }}
           ref={params.InputProps.ref}
           {...params}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          fullWidth
           placeholder={placeHolder}
         />
       )}

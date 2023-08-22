@@ -1,6 +1,6 @@
 export enum LocationEnum {
-  HOCHIMINH = 'Hồ Chí Minh',
+  HOCHIMINH = 'Thành phố Hồ Chí Minh',
   HANOI = 'Hà Nội',
   DANANG = 'Đà Nẵng',
-  NHATRANG = 'Nha Trang',
+  HAIPHONG = 'Hải Phòng',
 }
