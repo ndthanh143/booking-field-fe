@@ -7,8 +7,12 @@ import {
   KeyboardArrowDown,
 } from '@mui/icons-material';
 import { Avatar, Box, Button, Grid, Menu, MenuItem, Typography } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
+import { defaultLocations } from '@/common/datas/location.data';
 import { useAuth, useMenu } from '@/hooks';
+import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -17,6 +21,10 @@ export const Header = () => {
 
   const { anchorEl: anchorMenu, isOpen: isOpenMenu, onClose: closeMenu, onOpen: openMenu } = useMenu();
   const { anchorEl: anchorCategory, isOpen: isOpenCategory, onClose: closeCategory, onOpen: openCategory } = useMenu();
+
+  const pitchCategoryInstance = pitchCategoryKeys.list();
+  const { data } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
+
   return (
     <Grid
       container
@@ -52,10 +60,17 @@ export const Header = () => {
               'aria-labelledby': 'basic-button',
             }}
           >
-            <MenuItem>Sân 5</MenuItem>
-            <MenuItem>Sân 7</MenuItem>
-            <MenuItem>Sân 11</MenuItem>
-            <MenuItem>Sân Futsal</MenuItem>
+            {data?.data.map((item) => (
+              <MenuItem
+                onClick={() =>
+                  navigate(
+                    `/search?location=${defaultLocations[0]}&pitchCategory=${item._id}&minPrice=${DEFAULT_MIN_PRICE}&maxPrice=${DEFAULT_MAX_PRICE}`,
+                  )
+                }
+              >
+                {item.name}
+              </MenuItem>
+            ))}
           </Menu>
         </Box>
       </Grid>
