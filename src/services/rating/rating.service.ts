@@ -1,15 +1,24 @@
-import { CreateRatingPayload, GetRatingVenueResponse } from './rating.dto';
-import { PaginationQuery } from '@/common/dtos/base.dto';
+import { CreateRatingPayload, RatingsResponse, GetRatingsQuery, RatingResponse } from './rating.dto';
 import axiosInstance from '@/utils/axiosConfig';
 
-export const getRatingsByVenue = async (venueId: number, query: PaginationQuery) => {
-  const { page, limit } = query;
+export const getRatings = async (query: GetRatingsQuery) => {
+  const { page, limit, venueId } = query;
 
-  const { data } = await axiosInstance.get<GetRatingVenueResponse>(
-    `/ratings/venue/${venueId}?page=${page}&limit=${limit}`,
-  );
+  const { data } = await axiosInstance.get<RatingsResponse>('/ratings', {
+    params: {
+      page,
+      limit,
+      venueId,
+    },
+  });
 
   return data;
+};
+
+export const getRating = async (id: number) => {
+  const { data } = await axiosInstance.get<RatingResponse>(`/ratings/${id}`);
+
+  return data.data;
 };
 
 export const createRating = async (payload: CreateRatingPayload) => {

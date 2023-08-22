@@ -1,12 +1,12 @@
 import { Box, Slider, TextField } from '@mui/material';
 
-export interface IPriceFilterProps {
+export interface PriceFilterProps {
   priceRange: number[];
   onChange: (data: number[]) => void;
   minDistance: number;
 }
 
-export const PriceFilter = ({ priceRange, onChange, minDistance }: IPriceFilterProps) => {
+export const PriceFilter = ({ priceRange, onChange, minDistance }: PriceFilterProps) => {
   const handlePriceRangeChange = (_: Event, newValue: number | number[], activeThumb: number) => {
     if (!Array.isArray(newValue)) {
       return;

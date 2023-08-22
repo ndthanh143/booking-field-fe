@@ -7,11 +7,11 @@ import { Swiper as SwiperType } from 'swiper/types';
 import { useBoolean } from '@/hooks';
 import { VenueImage } from '@/services/venue/venue.dto';
 
-export interface IImageLibraryProps {
+export interface ImageLibraryProps {
   imageList: VenueImage[];
 }
 
-export const ImageLibrary = ({ imageList }: IImageLibraryProps) => {
+export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
   const { value, setTrue, setFalse } = useBoolean(false);
   const [swiper, setSwiper] = useState<SwiperType>();
 

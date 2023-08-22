@@ -3,7 +3,7 @@ import { useState, MouseEvent } from 'react';
 interface UseMenuOutput {
   anchorEl: HTMLElement | null;
   isOpen: boolean;
-  onOpen: (event: MouseEvent<HTMLButtonElement>) => void;
+  onOpen: (event: MouseEvent<HTMLElement>) => void;
   onClose: () => void;
 }
 
@@ -11,7 +11,7 @@ export const useMenu = (): UseMenuOutput => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isOpen = Boolean(anchorEl);
 
-  const onOpen = (event: MouseEvent<HTMLButtonElement>) => {
+  const onOpen = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const onClose = () => {

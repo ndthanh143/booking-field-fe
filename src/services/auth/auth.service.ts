@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie';
+import { User } from '../user/user.dto';
 import { LoginInput, AuthResponse } from './auth.dto';
 import axiosInstance from '@/utils/axiosConfig';
 
@@ -15,3 +16,11 @@ export const doLogout = () => {
   Cookies.remove('access_token');
   Cookies.remove('user');
 };
+
+export function getCurrentUser(): User | null {
+  const user = Cookies.get('user');
+  if (user) {
+    return JSON.parse(user);
+  }
+  return null;
+}

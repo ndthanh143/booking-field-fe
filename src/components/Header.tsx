@@ -1,6 +1,11 @@
-import { Person, Menu as MenuIcon, LogoutOutlined } from '@mui/icons-material';
-import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import {
+  Person,
+  Menu as MenuIcon,
+  LogoutOutlined,
+  HouseOutlined,
+  HistoryOutlined,
+  KeyboardArrowDown,
+} from '@mui/icons-material';
 import { Avatar, Box, Button, Grid, Menu, MenuItem, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth, useMenu } from '@/hooks';
@@ -36,7 +41,7 @@ export const Header = () => {
           />
           <Button variant='text' onClick={openCategory} color='secondary'>
             Danh mục sân bóng
-            <KeyboardArrowDownIcon />
+            <KeyboardArrowDown />
           </Button>
           <Menu
             id='category-menu'
@@ -59,7 +64,12 @@ export const Header = () => {
           <Button variant='text' color='secondary'>
             Tiếng Việt
           </Button>
-          <Button variant='outlined' color='secondary'>
+          <Button
+            variant='outlined'
+            href='https://docs.google.com/forms/d/e/1FAIpQLScCtwnRHg0BcfpQ_I2fKWAMY5CDwFytHWhx1oI8YlOA99wu2Q/viewform'
+            color='secondary'
+            target='_blank'
+          >
             Dành cho đối tác
           </Button>
           <Button variant='contained' onClick={openMenu}>
@@ -88,12 +98,19 @@ export const Header = () => {
                   </Box>
                 </MenuItem>
                 <MenuItem sx={{ paddingY: 1.5 }} onClick={() => navigate('/account/my-booking')}>
-                  <HistoryOutlinedIcon sx={{ marginRight: 2 }} />
+                  <HistoryOutlined sx={{ marginRight: 2 }} />
                   Đặt sân của tôi
                 </MenuItem>
 
                 <MenuItem
-                  sx={{ paddingY: 1.5, color: 'error.main' }}
+                  sx={{ paddingY: 1.5, fontWeight: 700 }}
+                  onClick={() => navigate('/venue-management/dashboard')}
+                >
+                  <HouseOutlined sx={{ marginRight: 2 }} />
+                  Quản lý sân bóng
+                </MenuItem>
+                <MenuItem
+                  sx={{ paddingY: 1.5 }}
                   onClick={() => {
                     closeMenu();
                     logout();

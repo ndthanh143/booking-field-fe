@@ -3,14 +3,14 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { convertDecimalToTime } from '@/utils/formatTime';
 
-export interface ITimeSelectionProps {
+export interface TimeSelectionProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (value: number[]) => void;
   timeRange: number[];
 }
 
-export const TimeSelection = ({ isOpen, onClose, onSave, timeRange }: ITimeSelectionProps) => {
+export const TimeSelection = ({ isOpen, onClose, onSave, timeRange }: TimeSelectionProps) => {
   const minDistance = 1;
 
   const [timeSelection, setTimeSelection] = useState<number[]>(timeRange);

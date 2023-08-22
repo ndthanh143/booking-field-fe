@@ -8,8 +8,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import { RatingBox } from '@/components';
 import { UserAccountLayout } from '@/components/UserAccountLayout';
 import { useAuth } from '@/hooks';
-import { BookingData } from '@/services/booking/booking.dto';
-import { getUserBookings } from '@/services/booking/booking.service';
+import { Booking } from '@/services/booking/booking.dto';
+import { bookingKeys } from '@/services/booking/booking.query';
 import { CreateRatingPayload } from '@/services/rating/rating.dto';
 import { createRating } from '@/services/rating/rating.service';
 import { convertCurrency } from '@/utils/convertCurrency';
@@ -19,30 +19,22 @@ export const AccountBooking = () => {
 
   const navigate = useNavigate();
 
-  const [selectedBooking, setSelectedBooking] = useState<BookingData | null>();
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>();
 
-  const { data: bookings, refetch: userBookingsRefetch } = useQuery({
-    queryKey: ['bookings'],
-    queryFn: () => {
-      if (profile) {
-        return getUserBookings(5);
-      }
-    },
-    enabled: !!profile,
-  });
+  const userBookingInstance = bookingKeys.personal();
+  const { data, refetch } = useQuery(userBookingInstance);
 
-  const { mutate: ratingMutation } = useMutation({
-    mutationKey: ['create-rating'],
+  const { mutate } = useMutation({
     mutationFn: (payload: CreateRatingPayload) => createRating(payload),
     onSuccess: () => {
-      userBookingsRefetch();
+      refetch();
       setSelectedBooking(null);
       toast.success('Cảm ơn bạn đã đánh giá');
     },
   });
 
   const handleRatingSubmit = (payload: CreateRatingPayload) => {
-    ratingMutation(payload);
+    mutate(payload);
   };
 
   if (!profile) {
@@ -57,9 +49,9 @@ export const AccountBooking = () => {
             Đặt sân của tôi
           </Typography>
         </Box>
-        {bookings && (
+        {data && (
           <Box display='flex' flexDirection='column' gap={2}>
-            {bookings.data.map((booking) => (
+            {data.data.map((booking) => (
               <Box border={1} paddingX={2} borderRadius={4} borderColor='secondary.light'>
                 <Box display='flex' alignItems='center' paddingY={2}>
                   <GolfCourse />
@@ -92,8 +84,7 @@ export const AccountBooking = () => {
                   </Grid>
                   <Grid item xs={4}>
                     <Typography textAlign='end' fontWeight={500}>
-                      {/* {booking.pitch.price * (dateToTimeFloat(booking.endTime) - dateToTimeFloat(booking.startTime))} */}
-                      {convertCurrency(120000)}
+                      {convertCurrency(booking.totalPrice)}
                     </Typography>
                   </Grid>
                 </Grid>

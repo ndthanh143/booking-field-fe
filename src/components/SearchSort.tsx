@@ -3,12 +3,12 @@ import { Box, Divider, List, ListItem, ListItemButton, ListItemText, Modal, Typo
 import { motion } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
 
-export interface ISearchSortProps {
+export interface SearchSortProps {
   isOpen: boolean;
   sortParams: string;
   onClose: () => void;
 }
-export const SearchSort = ({ isOpen, sortParams, onClose }: ISearchSortProps) => {
+export const SearchSort = ({ isOpen, sortParams, onClose }: SearchSortProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const sortOptions = [

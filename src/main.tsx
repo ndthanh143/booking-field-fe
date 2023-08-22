@@ -1,5 +1,6 @@
 import { ThemeProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import { theme } from './styles/theme.ts';
@@ -11,5 +12,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <CssBaseline />
     <App />
   </ThemeProvider>,
-  // </React.StrictMode>,
+  // </React.StrictMode>
 );

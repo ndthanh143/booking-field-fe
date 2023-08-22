@@ -3,13 +3,13 @@ import { PropsWithChildren } from 'react';
 import { DefaultLocations } from '@/common/datas/location.data';
 import { useBoolean } from '@/hooks';
 
-export interface ISelectBoxProps extends PropsWithChildren {
+export interface SelectBoxProps extends PropsWithChildren {
   value: string;
   onChange: (data: string) => void;
   placeHolder: string;
 }
 
-export const SelectBox = ({ value, onChange, placeHolder, children }: ISelectBoxProps) => {
+export const SelectBox = ({ value, onChange, placeHolder, children }: SelectBoxProps) => {
   const { value: isOpenSearchVenue, setFalse: closeSearchVenue, setTrue: openSearchVenue } = useBoolean(false);
 
   return (

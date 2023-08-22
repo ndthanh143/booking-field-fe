@@ -1,13 +1,13 @@
-import { Stepper as StepperMui, StepperProps } from '@mui/material';
+import { Stepper as StepperMui, StepperProps as MuiStepperProps } from '@mui/material';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 
-export interface IStepperProps extends StepperProps {
+export interface StepperProps extends MuiStepperProps {
   steps: string[];
   activeStep: number;
 }
 
-export const Stepper = ({ steps, activeStep, ...props }: IStepperProps) => {
+export const Stepper = ({ steps, activeStep, ...props }: StepperProps) => {
   return (
     <StepperMui activeStep={activeStep} {...props}>
       {steps.map((label, _) => {

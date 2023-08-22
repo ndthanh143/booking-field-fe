@@ -5,13 +5,13 @@ import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { PriceFilter } from './PriceFilter';
 
-export interface ISearchFilterProps {
+export interface SearchFilterProps {
   isOpen: boolean;
   priceRange: number[];
   onClose: () => void;
 }
 
-export const SearchFilter = ({ isOpen, priceRange, onClose }: ISearchFilterProps) => {
+export const SearchFilter = ({ isOpen, priceRange, onClose }: SearchFilterProps) => {
   const [price, setPrice] = useState(priceRange);
 
   const [searchParams, setSearchParams] = useSearchParams();

@@ -1,3 +1,4 @@
+import { Venue } from '../venue/venue.dto';
 import { BaseResponse } from '@/common/dtos/base.dto';
 
 export type UpdateUserResponse = BaseResponse<User>;
@@ -11,6 +12,7 @@ export type User = {
   phone: string;
   createdAt: Date;
   updatedAt: Date;
+  venue: Venue;
 };
 
 export type SignInPayload = {
