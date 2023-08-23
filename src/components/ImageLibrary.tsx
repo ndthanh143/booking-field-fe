@@ -17,32 +17,79 @@ export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
 
   return (
     <Grid container borderRadius={4} overflow='hidden' marginY={4} height={500}>
-      <Grid item xs={8}>
+      <Grid
+        item
+        xs={8}
+        sx={{
+          ':after': {
+            content: '""',
+            inset: 0,
+            position: 'absolute',
+            bgcolor: 'rgba(0, 0, 0, 0.6)',
+            display: 'none',
+          },
+          ':hover': {
+            ':after': {
+              display: 'block',
+            },
+          },
+          cursor: 'pointer',
+        }}
+        position='relative'
+      >
         <Box
           component='img'
           src={imageList[0].imagePath}
-          // alt={imageList[0].title}
+          alt={imageList[0].imagePath}
           width='100%'
           height='100%'
           sx={{ objectFit: 'cover' }}
         />
       </Grid>
       <Grid item xs={4} height='100%' position='relative' paddingLeft={2}>
-        <Box width='100%' height='100%'>
+        <Box width='100%' height='100%' display='flex' flexDirection='column' gap={2}>
           {imageList.slice(1, 4).map((item) => (
             <Box
-              component='img'
               width='100%'
-              height='33%'
-              sx={{ objectFit: 'cover' }}
-              src={item.imagePath}
-              key={item.imagePath}
-            />
+              height={100 / 3 + '%'}
+              sx={{
+                ':after': {
+                  content: '""',
+                  inset: 0,
+                  position: 'absolute',
+                  bgcolor: 'rgba(0, 0, 0, 0.6)',
+                  display: 'none',
+                },
+                ':hover': {
+                  ':after': {
+                    display: 'block',
+                  },
+                },
+                cursor: 'pointer',
+              }}
+              position='relative'
+            >
+              <Box
+                component='img'
+                width='100%'
+                height='100%'
+                sx={{ objectFit: 'cover' }}
+                src={item.imagePath}
+                key={item.imagePath}
+              />
+            </Box>
           ))}
         </Box>
         <Fab
           variant='extended'
-          sx={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', bottom: 12, fontSize: 12 }}
+          sx={{
+            position: 'absolute',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            bottom: 12,
+            fontSize: 12,
+            opacity: 0.9,
+          }}
           onClick={setTrue}
         >
           Xem tất cả

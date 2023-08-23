@@ -9,7 +9,7 @@ import { Avatar, Box, Button, Grid, Rating, Tab, Tabs, Typography } from '@mui/m
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
-import { SyntheticEvent, useMemo, useState } from 'react';
+import { MutableRefObject, SyntheticEvent, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RATING_PAGE_LIMIT } from '@/common/constants';
 import { ImageLibrary } from '@/components/ImageLibrary';
@@ -23,8 +23,13 @@ import { groupBy } from '@/utils/groupBy';
 export const VenueDetail = () => {
   const navigate = useNavigate();
 
+  const pitchesRef = useRef() as MutableRefObject<HTMLDivElement>;
+  const ratingsRef = useRef() as MutableRefObject<HTMLDivElement>;
+  const addressRef = useRef() as MutableRefObject<HTMLDivElement>;
+  const operatingRef = useRef() as MutableRefObject<HTMLDivElement>;
+
   const [tab, setTab] = useState(0);
-  const [ratingPage, setRatingPage] = useState(1);
+  const [page, setPage] = useState(1);
 
   const { slug } = useParams();
 
@@ -37,7 +42,7 @@ export const VenueDetail = () => {
   const pitchInstance = pitchKeys.list({ venueId: venue?._id });
   const { data: pitches } = useQuery({ ...pitchInstance, enabled: !!venue });
 
-  const ratingInstance = ratingKeys.list({ venueId: venue?._id, page: ratingPage, limit: RATING_PAGE_LIMIT });
+  const ratingInstance = ratingKeys.list({ venueId: venue?._id, page, limit: RATING_PAGE_LIMIT });
   const { data: ratings } = useQuery({ ...ratingInstance, enabled: !!venue });
 
   const center = useMemo(
@@ -86,13 +91,13 @@ export const VenueDetail = () => {
 
         <Box position='sticky' top={0} bgcolor='primary.contrastText' zIndex={1}>
           <Tabs value={tab} onChange={handleChange}>
-            <Tab label='Danh sách sân' />
-            <Tab label='Đánh giá' />
-            <Tab label='Địa chỉ' />
-            <Tab label='Giờ hoạt động' />
+            <Tab label='Danh sách sân' onClick={() => pitchesRef.current.scrollIntoView({ behavior: 'smooth' })} />
+            <Tab label='Đánh giá' onClick={() => ratingsRef.current.scrollIntoView({ behavior: 'smooth' })} />
+            <Tab label='Địa chỉ' onClick={() => addressRef.current.scrollIntoView({ behavior: 'smooth' })} />
+            <Tab label='Giờ hoạt động' onClick={() => operatingRef.current.scrollIntoView({ behavior: 'smooth' })} />
           </Tabs>
         </Box>
-        <Box marginY={4}>
+        <Box marginY={4} ref={pitchesRef}>
           <Typography variant='h4'>Danh sách sân</Typography>
           {groupByCategory &&
             groupByCategory.map((item) => (
@@ -176,7 +181,7 @@ export const VenueDetail = () => {
             ))}
         </Box>
 
-        <Box marginY={4}>
+        <Box marginY={4} ref={ratingsRef}>
           <Typography variant='h4'>Đánh giá</Typography>
           {ratings && ratings.data.length > 0 ? (
             <>
@@ -194,7 +199,7 @@ export const VenueDetail = () => {
                 <Box display='flex' alignItems='center' marginX={2}>
                   <FiberManualRecordIcon sx={{ fontSize: 8 }} />
                   <Typography variant='h5' marginX={1}>
-                    {ratings.data.length} Đánh giá
+                    {ratings.pageInfo.count} Đánh giá
                   </Typography>
                 </Box>
               </Box>
@@ -263,7 +268,7 @@ export const VenueDetail = () => {
           )}
         </Box>
 
-        <Box marginY={4}>
+        <Box marginY={4} ref={addressRef}>
           <Typography variant='h4'>Địa chỉ</Typography>
           {isLoaded && (
             <Box borderRadius={4} overflow='hidden' marginY={2}>
@@ -274,7 +279,7 @@ export const VenueDetail = () => {
           )}
         </Box>
 
-        <Box marginY={4}>
+        <Box marginY={4} ref={operatingRef}>
           <Typography variant='h4'>Giờ hoạt động</Typography>
           <Box display='flex' justifyContent='space-around' marginY={2}>
             <Box textAlign='center'>
