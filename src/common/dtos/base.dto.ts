@@ -28,3 +28,8 @@ export type PaginationQuery = {
   page?: number;
   limit?: number;
 };
+
+export type SortQuery = {
+  field: string;
+  order: string;
+};

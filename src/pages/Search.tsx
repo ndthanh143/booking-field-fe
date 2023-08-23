@@ -6,12 +6,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { noResultImage } from '@/assets/images/common';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
+import { OrderEnum } from '@/common/enums/order.enum';
 import { SearchFilter } from '@/components/SearchFilter';
 import { SearchResultCard } from '@/components/SearchResultCard';
 import { SearchSort } from '@/components/SearchSort';
 import { useBoolean } from '@/hooks';
-import { pitchKeys } from '@/services/pitch/pitch.query';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
+import { venueKeys } from '@/services/venue/venue.query';
 
 const STALE_TIME = 5 * 1000;
 const PAGE_LIMIT = 10;
@@ -20,7 +21,7 @@ export const Search = () => {
 
   const categoryParams = searchParams.get('pitchCategory') || '1';
   const locationParams = searchParams.get('location') || 'Hồ Chí Minh';
-  const sortParams = searchParams.get('sort') || 'ASC';
+  const sortParams = searchParams.get('sort') || OrderEnum.Asc;
   const minPrice = Number(searchParams.get('minPrice')) || DEFAULT_MIN_PRICE;
   const maxPrice = Number(searchParams.get('maxPrice')) || DEFAULT_MAX_PRICE;
 
@@ -32,16 +33,21 @@ export const Search = () => {
   const pitchCategoryInstace = pitchCategoryKeys.list();
   const { data: pitchCategories } = useQuery({ ...pitchCategoryInstace, staleTime: STALE_TIME });
 
-  const pitchInstance = pitchKeys.list({
-    keyword: locationParams,
+  const venueInstance = venueKeys.search({
+    location: locationParams,
     page,
     limit: PAGE_LIMIT,
-    order: sortParams,
-    pitchCategoryId: Number(categoryParams),
+    sorts: [
+      {
+        field: 'price',
+        order: sortParams,
+      },
+    ],
+    pitchCategory: Number(categoryParams),
     minPrice,
     maxPrice,
   });
-  const { data: pitches, refetch } = useQuery(pitchInstance);
+  const { data: venues, refetch: venueRefetch } = useQuery(venueInstance);
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
@@ -56,8 +62,10 @@ export const Search = () => {
   );
 
   useEffect(() => {
-    refetch();
-  }, [searchParams, refetch, page]);
+    venueRefetch();
+  }, [searchParams, venueRefetch, page]);
+
+  console.log(venues);
 
   return (
     <>
@@ -89,18 +97,18 @@ export const Search = () => {
       </Grid>
       <Grid container borderTop={1} paddingY={2} bgcolor='footer.light'>
         <Grid item md={7} padding={2} alignItems='center' sx={{ overflowY: 'scroll' }} height='100vh'>
-          {pitches?.data && pitches.data.length > 0 ? (
+          {venues?.data && venues.data.length > 0 ? (
             <>
-              <Typography variant='body2'>Có {pitches.data.length} sân bóng phù hợp dành cho bạn</Typography>
+              <Typography variant='body2'>Có {venues.data.length} sân bóng phù hợp dành cho bạn</Typography>
               <Box>
-                {pitches.data.map((item) => (
+                {venues.data.map((item) => (
                   <SearchResultCard data={item} key={item._id} />
                 ))}
               </Box>
-              {pitches.pageInfo.pageCount > 1 && (
+              {venues.pageInfo.pageCount > 1 && (
                 <Pagination
                   sx={{ display: 'flex', justifyContent: 'center' }}
-                  count={pitches.pageInfo.pageCount}
+                  count={venues.pageInfo.pageCount}
                   page={page}
                   onChange={(_, value) => setPage(value)}
                 />
@@ -127,8 +135,8 @@ export const Search = () => {
         <Grid item md={5}>
           {isLoaded && (
             <GoogleMap mapContainerStyle={{ width: '100%', height: '100vh' }} center={center} zoom={10}>
-              {pitches?.data.map((item) => (
-                <Marker position={{ lat: item.venue.location.lat, lng: item.venue.location.lng }} key={item._id} />
+              {venues?.data.map((item) => (
+                <Marker position={{ lat: item.location.lat, lng: item.location.lng }} key={item._id} />
               ))}
             </GoogleMap>
           )}

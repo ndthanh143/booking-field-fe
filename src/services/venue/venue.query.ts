@@ -1,5 +1,5 @@
-import { VenueQuery } from './venue.dto';
-import { getVenue, getVenues } from './venue.service';
+import { SearchVenueQuery, VenueQuery } from './venue.dto';
+import { getVenue, getVenues, searchVenues } from './venue.service';
 import { defineQuery } from '@/utils/defineQuery';
 
 export const venueKeys = {
@@ -13,4 +13,6 @@ export const venueKeys = {
         return getVenue(slug);
       }
     }),
+  searches: () => [venueKeys.all, 'search'] as const,
+  search: (query: SearchVenueQuery) => defineQuery([...venueKeys.searches(), query], () => searchVenues(query)),
 };
