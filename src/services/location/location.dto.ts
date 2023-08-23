@@ -27,3 +27,8 @@ export enum ProvinceDivisionTypeEnum {
   ThànhPhốTrungƯơng = 'thành phố trung ương',
   Tỉnh = 'tỉnh',
 }
+
+export type SearchLocationquery = {
+  type: string;
+  keyword: string;
+};
