@@ -1,3 +1,5 @@
+import { OrderEnum } from '../enums/order.enum';
+
 export type PageInfo = {
   page: number;
   pageSize: number;
@@ -27,4 +29,9 @@ export type BaseData = {
 export type PaginationQuery = {
   page?: number;
   limit?: number;
+};
+
+export type SortQuery = {
+  field: string;
+  order: OrderEnum;
 };

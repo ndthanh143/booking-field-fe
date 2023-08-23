@@ -1,4 +1,11 @@
-import { UpdateVenuePayload, VenueQuery, VenueResponse, VenuesResponse } from './venue.dto';
+import {
+  SearchVenueQuery,
+  SearchVenueResponse,
+  UpdateVenuePayload,
+  VenueQuery,
+  VenueResponse,
+  VenuesResponse,
+} from './venue.dto';
 import axiosInstance from '@/utils/axiosConfig';
 
 export const getVenues = async (query: VenueQuery) => {
@@ -17,6 +24,16 @@ export const getVenue = async (slug: string) => {
   const { data } = await axiosInstance.get<VenueResponse>(`/venues/${slug}`);
 
   return data.data;
+};
+
+export const searchVenues = async (query: SearchVenueQuery) => {
+  const { data } = await axiosInstance.get<SearchVenueResponse>('/venues/search', {
+    params: {
+      ...query,
+    },
+  });
+
+  return data;
 };
 
 export const getVenueByUser = async (userId: number) => {

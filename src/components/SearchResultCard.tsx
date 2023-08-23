@@ -1,13 +1,14 @@
+import { Image } from '@mui/icons-material';
 import PlaceIcon from '@mui/icons-material/Place';
 import StarIcon from '@mui/icons-material/Star';
 import { Box, Grid, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link } from './Link';
-import { Pitch } from '@/services/pitch/pitch.dto';
+import { SearchVenueData } from '@/services/venue/venue.dto';
 import convertToAMPM from '@/utils/convertTimestamp';
 
 export interface SearchResultCardProps {
-  data: Pitch;
+  data: SearchVenueData;
 }
 
 export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
@@ -21,24 +22,37 @@ export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
         duration: 0.3,
       }}
     >
-      <Link href={`/venue/${data.venue.slug}`}>
+      <Link href={`/venue/${data.slug}`}>
         <Grid container bgcolor='primary.contrastText' borderRadius={2} padding={2} marginY={2} {...props}>
           <Grid item md={3}>
             <Link href='/'>
-              <Box
-                component='img'
-                height={200}
-                width={200}
-                sx={{ objectFit: 'cover' }}
-                borderRadius={2}
-                src='https://shopconhantao.com.vn/assets/cms/uploads/images/chi-phi-lam-san-bong/chi-phi-lam-san-bong-co-nhan-tao3.jpg'
-                alt='hihihi'
-              />
+              {data.imageList?.length > 0 ? (
+                <Box
+                  component='img'
+                  height={200}
+                  width={200}
+                  sx={{ objectFit: 'cover' }}
+                  borderRadius={2}
+                  src={data.imageList?.[0].imagePath}
+                  alt={data.name}
+                />
+              ) : (
+                <Box
+                  height='100%'
+                  display='flex'
+                  justifyContent='center'
+                  alignItems='center'
+                  bgcolor='secondary.light'
+                  borderRadius={2}
+                >
+                  <Image fontSize='large' />
+                </Box>
+              )}
             </Link>
           </Grid>
           <Grid item md={9} paddingX={2} display='flex' flexDirection='column' justifyContent='space-between'>
             <Box>
-              <Typography variant='h6'>{data.venue.name}</Typography>
+              <Typography variant='h6'>{data.name}</Typography>
               <Box display='flex' gap={2} marginY={1} flexWrap='wrap'>
                 <Typography variant='body2'>Sân 5</Typography>
                 <Typography variant='body2'>Sân 7</Typography>
@@ -46,17 +60,19 @@ export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
                 <Typography variant='body2'>Sân Futsal</Typography>
               </Box>
               <Box>
-                <Typography variant='body2'>Open: {convertToAMPM(data.venue.openAt)}</Typography>
-                <Typography variant='body2'>Close: {convertToAMPM(data.venue.closeAt)}</Typography>
+                <Typography variant='body2'>Open: {convertToAMPM(data.openAt)}</Typography>
+                <Typography variant='body2'>Close: {convertToAMPM(data.closeAt)}</Typography>
               </Box>
             </Box>
 
             <Box>
               <Box display='flex' justifyContent='space-between'>
                 <Box display='flex' alignItems='center' marginY={1}>
-                  <StarIcon sx={{ color: 'primary.main', marginRight: 1 }} />
-                  {/* {data.} */}
-                  <Typography marginX={1}>(Đánh giá)</Typography>
+                  <Box display='flex' alignItems='center'>
+                    <StarIcon sx={{ color: 'primary.main', marginRight: 1 }} />
+                    <Typography>{data.averageRate}</Typography>
+                  </Box>
+                  <Typography marginX={1}>({data.totalReview} Đánh giá)</Typography>
                 </Box>
                 <Typography variant='body1' color='primary.main'>
                   1 giờ
@@ -65,7 +81,7 @@ export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
               <Box display='flex' justifyContent='space-between'>
                 <Box display='flex' alignItems='center'>
                   <PlaceIcon sx={{ marginRight: 1 }} />
-                  {data.venue.district}
+                  {data.district}
                 </Box>
                 <Typography variant='body1' fontWeight={500}>
                   {data.price.toLocaleString('vi')}đ

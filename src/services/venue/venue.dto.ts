@@ -1,6 +1,6 @@
 import { Pitch } from '../pitch/pitch.dto';
 import { Rating } from '../rating/rating.dto';
-import { BaseData, BasePaginationResponse, BaseResponse } from '@/common/dtos/base.dto';
+import { BaseData, BasePaginationResponse, BaseResponse, PaginationQuery, SortQuery } from '@/common/dtos/base.dto';
 
 export type VenuesResponse = BasePaginationResponse<Venue>;
 export type VenueResponse = BaseResponse<Venue>;
@@ -10,6 +10,14 @@ export type UpdateVenuePayload = {
   id: number;
   data: UpdateVenueData;
 };
+
+export type SearchVenueQuery = {
+  pitchCategory: number;
+  minPrice: number;
+  maxPrice: number;
+  location: string;
+  sorts?: SortQuery[];
+} & PaginationQuery;
 
 export type UpdateVenueData = {
   name?: string;
@@ -50,7 +58,8 @@ export type Price = {
 
 export type SearchVenueData = Venue & {
   price: number;
-  category_id: number;
+  averageRate: number;
+  totalReview: number;
 };
 
 export type VenueImage = {
