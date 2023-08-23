@@ -24,8 +24,6 @@
     "@stripe/react-stripe-js": "^2.1.1",
     "@stripe/stripe-js": "^1.54.2",
     "@tanstack/react-query": "^4.29.19",
-    "@types/autosuggest-highlight": "^3.2.0",
-    "@types/react-slick": "^0.23.10",
     "autosuggest-highlight": "^3.3.4",
     "axios": "^1.4.0",
     "chart.js": "^4.3.3",
@@ -49,12 +47,14 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
+    "@types/autosuggest-highlight": "^3.2.0",
     "@types/chart.js": "^2.9.37",
     "@types/js-cookie": "^3.0.3",
     "@types/node": "^20.4.2",
     "@types/nprogress": "^0.2.0",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
+    "@types/react-slick": "^0.23.10",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
     "@vitejs/plugin-react-swc": "^3.3.2",

@@ -30,6 +30,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'swiper/css';
 import './App.css';
+import 'nprogress/nprogress.css';
 
 const router = createBrowserRouter([
   {
