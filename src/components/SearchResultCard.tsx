@@ -1,3 +1,4 @@
+import { Image } from '@mui/icons-material';
 import PlaceIcon from '@mui/icons-material/Place';
 import StarIcon from '@mui/icons-material/Star';
 import { Box, Grid, Typography } from '@mui/material';
@@ -25,15 +26,28 @@ export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
         <Grid container bgcolor='primary.contrastText' borderRadius={2} padding={2} marginY={2} {...props}>
           <Grid item md={3}>
             <Link href='/'>
-              <Box
-                component='img'
-                height={200}
-                width={200}
-                sx={{ objectFit: 'cover' }}
-                borderRadius={2}
-                src='https://shopconhantao.com.vn/assets/cms/uploads/images/chi-phi-lam-san-bong/chi-phi-lam-san-bong-co-nhan-tao3.jpg'
-                alt='hihihi'
-              />
+              {data.imageList?.length > 0 ? (
+                <Box
+                  component='img'
+                  height={200}
+                  width={200}
+                  sx={{ objectFit: 'cover' }}
+                  borderRadius={2}
+                  src={data.imageList?.[0].imagePath}
+                  alt={data.name}
+                />
+              ) : (
+                <Box
+                  height='100%'
+                  display='flex'
+                  justifyContent='center'
+                  alignItems='center'
+                  bgcolor='secondary.light'
+                  borderRadius={2}
+                >
+                  <Image fontSize='large' />
+                </Box>
+              )}
             </Link>
           </Grid>
           <Grid item md={9} paddingX={2} display='flex' flexDirection='column' justifyContent='space-between'>

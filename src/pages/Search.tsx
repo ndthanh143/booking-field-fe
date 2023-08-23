@@ -40,7 +40,7 @@ export const Search = () => {
     sorts: [
       {
         field: 'price',
-        order: sortParams,
+        order: sortParams as OrderEnum,
       },
     ],
     pitchCategory: Number(categoryParams),
