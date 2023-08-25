@@ -1,5 +1,5 @@
 import { User } from '../user/user.dto';
-import { BaseResponse } from '@/common/dto/base.dto';
+import { BaseResponse } from '@/common/dtos/base.dto';
 
 export type LoginInput = {
   username: string;
