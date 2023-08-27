@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { ProvincesData, SearchLocationquery } from './location.dto';
 
-export const getProvinces = async ({ type, keyword }: SearchLocationquery) => {
+export const getProvinces = async (query: SearchLocationquery) => {
+  const { keyword, type } = query;
   const baseUrl = keyword
     ? `${import.meta.env.VITE_PROVINCE_API_URL}/${type}/search`
     : import.meta.env.VITE_PROVINCE_API_URL;

@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 import { object, string } from 'yup';
 import { useBoolean, useVenueByUserQuery, useVenueMutation } from '@/hooks';
 import { locationKeys } from '@/services/location/location.query';
-import { getProvinces } from '@/services/location/location.service';
 import { UpdateVenueData } from '@/services/venue/venue.dto';
 
 const schema = object({
@@ -30,7 +29,7 @@ export const InfoManagement = () => {
 
   const { data: venue } = useVenueByUserQuery();
 
-  const locationInstace = locationKeys.list();
+  const locationInstace = locationKeys.list({});
 
   const { data: provinces } = useQuery(locationInstace);
 
@@ -44,6 +43,8 @@ export const InfoManagement = () => {
     closeFixingMode();
     reset();
   };
+
+  console.log(provinces);
 
   useEffect(() => {
     if (provinces) {

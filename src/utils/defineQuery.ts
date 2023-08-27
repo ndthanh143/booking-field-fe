@@ -16,7 +16,7 @@ export const defineQuery = <
   queryFn: TQueryFunc,
 ) => {
   return {
-    queryKey: [queryKeyObj],
+    queryKey: queryKeyObj,
     queryFn: (options?: TOptions) =>
       queryFn({
         queryKeyObj,
