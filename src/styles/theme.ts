@@ -11,6 +11,7 @@ declare module '@mui/material/styles' {
   interface PaletteOptions {
     footer: PaletteOptions['primary'];
     default: PaletteOptions['primary'];
+    // success: PaletteOptions['primary'];
   }
 }
 
@@ -44,6 +45,12 @@ export const theme = createTheme({
       light: '#ddd',
       main: '#333',
       dark: '#000',
+      contrastText: '#fff',
+    },
+    success: {
+      light: '#3cef84',
+      main: '#05f766',
+      dark: '#00c34e',
       contrastText: '#fff',
     },
   },

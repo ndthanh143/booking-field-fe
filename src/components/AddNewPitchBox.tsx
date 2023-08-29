@@ -1,12 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { RoomOutlined } from '@mui/icons-material';
-import { Box, Button, Divider, Modal, TextField, Typography } from '@mui/material';
+import { Box, Button, Divider, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { number, object } from 'yup';
 import { SelectBox } from './SelectBox';
+import { PitchCategoryEnum } from '@/common/enums/pitch-category.enum';
 import { CreatePitchDto } from '@/services/pitch/pitch.dto';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
 import { getPitchCategories } from '@/services/pitch_category/pitch-category.service';
@@ -30,8 +31,6 @@ export const AddNewPitchBox = ({ venue, isOpen, onClose, onSubmit }: SearchSortP
   const pitchCategoryInstance = pitchCategoryKeys.list();
 
   const { data: categories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
-
-  const [pitchCategory, setPitchCategory] = useState<string>('');
 
   const {
     handleSubmit,
@@ -96,28 +95,9 @@ export const AddNewPitchBox = ({ venue, isOpen, onClose, onSubmit }: SearchSortP
             </Box>
             <Box paddingY={2}>
               <Typography>Loại Sân</Typography>
-              <SelectBox
-                value={pitchCategory}
-                onChange={(data) => setPitchCategory(data)}
-                placeHolder='Loại sân bạn muốn tạo'
-              >
-                {categories?.data.map((item) => (
-                  <Box
-                    onClick={() => {
-                      setValue('pitchCategory', item._id);
-                      setPitchCategory(item.name);
-                    }}
-                    display='flex'
-                    alignItems='center'
-                    padding={1}
-                    sx={{ cursor: 'pointer', ':hover': { bgcolor: '#ccc' } }}
-                    key={item._id}
-                  >
-                    <RoomOutlined sx={{ fontSize: 20, opacity: 0.7, marginRight: 1 }} />
-                    {item.name}
-                  </Box>
-                ))}
-              </SelectBox>
+              <Select {...register('pitchCategory')} fullWidth>
+                {categories?.data.map((item) => <MenuItem value={item._id}>{item.name}</MenuItem>)}
+              </Select>
               {errors.pitchCategory && (
                 <Typography variant='caption' color='error.main'>
                   * Vui lòng chọn loại sân

@@ -1,4 +1,4 @@
-import { AccountBoxOutlined, LogoutOutlined, RestoreOutlined } from '@mui/icons-material';
+import { AccountBoxOutlined, Lock, LogoutOutlined, RestoreOutlined } from '@mui/icons-material';
 import {
   Avatar,
   Box,
@@ -62,6 +62,15 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
                   <RestoreOutlined />
                 </ListItemIcon>
                 <ListItemText primary='Đặt sân của tôi' />
+              </ListItemButton>
+              <ListItemButton
+                onClick={() => navigate('/account/change-password')}
+                sx={{ color: pathname === '/account/change-password' ? 'primary.main' : '' }}
+              >
+                <ListItemIcon sx={{ color: 'inherit' }}>
+                  <Lock />
+                </ListItemIcon>
+                <ListItemText primary='Đổi mật khẩu' />
               </ListItemButton>
               <Divider sx={{ marginY: 2 }} />
               <ListItemButton onClick={logout}>

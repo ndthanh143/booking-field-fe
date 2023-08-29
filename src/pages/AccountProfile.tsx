@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { object, string } from 'yup';
-import { UserAccountLayout } from '@/components/UserAccountLayout';
+import { UserAccountLayout } from '@/components';
 import { useAuth, useBoolean } from '@/hooks';
 import { UpdateUserData, UpdateUserPayload } from '@/services/user/user.dto';
 import { updateUserInfo } from '@/services/user/user.service';

@@ -1,11 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { LoadingButton } from '@mui/lab';
-import { Avatar, Box, Grid, Link, Paper, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Grid, Paper, TextField, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
+import { Link } from '@/components';
 import { useAuth } from '@/hooks/useAuth';
 import { LoginInput } from '@/services/auth/auth.dto';
 
@@ -101,7 +102,7 @@ export const Login = () => {
               </LoadingButton>
               <Grid container>
                 <Grid item xs>
-                  <Link href='#' variant='body2'>
+                  <Link href='/forgotten-password' variant='body2'>
                     Forgot password?
                   </Link>
                 </Grid>

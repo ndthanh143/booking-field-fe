@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { AuthResponse } from '../auth/auth.dto';
-import { SignInPayload, UpdateUserData, UpdateUserResponse } from './user.dto';
+import { ChangePasswordPayload, SignInPayload, UpdateUserData, UpdateUserResponse } from './user.dto';
 import axiosInstance from '@/utils/axiosConfig';
 
 export const postRegister = async (payload: SignInPayload) => {
@@ -14,6 +14,12 @@ export const updateUserInfo = async (id: number, payload: UpdateUserData) => {
   const { data } = await axiosInstance.put<UpdateUserResponse>(`/users/${id}`, payload);
 
   Cookies.set('user', JSON.stringify(data.data));
+
+  return data;
+};
+
+export const changePassword = async (payload: ChangePasswordPayload) => {
+  const { data } = await axiosInstance.put('/users/change-password', payload);
 
   return data;
 };

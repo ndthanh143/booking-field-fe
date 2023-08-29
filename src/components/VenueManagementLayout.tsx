@@ -1,13 +1,11 @@
 import {
   ChevronLeft,
   Dashboard,
-  FavoriteBorderOutlined,
   HistoryOutlined,
   House,
   HouseOutlined,
   LogoutOutlined,
   Menu as MenuIcon,
-  Notifications,
   ShoppingBag,
 } from '@mui/icons-material';
 import {
@@ -25,7 +23,6 @@ import {
   MenuItem,
   Avatar,
   Menu,
-  Badge,
 } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import MuiDrawer from '@mui/material/Drawer';
@@ -127,11 +124,7 @@ export const VenueManagementLayout = () => {
                   (pathname === '/venue-management/your-venue' && 'Sân của bạn') ||
                   (pathname === '/venue-management/bookings' && 'Đặt sân')}
               </Typography>
-              <IconButton color='inherit' sx={{ marginX: 2 }}>
-                <Badge badgeContent={4} color='secondary'>
-                  <Notifications />
-                </Badge>
-              </IconButton>
+
               <Box sx={{ cursor: 'pointer' }} onClick={openMenu}>
                 <Avatar>{profile.firstName.charAt(0)}</Avatar>
               </Box>
