@@ -1,12 +1,12 @@
 import { ThemeProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
+import * as Sentry from '@sentry/react';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from 'react-router-dom';
 import App from './App.tsx';
 import { theme } from './styles/theme.ts';
 import './index.css';
-import * as Sentry from '@sentry/react';
-import { createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from 'react-router-dom';
 
 Sentry.init({
   dsn: import.meta.env.SENTRY_DNS,

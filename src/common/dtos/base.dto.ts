@@ -21,7 +21,7 @@ export type BasePaginationResponse<T> = {
 };
 
 export type BaseData = {
-  _id: number;
+  id: number;
   createdAt: Date;
   updatedAt: Date;
 };

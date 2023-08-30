@@ -35,7 +35,7 @@ export const InfoManagement = () => {
 
   const onSubmitHandler = (data: UpdateVenueData) => {
     if (venue) {
-      updateVenueMutation({ id: venue._id, data });
+      updateVenueMutation({ id: venue.id, data });
     }
   };
 
@@ -43,8 +43,6 @@ export const InfoManagement = () => {
     closeFixingMode();
     reset();
   };
-
-  console.log(provinces);
 
   useEffect(() => {
     if (provinces) {

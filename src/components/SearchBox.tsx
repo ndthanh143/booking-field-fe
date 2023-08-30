@@ -47,7 +47,7 @@ export const SearchBox = () => {
 
       navigate(
         `/search?location=${location}&pitchCategory=${
-          searchPitchCategory || pitchCategories?.data[0]._id
+          searchPitchCategory || pitchCategories?.data[0].id
         }&minPrice=${DEFAULT_MIN_PRICE}&maxPrice=${DEFAULT_MAX_PRICE}`,
       );
     }
@@ -59,7 +59,6 @@ export const SearchBox = () => {
     }
   }, [debounceSearchAddress, locationRefetch]);
 
-  console.log(provinces);
   const ref = useRef(null);
   const isInView = useInView(ref, { margin: '-150px' });
 
@@ -166,7 +165,7 @@ export const SearchBox = () => {
                             alignItems='center'
                             padding={1}
                             sx={{ cursor: 'pointer', ':hover': { bgcolor: '#ccc' }, ':focus': { bgcolor: '#ccc' } }}
-                            key={item._id}
+                            key={item.id}
                             borderRadius={2}
                           >
                             <SportsSoccerIcon sx={{ opacity: 0.7, fontSize: 20, marginRight: 1 }} />
@@ -222,14 +221,14 @@ export const SearchBox = () => {
                 {pitchCategories.data.map((item) => (
                   <Box
                     onClick={() => {
-                      setSearchPitchCategory(item._id.toString());
+                      setSearchPitchCategory(item.id.toString());
                       setPitchCategory(item.name);
                     }}
                     display='flex'
                     alignItems='center'
                     padding={1}
                     sx={{ cursor: 'pointer', ':hover': { bgcolor: '#ccc' } }}
-                    key={item._id}
+                    key={item.id}
                   >
                     <RoomOutlinedIcon sx={{ fontSize: 20, opacity: 0.7, marginRight: 1 }} />
                     {item.name}

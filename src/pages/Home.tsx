@@ -34,7 +34,7 @@ export const Home = () => {
         <Box marginY={2}>
           <Slider {...SliderSettings}>
             {data.data.map((category) => (
-              <Box display='flex' justifyContent='center' maxHeight={200} paddingX={4} key={category._id}>
+              <Box display='flex' justifyContent='center' maxHeight={200} paddingX={4} key={category.id}>
                 <Box
                   borderRadius={4}
                   overflow='hidden'
@@ -77,7 +77,7 @@ export const Home = () => {
           <Grid container sx={{ width: 'full' }} spacing={4}>
             {data.data.map((category) => (
               <Grid item xs={12} md={6} lg={3}>
-                <Card sx={{ maxWidth: 345, minHeight: 400, borderRadius: 4 }} key={category._id}>
+                <Card sx={{ maxWidth: 345, minHeight: 400, borderRadius: 4 }} key={category.id}>
                   <Box
                     position='relative'
                     sx={{
@@ -98,7 +98,7 @@ export const Home = () => {
                     }}
                     onClick={() =>
                       navigate(
-                        `/search?location=${defaultLocations[0]}&pitchCategory=${category._id}&minPrice=${DEFAULT_MIN_PRICE}&maxPrice=${DEFAULT_MAX_PRICE}`,
+                        `/search?location=${defaultLocations[0]}&pitchCategory=${category.id}&minPrice=${DEFAULT_MIN_PRICE}&maxPrice=${DEFAULT_MAX_PRICE}`,
                       )
                     }
                   >

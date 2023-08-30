@@ -39,10 +39,10 @@ export const VenueDetail = () => {
     enabled: !!slug,
   });
 
-  const pitchInstance = pitchKeys.list({ venueId: venue?._id });
+  const pitchInstance = pitchKeys.list({ venueId: venue?.id });
   const { data: pitches } = useQuery({ ...pitchInstance, enabled: !!venue });
 
-  const ratingInstance = ratingKeys.list({ venueId: venue?._id, page, limit: RATING_PAGE_LIMIT });
+  const ratingInstance = ratingKeys.list({ venueId: venue?.id, page, limit: RATING_PAGE_LIMIT });
   const { data: ratings } = useQuery({ ...ratingInstance, enabled: !!venue });
 
   const center = useMemo(
@@ -172,7 +172,7 @@ export const VenueDetail = () => {
                   <Button
                     variant='contained'
                     sx={{ marginY: 2 }}
-                    onClick={() => navigate(`/booking/${venue.slug}?pitchCategory=${item.values[0].pitchCategory._id}`)}
+                    onClick={() => navigate(`/booking/${venue.slug}?pitchCategory=${item.values[0].pitchCategory.id}`)}
                   >
                     Đặt sân
                   </Button>
@@ -205,7 +205,7 @@ export const VenueDetail = () => {
               </Box>
               <Grid container spacing={6}>
                 {ratings.data.map((rating) => (
-                  <Grid item xs={12} md={6} key={rating._id}>
+                  <Grid item xs={12} md={6} key={rating.id}>
                     <Box display='flex' justifyContent='space-between' alignItems='center'>
                       <Box display='flex' alignItems='center'>
                         <Avatar sx={{ bgcolor: 'primary.main', marginRight: 2, width: 56, height: 56 }}>

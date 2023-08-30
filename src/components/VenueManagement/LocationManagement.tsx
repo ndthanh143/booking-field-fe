@@ -15,7 +15,7 @@ export const LocationManagement = () => {
     if (venue && selectedLatLng) {
       const { lat, lng } = selectedLatLng;
       updateVenueMutation({
-        id: venue._id,
+        id: venue.id,
         data: {
           location: {
             lat,

@@ -28,7 +28,7 @@ const currentDate = new Date();
 export const Dashboard = () => {
   const { data: venue } = useVenueByUserQuery();
 
-  const bookingInstance = bookingKeys.list({ venueId: venue?._id });
+  const bookingInstance = bookingKeys.list({ venueId: venue?.id });
   const { data: bookings } = useQuery({
     ...bookingInstance,
     enabled: !!venue,
@@ -95,8 +95,8 @@ export const Dashboard = () => {
 
   useEffect(() => {
     if (venue) {
-      getBookingIncomeMutation({ year, venueId: venue._id });
-      getBookingCategoryMutation({ year, venueId: venue._id });
+      getBookingIncomeMutation({ year, venueId: venue.id });
+      getBookingCategoryMutation({ year, venueId: venue.id });
     }
   }, [getBookingIncomeMutation, getBookingCategoryMutation, venue, year]);
 

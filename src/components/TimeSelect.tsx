@@ -8,8 +8,8 @@ export interface TimeSelectProps extends FreeTimeBooking {
   onSave: (value: number[]) => void;
 }
 
-export const TimeSelect = ({ onSave, startTime, endTime, _id }: TimeSelectProps) => {
-  const isFreeTime = _id === -1;
+export const TimeSelect = ({ onSave, startTime, endTime, id }: TimeSelectProps) => {
+  const isFreeTime = id === -1;
   const { value, setTrue, setFalse } = useBoolean();
 
   return (
