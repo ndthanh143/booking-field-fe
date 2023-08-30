@@ -8,3 +8,5 @@ export * from './venueManagement/VenueManagement';
 export * from './venueManagement/BookingManagement';
 export * from './AccountProfile';
 export * from './AccountBooking';
+export * from './AccountPassword';
+export * from './ForgottenPassword';

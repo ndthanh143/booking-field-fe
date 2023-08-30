@@ -24,3 +24,4 @@ export * from './VenueManagement/LocationManagement';
 export * from './VenueManagement/LocationManagement';
 export * from './RatingBox';
 export * from './TextArea';
+export * from './UserAccountLayout';

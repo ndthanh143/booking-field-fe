@@ -8,10 +8,12 @@ import { MainLayout, SecondaryLayout } from './components/Layout';
 import { VenueManagementLayout } from './components/VenueManagementLayout';
 import {
   AccountBooking,
+  AccountPassword,
   AccountProfile,
   BookingComplete,
   BookingManagement,
   Dashboard,
+  ForgottenPassword,
   Home,
   Login,
   Register,
@@ -31,6 +33,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'swiper/css';
 import './App.css';
 import 'nprogress/nprogress.css';
+import { ResetPassword } from './pages/ResetPassword';
 
 const router = createBrowserRouter([
   {
@@ -54,6 +57,19 @@ const router = createBrowserRouter([
           {
             path: 'register',
             element: <Register />,
+          },
+          {
+            path: 'forgotten-password',
+            element: <ForgottenPassword />,
+          },
+          {
+            path: 'reset-password',
+            children: [
+              {
+                path: ':resetToken',
+                element: <ResetPassword />,
+              },
+            ],
           },
         ],
       },
@@ -124,6 +140,10 @@ const router = createBrowserRouter([
           {
             path: 'my-booking',
             element: <AccountBooking />,
+          },
+          {
+            path: 'change-password',
+            element: <AccountPassword />,
           },
         ],
       },

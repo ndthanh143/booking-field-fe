@@ -12,3 +12,12 @@ export type AuthResponseData = {
 };
 
 export type AuthResponse = BaseResponse<AuthResponseData>;
+
+export type sendEmailForgotPasswordPayload = {
+  email: string;
+};
+
+export type ResetPasswordPayload = {
+  resetToken: string;
+  newPassword: string;
+};

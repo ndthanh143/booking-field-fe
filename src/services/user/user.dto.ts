@@ -34,3 +34,8 @@ export type UpdateUserData = {
   lastName: string;
   phone: string;
 };
+
+export type ChangePasswordPayload = {
+  currentPassword: string;
+  newPassword: string;
+};
