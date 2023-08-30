@@ -29,6 +29,6 @@ export enum ProvinceDivisionTypeEnum {
 }
 
 export type SearchLocationquery = {
-  type: string;
-  keyword: string;
+  type?: string;
+  keyword?: string;
 };
