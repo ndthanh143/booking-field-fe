@@ -19,7 +19,7 @@ import { convertCurrency } from '@/utils/convertCurrency';
 import { findFreeTime } from '@/utils/findBookingFreeTime';
 import { convertDecimalToTime } from '@/utils/formatTime';
 
-export const BookingPage = () => {
+export const Booking = () => {
   const stepList = ['Tùy chọn', 'Thanh toán', 'Hoàn tất'];
 
   const [step, setStep] = useState(0);

@@ -10,3 +10,6 @@ export * from './AccountProfile';
 export * from './AccountBooking';
 export * from './AccountPassword';
 export * from './ForgottenPassword';
+export * from './ResetPassword';
+export * from './VenueDetail';
+export * from './Booking';
