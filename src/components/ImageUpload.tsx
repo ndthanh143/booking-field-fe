@@ -32,7 +32,7 @@ export const ImageUpload = ({ onChange }: ImageUploadProps) => {
         hidden
         type='file'
         id='file-upload'
-        onChange={(e) => e.target.files && onChange(e.target.files)}
+        onChange={(e) => e.target.files && e.target.files.length > 0 && onChange(e.target.files)}
         multiple
         accept='image/*'
       />

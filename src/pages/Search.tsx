@@ -65,8 +65,6 @@ export const Search = () => {
     venueRefetch();
   }, [searchParams, venueRefetch, page]);
 
-  console.log(venues);
-
   return (
     <>
       <Divider sx={{ marginY: 2 }} />
@@ -74,10 +72,10 @@ export const Search = () => {
         <Grid item xs={4} display='flex' gap={2}>
           {pitchCategories?.data.map((category) => (
             <Button
-              variant={Number(categoryParams) == category._id ? 'contained' : 'outlined'}
-              key={category._id}
+              variant={Number(categoryParams) == category.id ? 'contained' : 'outlined'}
+              key={category.id}
               onClick={() => {
-                searchParams.set('pitchCategory', category._id.toString());
+                searchParams.set('pitchCategory', category.id.toString());
                 setSearchParams((prev) => [...prev]);
               }}
             >
@@ -102,7 +100,7 @@ export const Search = () => {
               <Typography variant='body2'>Có {venues.data.length} sân bóng phù hợp dành cho bạn</Typography>
               <Box>
                 {venues.data.map((item) => (
-                  <SearchResultCard data={item} key={item._id} />
+                  <SearchResultCard data={item} key={item.id} />
                 ))}
               </Box>
               {venues.pageInfo.pageCount > 1 && (
@@ -136,7 +134,7 @@ export const Search = () => {
           {isLoaded && (
             <GoogleMap mapContainerStyle={{ width: '100%', height: '100vh' }} center={center} zoom={10}>
               {venues?.data.map((item) => (
-                <Marker position={{ lat: item.location.lat, lng: item.location.lng }} key={item._id} />
+                <Marker position={{ lat: item.location.lat, lng: item.location.lng }} key={item.id} />
               ))}
             </GoogleMap>
           )}

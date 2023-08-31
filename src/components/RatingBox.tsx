@@ -79,7 +79,7 @@ export const RatingBox = ({ isOpen, onClose, data, onSubmit }: IRatingBoxProps) 
           <Button
             variant='contained'
             sx={{ width: '100%' }}
-            onClick={() => rating && onSubmit({ booking: data._id, rate: rating, content })}
+            onClick={() => rating && onSubmit({ booking: data.id, rate: rating, content })}
             disabled={!rating}
           >
             Xác nhận

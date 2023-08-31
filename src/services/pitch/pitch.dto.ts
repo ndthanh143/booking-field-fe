@@ -30,7 +30,7 @@ export type Pitch = {
 
 export type GetPitchByVenueDetailData = {
   price: number;
-  pitchCategory_id: number;
+  pitchCategoryId: number;
   name: string;
   description: string;
   thumbnail: string;

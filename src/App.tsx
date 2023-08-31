@@ -12,16 +12,17 @@ import {
   AccountProfile,
   BookingComplete,
   BookingManagement,
+  Booking,
   Dashboard,
   ForgottenPassword,
   Home,
   Login,
   Register,
+  ResetPassword,
   Search,
+  VenueDetail,
   VenueManagement,
 } from './pages';
-import { BookingPage } from './pages/Booking';
-import { VenueDetail } from './pages/VenueDetail';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -33,7 +34,6 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'swiper/css';
 import './App.css';
 import 'nprogress/nprogress.css';
-import { ResetPassword } from './pages/ResetPassword';
 
 const router = createBrowserRouter([
   {
@@ -101,7 +101,7 @@ const router = createBrowserRouter([
             children: [
               {
                 path: ':slug',
-                element: <BookingPage />,
+                element: <Booking />,
               },
             ],
           },

@@ -62,9 +62,10 @@ export const Header = () => {
           >
             {data?.data.map((item) => (
               <MenuItem
+                key={item.id}
                 onClick={() =>
                   navigate(
-                    `/search?location=${defaultLocations[0]}&pitchCategory=${item._id}&minPrice=${DEFAULT_MIN_PRICE}&maxPrice=${DEFAULT_MAX_PRICE}`,
+                    `/search?location=${defaultLocations[0]}&pitchCategory=${item.id}&minPrice=${DEFAULT_MIN_PRICE}&maxPrice=${DEFAULT_MAX_PRICE}`,
                   )
                 }
               >
@@ -117,13 +118,15 @@ export const Header = () => {
                   Đặt sân của tôi
                 </MenuItem>
 
-                <MenuItem
-                  sx={{ paddingY: 1.5, fontWeight: 700 }}
-                  onClick={() => navigate('/venue-management/dashboard')}
-                >
-                  <HouseOutlined sx={{ marginRight: 2 }} />
-                  Quản lý sân bóng
-                </MenuItem>
+                {profile.venue && (
+                  <MenuItem
+                    sx={{ paddingY: 1.5, fontWeight: 700 }}
+                    onClick={() => navigate('/venue-management/dashboard')}
+                  >
+                    <HouseOutlined sx={{ marginRight: 2 }} />
+                    Quản lý sân bóng
+                  </MenuItem>
+                )}
                 <MenuItem
                   sx={{ paddingY: 1.5 }}
                   onClick={() => {

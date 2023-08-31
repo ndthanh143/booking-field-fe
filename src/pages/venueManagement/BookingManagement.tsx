@@ -8,7 +8,7 @@ import { bookingKeys } from '@/services/booking/booking.query';
 export const BookingManagement = () => {
   const { profile } = useAuth();
 
-  const bookingInstance = bookingKeys.list({ venueId: profile?.venue._id });
+  const bookingInstance = bookingKeys.list({ venueId: profile?.venue.id });
   const { data: bookings } = useQuery({ ...bookingInstance, enabled: !!profile });
 
   const [page, setPage] = useState<number>(1);
@@ -30,7 +30,7 @@ export const BookingManagement = () => {
             </TableHead>
             <TableBody>
               {bookings.data.map((booking) => (
-                <TableRow key={booking._id}>
+                <TableRow key={booking.id}>
                   <TableCell>{booking.pitch.no}</TableCell>
                   <TableCell>{booking.pitch.pitchCategory.name}</TableCell>
                   <TableCell>{moment(booking.startTime).format('DD-MM-YYYY ')}</TableCell>

@@ -39,9 +39,9 @@ export const AccountProfile = () => {
 
   const onSubmitHandler = (data: UpdateUserData) => {
     if (profile) {
-      const { _id } = profile;
+      const { id } = profile;
 
-      updateUserMutateion({ id: _id, data });
+      updateUserMutateion({ id, data });
     }
   };
 

@@ -46,8 +46,8 @@ export const AddNewPitchBox = ({ venue, isOpen, onClose, onSubmit }: SearchSortP
   };
 
   useEffect(() => {
-    setValue('venue', venue._id);
-  }, [setValue, venue._id]);
+    setValue('venue', venue.id);
+  }, [setValue, venue.id]);
 
   return (
     <Modal
@@ -96,7 +96,7 @@ export const AddNewPitchBox = ({ venue, isOpen, onClose, onSubmit }: SearchSortP
             <Box paddingY={2}>
               <Typography>Loại Sân</Typography>
               <Select {...register('pitchCategory')} fullWidth>
-                {categories?.data.map((item) => <MenuItem value={item._id}>{item.name}</MenuItem>)}
+                {categories?.data.map((item) => <MenuItem value={item.id}>{item.name}</MenuItem>)}
               </Select>
               {errors.pitchCategory && (
                 <Typography variant='caption' color='error.main'>

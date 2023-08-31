@@ -5,6 +5,7 @@ import moment from 'moment';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { noResultImage } from '@/assets/images/common';
 import { RatingBox, UserAccountLayout } from '@/components';
 import { useAuth } from '@/hooks';
 import { Booking } from '@/services/booking/booking.dto';
@@ -48,7 +49,7 @@ export const AccountBooking = () => {
             Đặt sân của tôi
           </Typography>
         </Box>
-        {data && (
+        {data ? (
           <Box display='flex' flexDirection='column' gap={2}>
             {data.data.map((booking) => (
               <Box border={1} paddingX={2} borderRadius={4} borderColor='secondary.light'>
@@ -65,7 +66,7 @@ export const AccountBooking = () => {
                   <Grid item xs={3}>
                     <Box
                       component='img'
-                      src={booking.pitch.venue.imageList[0].imagePath}
+                      src={booking.pitch.venue.imageList?.[0].imagePath}
                       alt={booking.pitch.venue.name}
                       width='100%'
                       height='100%'
@@ -116,6 +117,11 @@ export const AccountBooking = () => {
                 </Box>
               </Box>
             ))}
+          </Box>
+        ) : (
+          <Box marginY={2}>
+            <Box component='img' src={noResultImage.src} alt={noResultImage.name} />
+            <Typography>bạn chưa đặt sân bóng nào</Typography>
           </Box>
         )}
       </Box>

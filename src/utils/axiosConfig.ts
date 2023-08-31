@@ -1,14 +1,20 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const accessToken = Cookies.get('access_token');
-
 const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_API_URL}/api`,
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${accessToken}`,
-  },
+});
+
+axiosInstance.interceptors.request.use((config) => {
+  config.headers = config.headers || {};
+
+  const accessToken = Cookies.get('access_token');
+
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+
+  return config;
 });
 
 export default axiosInstance;

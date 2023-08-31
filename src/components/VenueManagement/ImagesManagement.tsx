@@ -34,7 +34,7 @@ export const ImagesManagement = () => {
       const newImageList = venue.imageList.filter((item) => item !== seletedImage);
 
       updateVenueMutation({
-        id: venue._id,
+        id: venue.id,
         data: {
           imageList: newImageList,
         },
@@ -54,10 +54,10 @@ export const ImagesManagement = () => {
   useEffect(() => {
     if (venue && isUploadSucess) {
       updateVenueMutation({
-        id: venue._id,
+        id: venue.id,
         data: {
           imageList: [
-            ...venue.imageList,
+            ...(venue.imageList ? [...venue.imageList] : []),
             ...uploadData.map((item) => {
               return {
                 imagePath: item.url,

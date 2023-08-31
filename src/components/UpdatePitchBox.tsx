@@ -66,8 +66,8 @@ export const UpdatePitchBox = ({ pitch, isOpen, onClose, onSubmit }: SearchSortP
             </Box>
             <Box paddingY={2}>
               <Typography>Loại Sân</Typography>
-              <Select defaultValue={pitch.pitchCategory._id} {...register('pitchCategory')} fullWidth>
-                {categories?.data.map((item) => <MenuItem value={item._id}>{item.name}</MenuItem>)}
+              <Select defaultValue={pitch.pitchCategory.id} {...register('pitchCategory')} fullWidth>
+                {categories?.data.map((item) => <MenuItem value={item.id}>{item.name}</MenuItem>)}
               </Select>
             </Box>
             <Box display='flex' justifyContent='end' gap={2} paddingY={2}>

@@ -31,7 +31,7 @@ export const PitchesManagement = () => {
 
   const handleDeletePitch = () => {
     if (seletedPitch) {
-      deletePitchMutation(seletedPitch._id);
+      deletePitchMutation(seletedPitch.id);
     }
   };
 
@@ -41,7 +41,7 @@ export const PitchesManagement = () => {
 
   const handleUpdatePitch = (data: UpdatePitchDto) => {
     if (seletedPitch) {
-      updatePitchMutation({ id: seletedPitch._id, data });
+      updatePitchMutation({ id: seletedPitch.id, data });
     }
   };
 
@@ -70,78 +70,80 @@ export const PitchesManagement = () => {
   }, [isDeleteSuccess, closeConfirmBox, venueRefetch, resetDelete]);
 
   return (
-    venue && (
-      <>
-        <Box>
-          <Button variant='contained' onClick={openAddPitchBox}>
-            Thêm mới
-          </Button>
-          <Table size='small' sx={{ marginY: 2 }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>No</TableCell>
-                <TableCell>Giá</TableCell>
-                <TableCell>Loại</TableCell>
-                <TableCell>Thao tác</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {venue.pitches.map((pitch) => (
-                <TableRow key={pitch._id}>
-                  <TableCell>{pitch.no}</TableCell>
-                  <TableCell>{pitch.price}</TableCell>
-                  <TableCell>{pitch.pitchCategory.name}</TableCell>
-                  <TableCell>
-                    <Box display='flex' gap={2}>
-                      <IconButton
-                        color='primary'
-                        onClick={() => {
-                          setSeletedPitch(pitch);
-                          openConfirmBox();
-                        }}
-                      >
-                        <Delete />
-                      </IconButton>
-                      <IconButton
-                        onClick={() => {
-                          setSeletedPitch(pitch);
-                          openUpdatePitchBox();
-                        }}
-                      >
-                        <Edit />
-                      </IconButton>
-                    </Box>
-                  </TableCell>
+    <>
+      <Button variant='contained' onClick={openAddPitchBox}>
+        Thêm mới
+      </Button>
+      {venue && (
+        <>
+          <Box>
+            <Table size='small' sx={{ marginY: 2 }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>No</TableCell>
+                  <TableCell>Giá</TableCell>
+                  <TableCell>Loại</TableCell>
+                  <TableCell>Thao tác</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Box>
-        <ConfirmBox
-          title='Bạn có chắc muốn xóa'
-          subTitle='Bạn sẽ không thể khôi phục dữ liệu sau khi đã xóa'
-          isOpen={isOpenConfirmBox}
-          onClose={closeConfirmBox}
-          onAccept={handleDeletePitch}
-        />
-        <AddNewPitchBox
-          venue={venue}
-          isOpen={isOpenAddPitchBox}
-          onClose={closeAddPitchBox}
-          onSubmit={(payload) => handleCreatePitch(payload)}
-        />
-        {seletedPitch && (
-          <UpdatePitchBox
-            pitch={seletedPitch}
-            isOpen={isOpenUpdatePitchBox}
-            onClose={() => {
-              setSeletedPitch(null);
-              closeUpdatePitchBox();
-            }}
-            onSubmit={(payload) => handleUpdatePitch(payload)}
+              </TableHead>
+              <TableBody>
+                {venue.pitches.map((pitch) => (
+                  <TableRow key={pitch.id}>
+                    <TableCell>{pitch.no}</TableCell>
+                    <TableCell>{pitch.price}</TableCell>
+                    <TableCell>{pitch.pitchCategory.name}</TableCell>
+                    <TableCell>
+                      <Box display='flex' gap={2}>
+                        <IconButton
+                          color='primary'
+                          onClick={() => {
+                            setSeletedPitch(pitch);
+                            openConfirmBox();
+                          }}
+                        >
+                          <Delete />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => {
+                            setSeletedPitch(pitch);
+                            openUpdatePitchBox();
+                          }}
+                        >
+                          <Edit />
+                        </IconButton>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Box>
+          <ConfirmBox
+            title='Bạn có chắc muốn xóa'
+            subTitle='Bạn sẽ không thể khôi phục dữ liệu sau khi đã xóa'
+            isOpen={isOpenConfirmBox}
+            onClose={closeConfirmBox}
+            onAccept={handleDeletePitch}
           />
-        )}
-      </>
-    )
+          <AddNewPitchBox
+            venue={venue}
+            isOpen={isOpenAddPitchBox}
+            onClose={closeAddPitchBox}
+            onSubmit={(payload) => handleCreatePitch(payload)}
+          />
+          {seletedPitch && (
+            <UpdatePitchBox
+              pitch={seletedPitch}
+              isOpen={isOpenUpdatePitchBox}
+              onClose={() => {
+                setSeletedPitch(null);
+                closeUpdatePitchBox();
+              }}
+              onSubmit={(payload) => handleUpdatePitch(payload)}
+            />
+          )}
+        </>
+      )}
+    </>
   );
 };

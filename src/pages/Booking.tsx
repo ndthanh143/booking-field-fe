@@ -2,6 +2,7 @@ import { ReportOutlined } from '@mui/icons-material';
 import { Box, Button, Divider, Grid, Tooltip, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
@@ -18,7 +19,7 @@ import { convertCurrency } from '@/utils/convertCurrency';
 import { findFreeTime } from '@/utils/findBookingFreeTime';
 import { convertDecimalToTime } from '@/utils/formatTime';
 
-export const BookingPage = () => {
+export const Booking = () => {
   const stepList = ['Tùy chọn', 'Thanh toán', 'Hoàn tất'];
 
   const [step, setStep] = useState(0);
@@ -37,8 +38,8 @@ export const BookingPage = () => {
   const { data: venue, refetch: venueRefetch } = useQuery({ ...venueInstance, enabled: !!slug });
 
   const bookingInstance = bookingKeys.list({
-    pitchId: selectedPitch?._id,
-    date: moment(selectedDate).format('YYYY-MM-DD'),
+    pitchId: selectedPitch?.id,
+    date: dayjs(selectedDate).format('YYYY-MM-DD'),
   });
 
   const { data: bookings, refetch: bookingsRefetch } = useQuery({
@@ -52,7 +53,7 @@ export const BookingPage = () => {
 
   const pitchCategoryId = Number(searchParams.get('pitchCategory'));
 
-  const pitchInstance = pitchKeys.list({ venueId: venue?._id, pitchCategoryId });
+  const pitchInstance = pitchKeys.list({ venueId: venue?.id, pitchCategoryId });
   const { data: pitches } = useQuery({
     ...pitchInstance,
     enabled: !!venue,
@@ -87,10 +88,10 @@ export const BookingPage = () => {
   const handleSubmit = () => {
     if (selectedTime && selectedPitch) {
       const startTimeNumber = selectedTime[0];
-      const startDayString = moment(selectedDate).format('YYYY-MM-DD');
+      const startDayString = dayjs(selectedDate).format('YYYY-MM-DD');
 
       const endTimeNumber = selectedTime[1];
-      const endDayString = moment(selectedDate).format('YYYY-MM-DD');
+      const endDayString = dayjs(selectedDate).format('YYYY-MM-DD');
 
       const startTime = convertToDate(startDayString, startTimeNumber);
       const endTime = convertToDate(endDayString, endTimeNumber);
@@ -98,7 +99,7 @@ export const BookingPage = () => {
       createBookingMutate({
         startTime,
         endTime,
-        pitch: selectedPitch._id,
+        pitch: selectedPitch.id,
       });
     }
   };
@@ -130,7 +131,7 @@ export const BookingPage = () => {
             </Typography>
             <Grid container spacing={4} border={1} paddingBottom={4} borderColor='secondary.light' marginTop={1}>
               {pitches.data.map((item) => (
-                <Grid item xs={3} position='relative' key={item._id}>
+                <Grid item xs={3} position='relative' key={item.id}>
                   <Box onClick={() => setSelectedPitch(item)}>
                     <Box
                       width='100%'
@@ -158,7 +159,7 @@ export const BookingPage = () => {
             </Grid>
             <Box display='flex' justifyContent='center'>
               <DatePicker
-                value={selectedDate}
+                value={selectedDate ?? null}
                 label='Chọn ngày muốn đặt'
                 sx={{ marginY: 4 }}
                 format='DD/MM/YYYY'
@@ -281,7 +282,7 @@ export const BookingPage = () => {
               <Box display='flex' marginBottom={2}>
                 <Box
                   component='img'
-                  src={pitches.data[0].venue.imageList[0].imagePath}
+                  src={pitches.data[0].venue.imageList?.[0].imagePath}
                   alt='venue'
                   width='20%'
                   height='30%'

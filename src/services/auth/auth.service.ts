@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie';
+import { User } from '../user/user.dto';
 import { LoginInput, AuthResponse, sendEmailForgotPasswordPayload, ResetPasswordPayload } from './auth.dto';
 import axiosInstance from '@/utils/axiosConfig';
 
@@ -16,7 +17,7 @@ export const doLogout = () => {
   Cookies.remove('user');
 };
 
-export const getCurrentUser = () => {
+export const getCurrentUser = (): User | null => {
   const user = Cookies.get('user');
   if (user) {
     return JSON.parse(user);

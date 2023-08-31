@@ -1,6 +1,6 @@
 import { Booking } from '@/services/booking/booking.dto';
 export type FreeTimeBooking = {
-  _id: number;
+  id: number;
   startTime: number;
   endTime: number;
 };
@@ -17,7 +17,7 @@ export const findFreeTime = (bookings: Booking[]) => {
   if (bookings.length === 0) {
     return [
       {
-        _id: -1,
+        id: -1,
         startTime: 0,
         endTime: 24,
       },
@@ -33,7 +33,7 @@ export const findFreeTime = (bookings: Booking[]) => {
       if (index === 0) {
         if (start > 0) {
           acc.push({
-            _id: -1,
+            id: -1,
             startTime: 0,
             endTime: start,
           });
@@ -44,7 +44,7 @@ export const findFreeTime = (bookings: Booking[]) => {
 
         if (start > previousEndTime) {
           acc.push({
-            _id: -1,
+            id: -1,
             startTime: previousEndTime,
             endTime: start,
           });
@@ -52,7 +52,7 @@ export const findFreeTime = (bookings: Booking[]) => {
       }
 
       acc.push({
-        _id: booking._id,
+        id: booking.id,
         startTime: dateToTimeFloat(new Date(booking.startTime)),
         endTime: dateToTimeFloat(new Date(endTime)),
       });
@@ -67,7 +67,7 @@ export const findFreeTime = (bookings: Booking[]) => {
 
   if (lastEndTime < 24) {
     freeTimeBookings.push({
-      _id: -1,
+      id: -1,
       startTime: lastEndTime,
       endTime: 24,
     });
