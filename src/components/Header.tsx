@@ -1,29 +1,20 @@
-import {
-  Person,
-  Menu as MenuIcon,
-  LogoutOutlined,
-  HouseOutlined,
-  HistoryOutlined,
-  KeyboardArrowDown,
-} from '@mui/icons-material';
-import { Avatar, Box, Button, Grid, Menu, MenuItem, Typography } from '@mui/material';
+import { KeyboardArrowDown } from '@mui/icons-material';
+import { Box, Button, Grid, Menu, MenuItem } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { MenuNotification, MenuActions } from '.';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { defaultLocations } from '@/common/datas/location.data';
-import { useAuth, useMenu } from '@/hooks';
+import { useMenu } from '@/hooks';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
 
 export const Header = () => {
   const navigate = useNavigate();
 
-  const { profile, logout } = useAuth();
-
-  const { anchorEl: anchorMenu, isOpen: isOpenMenu, onClose: closeMenu, onOpen: openMenu } = useMenu();
   const { anchorEl: anchorCategory, isOpen: isOpenCategory, onClose: closeCategory, onOpen: openCategory } = useMenu();
 
   const pitchCategoryInstance = pitchCategoryKeys.list();
-  const { data } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
+  const { data: pitchCategories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
   return (
     <Grid
@@ -60,7 +51,7 @@ export const Header = () => {
               'aria-labelledby': 'basic-button',
             }}
           >
-            {data?.data.map((item) => (
+            {pitchCategories?.data.map((item) => (
               <MenuItem
                 key={item.id}
                 onClick={() =>
@@ -88,67 +79,9 @@ export const Header = () => {
           >
             Dành cho đối tác
           </Button>
-          <Button variant='contained' onClick={openMenu}>
-            <Person sx={{ opacity: 0.5 }} />
-            <MenuIcon />
-          </Button>
-          <Menu
-            id='actions-menu'
-            anchorEl={anchorMenu}
-            open={isOpenMenu}
-            onClose={closeMenu}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
-          >
-            {profile ? (
-              <Box>
-                <MenuItem
-                  sx={{ borderBottom: 1, borderColor: '#ccc', padding: 2 }}
-                  onClick={() => navigate('/account/profile')}
-                >
-                  <Avatar />
-                  <Box marginLeft={2}>
-                    <Typography fontWeight={500}>{`${profile.firstName} ${profile.lastName}`}</Typography>
-                    <Typography>Xem hồ sơ</Typography>
-                  </Box>
-                </MenuItem>
-                <MenuItem sx={{ paddingY: 1.5 }} onClick={() => navigate('/account/my-booking')}>
-                  <HistoryOutlined sx={{ marginRight: 2 }} />
-                  Đặt sân của tôi
-                </MenuItem>
+          <MenuNotification variant='primary' />
 
-                {profile.venue && (
-                  <MenuItem
-                    sx={{ paddingY: 1.5, fontWeight: 700 }}
-                    onClick={() => navigate('/venue-management/dashboard')}
-                  >
-                    <HouseOutlined sx={{ marginRight: 2 }} />
-                    Quản lý sân bóng
-                  </MenuItem>
-                )}
-                <MenuItem
-                  sx={{ paddingY: 1.5 }}
-                  onClick={() => {
-                    closeMenu();
-                    logout();
-                  }}
-                >
-                  <LogoutOutlined sx={{ marginRight: 2 }} />
-                  Đăng xuất
-                </MenuItem>
-              </Box>
-            ) : (
-              <Box>
-                <MenuItem onClick={() => navigate('/login')} sx={{ paddingY: 1.5 }} disableRipple>
-                  Đăng nhập
-                </MenuItem>
-                <MenuItem onClick={() => navigate('/register')} sx={{ paddingY: 1.5 }}>
-                  Đăng ký
-                </MenuItem>
-              </Box>
-            )}
-          </Menu>
+          <MenuActions variant='primary' />
         </Box>
       </Grid>
     </Grid>

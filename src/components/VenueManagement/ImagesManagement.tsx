@@ -4,12 +4,12 @@ import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { ConfirmBox } from '../ConfirmBox';
 import { ImageUpload } from '../ImageUpload';
-import { useBoolean, useVenueByUserQuery, useVenueMutation } from '@/hooks';
-import { uploadImages } from '@/services/media/media.service';
+import { useBoolean, useVenueByUser, useVenueMutation } from '@/hooks';
+import mediaService from '@/services/media/media.service';
 import { VenueImage } from '@/services/venue/venue.dto';
 
 export const ImagesManagement = () => {
-  const { data: venue } = useVenueByUserQuery();
+  const { data: venue } = useVenueByUser();
 
   const { updateVenueMutation } = useVenueMutation();
 
@@ -26,7 +26,7 @@ export const ImagesManagement = () => {
     isLoading: isUploading,
     reset: resetStateUpload,
   } = useMutation({
-    mutationFn: (files: FileList) => uploadImages(files),
+    mutationFn: (files: FileList) => mediaService.uploadImages(files),
   });
 
   const handleDelete = () => {

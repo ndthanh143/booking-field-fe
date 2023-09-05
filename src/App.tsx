@@ -1,9 +1,12 @@
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useState } from 'react';
+import Cookies from 'js-cookie';
+import { createContext, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import * as io from 'socket.io-client';
+import { NotificationContainer } from './components';
 import { MainLayout, SecondaryLayout } from './components/Layout';
 import { VenueManagementLayout } from './components/VenueManagementLayout';
 import {
@@ -22,6 +25,7 @@ import {
   Search,
   VenueDetail,
   VenueManagement,
+  AccountNotification,
 } from './pages';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -142,6 +146,10 @@ const router = createBrowserRouter([
             element: <AccountBooking />,
           },
           {
+            path: 'notification',
+            element: <AccountNotification />,
+          },
+          {
             path: 'change-password',
             element: <AccountPassword />,
           },
@@ -151,16 +159,29 @@ const router = createBrowserRouter([
   },
 ]);
 
+const accessToken = Cookies.get('access_token');
+
+const socket = io.connect('ws://localhost:3002', {
+  extraHeaders: {
+    Authorization: `Bearer ${accessToken}`,
+  },
+});
+
+export const SocketContext = createContext(socket);
+
 function App() {
   const [queryClient] = useState(() => new QueryClient({}));
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <ToastContainer />
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    </LocalizationProvider>
+    <SocketContext.Provider value={socket}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <ToastContainer />
+        <QueryClientProvider client={queryClient}>
+          <NotificationContainer />
+          <RouterProvider router={router} />
+        </QueryClientProvider>
+      </LocalizationProvider>
+    </SocketContext.Provider>
   );
 }
 

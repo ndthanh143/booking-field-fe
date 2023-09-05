@@ -54,7 +54,7 @@ export const findFreeTime = (bookings: Booking[]) => {
       acc.push({
         id: booking.id,
         startTime: dateToTimeFloat(new Date(booking.startTime)),
-        endTime: dateToTimeFloat(new Date(endTime)),
+        endTime: dateToTimeFloat(new Date(endTime)) === 0 ? 24 : dateToTimeFloat(new Date(endTime)),
       });
 
       return acc;
@@ -63,7 +63,8 @@ export const findFreeTime = (bookings: Booking[]) => {
   );
 
   const lastInterval = bookings[bookings.length - 1];
-  const lastEndTime = dateToTimeFloat(new Date(lastInterval.endTime));
+  const lastEndTime =
+    dateToTimeFloat(new Date(lastInterval.endTime)) === 0 ? 24 : dateToTimeFloat(new Date(lastInterval.endTime));
 
   if (lastEndTime < 24) {
     freeTimeBookings.push({

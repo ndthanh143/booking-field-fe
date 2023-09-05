@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react';
 import { AddNewPitchBox } from '../AddNewPitchBox';
 import { ConfirmBox } from '../ConfirmBox';
 import { UpdatePitchBox } from '../UpdatePitchBox';
-import { useBoolean, useVenueByUserQuery } from '@/hooks';
+import { useBoolean, useVenueByUser } from '@/hooks';
 import { usePitchMutation } from '@/hooks/usePitchMutation';
 import { CreatePitchDto, Pitch, UpdatePitchDto } from '@/services/pitch/pitch.dto';
 
 export const PitchesManagement = () => {
-  const { data: venue, refetch: venueRefetch } = useVenueByUserQuery();
+  const { data: venue, refetch: venueRefetch } = useVenueByUser();
 
   const {
     createPitchMutation,
@@ -89,7 +89,7 @@ export const PitchesManagement = () => {
               <TableBody>
                 {venue.pitches.map((pitch) => (
                   <TableRow key={pitch.id}>
-                    <TableCell>{pitch.no}</TableCell>
+                    <TableCell>{pitch.name}</TableCell>
                     <TableCell>{pitch.price}</TableCell>
                     <TableCell>{pitch.pitchCategory.name}</TableCell>
                     <TableCell>

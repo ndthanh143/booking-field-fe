@@ -3,13 +3,12 @@ import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { object, string } from 'yup';
 import { UserAccountLayout } from '@/components';
 import { useAuth, useBoolean } from '@/hooks';
 import { UpdateUserData, UpdateUserPayload } from '@/services/user/user.dto';
-import { updateUserInfo } from '@/services/user/user.service';
+import userService from '@/services/user/user.service';
 
 const schema = object({
   firstName: string().required(),
@@ -18,8 +17,6 @@ const schema = object({
 });
 
 export const AccountProfile = () => {
-  const navigate = useNavigate();
-
   const { value: isUpdating, setTrue, setFalse } = useBoolean(false);
 
   const { profile, refetch } = useAuth();
@@ -29,7 +26,7 @@ export const AccountProfile = () => {
   });
 
   const { mutate: updateUserMutateion } = useMutation({
-    mutationFn: ({ id, data }: UpdateUserPayload) => updateUserInfo(id, data),
+    mutationFn: ({ id, data }: UpdateUserPayload) => userService.updateUserInfo(id, data),
     onSuccess: () => {
       refetch();
       setFalse();
@@ -44,10 +41,6 @@ export const AccountProfile = () => {
       updateUserMutateion({ id, data });
     }
   };
-
-  if (!profile) {
-    navigate('/');
-  }
 
   useEffect(() => {
     if (profile) {

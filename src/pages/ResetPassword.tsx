@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { object, ref, string } from 'yup';
-import { resetPassword } from '@/services/auth/auth.service';
+import authService from '@/services/auth/auth.service';
 
 export type ResetPasswordForm = {
   newPassword: string;
@@ -35,7 +35,7 @@ export const ResetPassword = () => {
   });
 
   const { mutate } = useMutation({
-    mutationFn: resetPassword,
+    mutationFn: authService.resetPassword,
     onSuccess: () => {
       toast.success('Change password successfully');
       navigate('/login');

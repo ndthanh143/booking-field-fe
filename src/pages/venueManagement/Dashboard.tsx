@@ -1,17 +1,17 @@
 import { CreditCard, People } from '@mui/icons-material';
-import { Autocomplete, Box, Card, CardContent, Grid, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { Box, Card, CardContent, Grid, MenuItem, Select, Typography } from '@mui/material';
 
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { CategoryScale, ChartData, ChartOptions } from 'chart.js';
 import { Chart as ChartJS } from 'chart.js/auto';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Line, Pie } from 'react-chartjs-2';
 import CountUp from 'react-countup';
 import { TimePeriodFilter } from '@/common/enums/filter-chart.enum';
-import { useVenueByUserQuery } from '@/hooks';
+import { useVenueByUser } from '@/hooks';
 import { GetAnalystBookingIncomeDto } from '@/services/booking/booking.dto';
 import { bookingKeys } from '@/services/booking/booking.query';
-import { getAnalystBookingCategory, getAnalystBookingIncome, getBookings } from '@/services/booking/booking.service';
+import bookingService from '@/services/booking/booking.service';
 import { convertCurrency } from '@/utils/convertCurrency';
 import { getMonthsAgoFromDate } from '@/utils/getMonthsAgo';
 
@@ -26,7 +26,7 @@ export const FilterChartOptions = [
 
 const currentDate = new Date();
 export const Dashboard = () => {
-  const { data: venue } = useVenueByUserQuery();
+  const { data: venue } = useVenueByUser();
 
   const bookingInstance = bookingKeys.list({ venueId: venue?.id });
   const { data: bookings } = useQuery({
@@ -35,11 +35,11 @@ export const Dashboard = () => {
   });
 
   const { data: incomeData, mutate: getBookingIncomeMutation } = useMutation({
-    mutationFn: (payload: GetAnalystBookingIncomeDto) => getAnalystBookingIncome(payload),
+    mutationFn: (payload: GetAnalystBookingIncomeDto) => bookingService.getAnalystBookingIncome(payload),
   });
 
   const { data: categoryData, mutate: getBookingCategoryMutation } = useMutation({
-    mutationFn: (payload: GetAnalystBookingIncomeDto) => getAnalystBookingCategory(payload),
+    mutationFn: (payload: GetAnalystBookingIncomeDto) => bookingService.getAnalystBookingCategory(payload),
   });
 
   const [year, setYear] = useState<number>(currentDate.getFullYear());
@@ -52,6 +52,8 @@ export const Dashboard = () => {
       new Date(item.day) > getMonthsAgoFromDate(currentFilterDate, selectedIncome) &&
       new Date(item.day) < currentFilterDate,
   );
+
+  const listFiveYearFromNow = useMemo(() => Array.from(Array(5), (_, index) => currentDate.getFullYear() - index), []);
 
   const lineData: ChartData<'line'> = {
     labels: filteData?.map((item) => `${item.day}`),
@@ -133,15 +135,18 @@ export const Dashboard = () => {
               Tổng thu nhập theo từng tháng
             </Typography>
             <Box display='flex' gap={2}>
-              <Autocomplete
-                disablePortal
-                options={[2018, 2019, 2020, 2021, 2022, 2023]}
-                defaultValue={currentDate.getFullYear()}
+              <Select
+                labelId='year-select'
+                id='year-select'
                 sx={{ minWidth: 150 }}
-                itemType='number'
-                onInputChange={(_, value) => setYear(Number(value))}
-                renderInput={(params) => <TextField {...params} />}
-              />
+                value={year}
+                onChange={(e) => setYear(Number(e.target.value))}
+              >
+                {listFiveYearFromNow.map((item) => (
+                  <MenuItem value={item}>{item}</MenuItem>
+                ))}
+              </Select>
+
               <Select
                 labelId='filter-select'
                 id='filter-select'

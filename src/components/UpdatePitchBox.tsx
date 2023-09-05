@@ -3,7 +3,7 @@ import { Box, Button, Divider, MenuItem, Modal, Select, TextField, Typography } 
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
-import { number, object } from 'yup';
+import { number, object, string } from 'yup';
 import { Pitch, UpdatePitchDto } from '@/services/pitch/pitch.dto';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
 
@@ -15,7 +15,7 @@ export interface SearchSortProps {
 }
 
 const schema = object({
-  no: number(),
+  name: string(),
   price: number().min(0),
   pitchCategory: number(),
 });
@@ -58,11 +58,11 @@ export const UpdatePitchBox = ({ pitch, isOpen, onClose, onSubmit }: SearchSortP
           <Box padding={4}>
             <Box paddingY={2}>
               <Typography>Số sân</Typography>
-              <TextField placeholder='...' type='number' fullWidth {...register('no')} defaultValue={pitch.no} />
+              <TextField fullWidth {...register('name')} defaultValue={pitch.name} />
             </Box>
             <Box paddingY={2}>
               <Typography>Giá sân theo giờ</Typography>
-              <TextField placeholder='...' fullWidth type='number' {...register('price')} defaultValue={pitch.price} />
+              <TextField fullWidth type='number' {...register('price')} defaultValue={pitch.price} />
             </Box>
             <Box paddingY={2}>
               <Typography>Loại Sân</Typography>

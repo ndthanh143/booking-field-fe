@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { object, ref, string } from 'yup';
 import { UserAccountLayout } from '@/components';
 import { ChangePasswordPayload } from '@/services/user/user.dto';
-import { changePassword } from '@/services/user/user.service';
+import userService from '@/services/user/user.service';
 
 const schema = object({
   currentPassword: string().required('Vui lòng nhập trường này'),
@@ -26,7 +26,7 @@ export const AccountPassword = () => {
   });
 
   const { mutate } = useMutation({
-    mutationFn: changePassword,
+    mutationFn: userService.changePassword,
     onSuccess: () => {
       toast.success('Cập nhật mật khẩu thành công');
       reset();

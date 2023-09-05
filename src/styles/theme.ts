@@ -11,7 +11,6 @@ declare module '@mui/material/styles' {
   interface PaletteOptions {
     footer: PaletteOptions['primary'];
     default: PaletteOptions['primary'];
-    // success: PaletteOptions['primary'];
   }
 }
 
