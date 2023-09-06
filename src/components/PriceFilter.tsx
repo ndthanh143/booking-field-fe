@@ -1,4 +1,5 @@
 import { Box, Slider, TextField } from '@mui/material';
+import { useLocale } from '@/locales';
 
 export interface PriceFilterProps {
   priceRange: number[];
@@ -7,6 +8,8 @@ export interface PriceFilterProps {
 }
 
 export const PriceFilter = ({ priceRange, onChange, minDistance }: PriceFilterProps) => {
+  const { formatMessage } = useLocale();
+
   const handlePriceRangeChange = (_: Event, newValue: number | number[], activeThumb: number) => {
     if (!Array.isArray(newValue)) {
       return;
@@ -42,8 +45,8 @@ export const PriceFilter = ({ priceRange, onChange, minDistance }: PriceFilterPr
         disableSwap
       />
       <Box display='flex' justifyContent='space-between'>
-        <TextField value={`${priceRange[0]}đ`} label='Giá tối thiểu' />
-        <TextField value={`${priceRange[1]}đ`} label='Giá tối đa' />
+        <TextField value={`${priceRange[0]}đ`} label={formatMessage({ id: 'search.tool.filter.price.min' })} />
+        <TextField value={`${priceRange[1]}đ`} label={formatMessage({ id: 'search.tool.filter.price.max' })} />
       </Box>
     </>
   );

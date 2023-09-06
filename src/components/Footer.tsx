@@ -2,52 +2,55 @@ import { Box, Divider, Grid, Typography } from '@mui/material';
 import { Copyright } from './Copyright';
 import { Link } from './Link';
 import { PaymentImages } from '@/assets/images/payment';
+import { useLocale } from '@/locales';
 
 export const Footer = () => {
+  const { formatMessage } = useLocale();
+
   return (
     <Box bgcolor='footer.light' paddingTop={2} paddingX={2}>
       <Grid container>
         <Grid item xs={12} md={3}>
           <Typography variant='body1' fontWeight={500} marginY={2}>
-            Hỗ trợ
+            {formatMessage({ id: 'app.footer.support.title' })}
           </Typography>
           <Box>
             <Link href='/' display='block' marginY={0.5} color='inherit' fontWeight={300} underline='none'>
-              Hotline: 0354 560 042
+              {formatMessage({ id: 'app.footer.support.item.hotline' })}: 0354 560 042
             </Link>
             <Link href='/' display='block' marginY={0.5} color='inherit' fontWeight={300} underline='none'>
-              Hỗ trợ khách hàng: cskh@go.vn
+              {formatMessage({ id: 'app.footer.support.item.support' })}: cskh@go.vn
             </Link>
             <Link href='/' display='block' marginY={0.5} color='inherit' fontWeight={300} underline='none'>
-              Liên hệ hợp tác: support@go.vn
+              {formatMessage({ id: 'app.footer.support.item.colab' })}: support@go.vn
             </Link>
             <Link href='/' display='block' marginY={0.5} color='inherit' fontWeight={300} underline='none'>
-              Cơ chế giải quyết tranh chấp, khiếu nại
+              {formatMessage({ id: 'app.footer.support.item.sub-title' })}
             </Link>
           </Box>
         </Grid>
         <Grid item xs={12} md={3}>
           <Typography variant='body1' fontWeight={500} marginY={2}>
-            Giới thiệu
+            {formatMessage({ id: 'app.footer.introduce.title' })}
           </Typography>
           <Box>
             <Link href='/' display='block' marginY={0.5} color='inherit' fontWeight={300} underline='none'>
-              Về chúng tôi
+              {formatMessage({ id: 'app.footer.introduce.item.about' })}
             </Link>
             <Link href='/' display='block' marginY={0.5} color='inherit' fontWeight={300} underline='none'>
-              Trang blog
+              {formatMessage({ id: 'app.footer.introduce.item.blog' })}
             </Link>
             <Link href='/' display='block' marginY={0.5} color='inherit' fontWeight={300} underline='none'>
-              Quy chế hoạt động website
+              {formatMessage({ id: 'app.footer.introduce.item.rule' })}
             </Link>
             <Link href='/' display='block' marginY={0.5} color='inherit' fontWeight={300} underline='none'>
-              Dành cho đối tác
+              {formatMessage({ id: 'app.footer.introduce.item.for-business' })}
             </Link>
           </Box>
         </Grid>
         <Grid item xs={12} md={3}>
           <Typography variant='body1' fontWeight={500} marginY={2}>
-            Đối tác thanh toán
+            {formatMessage({ id: 'app.footer.business.title' })}
           </Typography>
           <Grid container gap={2}>
             {PaymentImages.map((item) => (
@@ -67,7 +70,7 @@ export const Footer = () => {
         </Grid>
         <Grid item xs={12} md={3}>
           <Typography variant='body1' fontWeight={500} marginY={2}>
-            Tải ứng dụng
+            {formatMessage({ id: 'app.footer.download.title' })}
           </Typography>
         </Grid>
       </Grid>

@@ -8,6 +8,7 @@ import { noResultImage } from '@/assets/images/common';
 import { DEFAULT_NOTIFICATION_LIMIT, DEFAULT_NOTIFICATION_PAGE } from '@/common/constants';
 import { OrderEnum } from '@/common/enums/order.enum';
 import { useAuth, useMenu } from '@/hooks';
+import { useLocale } from '@/locales';
 import { notificationKeys } from '@/services/notification/notification.query';
 
 export type MenuNotificationProps = {
@@ -18,6 +19,8 @@ export const MenuNotification = ({ variant }: MenuNotificationProps) => {
   const { profile } = useAuth();
 
   const navigate = useNavigate();
+
+  const { formatMessage } = useLocale();
 
   const {
     anchorEl: anchorNotification,
@@ -123,7 +126,9 @@ export const MenuNotification = ({ variant }: MenuNotificationProps) => {
             }}
             onClick={() => navigate('/account/notification')}
           >
-            Xem tất cả
+            {formatMessage({
+              id: 'app.home.header.notification.view-all',
+            })}
           </Typography>
         </Box>
       </Menu>

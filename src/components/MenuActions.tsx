@@ -2,6 +2,7 @@ import { LogoutOutlined, Menu as MenuIcon, HouseOutlined, HistoryOutlined, Perso
 import { Avatar, Box, Button, IconButton, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth, useMenu } from '@/hooks';
+import { useLocale } from '@/locales';
 
 export type MenuActionsProps = {
   variant: 'primary' | 'secondary';
@@ -9,6 +10,8 @@ export type MenuActionsProps = {
 
 export const MenuActions = ({ variant }: MenuActionsProps) => {
   const navigate = useNavigate();
+
+  const { formatMessage } = useLocale();
 
   const { profile, logout } = useAuth();
 
@@ -54,18 +57,22 @@ export const MenuActions = ({ variant }: MenuActionsProps) => {
               <Avatar />
               <Box marginLeft={2}>
                 <Typography fontWeight={500}>{`${profile.firstName} ${profile.lastName}`}</Typography>
-                <Typography>Xem hồ sơ</Typography>
+                <Typography>{formatMessage({ id: 'app.home.header.account.view-profile' })}</Typography>
               </Box>
             </MenuItem>
             <MenuItem sx={{ paddingY: 1.5 }} onClick={() => navigate('/account/my-booking')}>
               <HistoryOutlined sx={{ marginRight: 2 }} />
-              Đặt sân của tôi
+              {formatMessage({
+                id: 'app.home.header.account.my-booking',
+              })}
             </MenuItem>
 
             {profile.venue && (
               <MenuItem sx={{ paddingY: 1.5, fontWeight: 700 }} onClick={() => navigate('/venue-management/dashboard')}>
                 <HouseOutlined sx={{ marginRight: 2 }} />
-                Quản lý sân bóng
+                {formatMessage({
+                  id: 'app.home.header.account.venue-management',
+                })}
               </MenuItem>
             )}
             <MenuItem
@@ -76,16 +83,22 @@ export const MenuActions = ({ variant }: MenuActionsProps) => {
               }}
             >
               <LogoutOutlined sx={{ marginRight: 2 }} />
-              Đăng xuất
+              {formatMessage({
+                id: 'app.home.header.account.sign-out',
+              })}
             </MenuItem>
           </Box>
         ) : (
           <Box>
             <MenuItem onClick={() => navigate('/login')} sx={{ paddingY: 1.5 }} disableRipple>
-              Đăng nhập
+              {formatMessage({
+                id: 'app.home.header.account.sign-in',
+              })}
             </MenuItem>
             <MenuItem onClick={() => navigate('/register')} sx={{ paddingY: 1.5 }}>
-              Đăng ký
+              {formatMessage({
+                id: 'app.home.header.account.sign-up',
+              })}
             </MenuItem>
           </Box>
         )}
