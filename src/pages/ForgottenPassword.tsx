@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { object, string } from 'yup';
 import { sendEmailForgotPasswordPayload } from '@/services/auth/auth.dto';
-import { sendEmailForgotPassword } from '@/services/auth/auth.service';
+import authService from '@/services/auth/auth.service';
 
 const schema = object({
   email: string().required('Please fill in your email address'),
@@ -23,7 +23,7 @@ export const ForgottenPassword = () => {
   } = useForm<sendEmailForgotPasswordPayload>({ resolver: yupResolver(schema) });
 
   const { mutate, isError, isLoading, isSuccess } = useMutation({
-    mutationFn: sendEmailForgotPassword,
+    mutationFn: authService.sendEmailForgotPassword,
     onSuccess: () => {
       toast.success('Send reset password email successfully!');
     },

@@ -1,13 +1,4 @@
-import {
-  ChevronLeft,
-  Dashboard,
-  HistoryOutlined,
-  House,
-  HouseOutlined,
-  LogoutOutlined,
-  Menu as MenuIcon,
-  ShoppingBag,
-} from '@mui/icons-material';
+import { ChevronLeft, Dashboard, House, Menu as MenuIcon, ShoppingBag } from '@mui/icons-material';
 import {
   IconButton,
   Toolbar,
@@ -20,15 +11,13 @@ import {
   ListItemText,
   Box,
   Container,
-  MenuItem,
-  Avatar,
-  Menu,
 } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import MuiDrawer from '@mui/material/Drawer';
 import { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth, useMenu } from '@/hooks';
+import { MenuNotification, MenuActions } from '.';
+import { useAuth } from '@/hooks';
 
 const drawerWidth = 240;
 
@@ -79,23 +68,17 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 }));
 
 export const VenueManagementLayout = () => {
+  const navigate = useNavigate();
+
   const { pathname } = useLocation();
 
-  const { profile, logout } = useAuth();
-
-  const { anchorEl: anchorMenu, isOpen: isOpenMenu, onOpen: openMenu, onClose: closeMenu } = useMenu();
+  const { profile } = useAuth();
 
   const [open, setOpen] = useState(true);
 
   const toggleDrawer = () => {
     setOpen(!open);
   };
-
-  const navigate = useNavigate();
-
-  if (!profile) {
-    navigate('/');
-  }
 
   return (
     profile && (
@@ -124,54 +107,8 @@ export const VenueManagementLayout = () => {
                   (pathname === '/venue-management/your-venue' && 'Sân của bạn') ||
                   (pathname === '/venue-management/bookings' && 'Đặt sân')}
               </Typography>
-
-              <Box sx={{ cursor: 'pointer' }} onClick={openMenu}>
-                <Avatar>{profile.firstName.charAt(0)}</Avatar>
-              </Box>
-              <Menu
-                id='actions-menu'
-                anchorEl={anchorMenu}
-                open={isOpenMenu}
-                onClose={closeMenu}
-                MenuListProps={{
-                  'aria-labelledby': 'basic-button',
-                }}
-              >
-                <Box>
-                  <MenuItem
-                    sx={{ borderBottom: 1, borderColor: '#ccc', padding: 2 }}
-                    onClick={() => navigate('/account/profile')}
-                  >
-                    <Avatar />
-                    <Box marginLeft={2}>
-                      <Typography fontWeight={500}>{`${profile.firstName} ${profile.lastName}`}</Typography>
-                      <Typography>Xem hồ sơ</Typography>
-                    </Box>
-                  </MenuItem>
-                  <MenuItem sx={{ paddingY: 1.5 }} onClick={() => navigate('/account/my-booking')}>
-                    <HistoryOutlined sx={{ marginRight: 2 }} />
-                    Đặt sân của tôi
-                  </MenuItem>
-
-                  <MenuItem
-                    sx={{ paddingY: 1.5, fontWeight: 700 }}
-                    onClick={() => navigate('/venue-management/dashboard')}
-                  >
-                    <HouseOutlined sx={{ marginRight: 2 }} />
-                    Quản lý sân bóng
-                  </MenuItem>
-                  <MenuItem
-                    sx={{ paddingY: 1.5 }}
-                    onClick={() => {
-                      closeMenu();
-                      logout();
-                    }}
-                  >
-                    <LogoutOutlined sx={{ marginRight: 2 }} />
-                    Đăng xuất
-                  </MenuItem>
-                </Box>
-              </Menu>
+              <MenuNotification variant='secondary' />
+              <MenuActions variant='secondary' />
             </Toolbar>
           </AppBar>
           <Drawer variant='permanent' open={open}>

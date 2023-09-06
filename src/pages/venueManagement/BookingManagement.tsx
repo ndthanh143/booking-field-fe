@@ -31,7 +31,7 @@ export const BookingManagement = () => {
             <TableBody>
               {bookings.data.map((booking) => (
                 <TableRow key={booking.id}>
-                  <TableCell>{booking.pitch.no}</TableCell>
+                  <TableCell>{booking.pitch.name}</TableCell>
                   <TableCell>{booking.pitch.pitchCategory.name}</TableCell>
                   <TableCell>{moment(booking.startTime).format('DD-MM-YYYY ')}</TableCell>
                   <TableCell>{`${moment(booking.startTime).format('HH:mm')} - ${moment(booking.endTime).format(

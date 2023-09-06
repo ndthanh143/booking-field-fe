@@ -1,16 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { RoomOutlined } from '@mui/icons-material';
 import { Box, Button, Divider, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { number, object } from 'yup';
-import { SelectBox } from './SelectBox';
-import { PitchCategoryEnum } from '@/common/enums/pitch-category.enum';
+import { number, object, string } from 'yup';
 import { CreatePitchDto } from '@/services/pitch/pitch.dto';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
-import { getPitchCategories } from '@/services/pitch_category/pitch-category.service';
 import { Venue } from '@/services/venue/venue.dto';
 
 export interface SearchSortProps {
@@ -21,7 +17,7 @@ export interface SearchSortProps {
 }
 
 const schema = object({
-  no: number().required(),
+  name: string().required(),
   price: number().required().min(0),
   pitchCategory: number().required(),
   venue: number().required(),
@@ -77,8 +73,8 @@ export const AddNewPitchBox = ({ venue, isOpen, onClose, onSubmit }: SearchSortP
           <Box padding={4}>
             <Box paddingY={2}>
               <Typography>Tên sân</Typography>
-              <TextField placeholder='...' type='number' fullWidth {...register('no')} />
-              {errors.no && (
+              <TextField fullWidth {...register('name')} />
+              {errors.name && (
                 <Typography variant='caption' color='error.main'>
                   * Vui lòng nhập tên sân
                 </Typography>
@@ -86,7 +82,7 @@ export const AddNewPitchBox = ({ venue, isOpen, onClose, onSubmit }: SearchSortP
             </Box>
             <Box paddingY={2}>
               <Typography>Giá sân theo giờ</Typography>
-              <TextField placeholder='...' type='number' fullWidth {...register('price')} />
+              <TextField type='number' fullWidth {...register('price')} />
               {errors.price && (
                 <Typography variant='caption' color='error.main'>
                   * Vui lòng nhập giá sân

@@ -1,4 +1,4 @@
-import { AccountBoxOutlined, Lock, LogoutOutlined, RestoreOutlined } from '@mui/icons-material';
+import { AccountBoxOutlined, Lock, LogoutOutlined, Notifications, RestoreOutlined } from '@mui/icons-material';
 import {
   Avatar,
   Box,
@@ -21,6 +21,10 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
   const navigate = useNavigate();
 
   const { pathname } = useLocation();
+
+  if (!profile) {
+    navigate('/');
+  }
 
   return (
     profile && (
@@ -62,6 +66,15 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
                   <RestoreOutlined />
                 </ListItemIcon>
                 <ListItemText primary='Đặt sân của tôi' />
+              </ListItemButton>
+              <ListItemButton
+                onClick={() => navigate('/account/notification')}
+                sx={{ color: pathname === '/account/notification' ? 'primary.main' : '' }}
+              >
+                <ListItemIcon sx={{ color: 'inherit' }}>
+                  <Notifications />
+                </ListItemIcon>
+                <ListItemText primary='Thông báo' />
               </ListItemButton>
               <ListItemButton
                 onClick={() => navigate('/account/change-password')}

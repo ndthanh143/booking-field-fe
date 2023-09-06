@@ -8,7 +8,7 @@ export type GetPitchesByVenueResponse = BaseResponse<Pitch[]>;
 export type GetPitchesByVenueDetailResponse = BaseResponse<GetPitchByVenueDetailData[]>;
 
 export type CreatePitchDto = {
-  no: number;
+  name: string;
   price: number;
   pitchCategory: number;
   venue: number;
@@ -22,7 +22,7 @@ export type UpdatePitchPayload = {
 export type UpdatePitchDto = Partial<Omit<CreatePitchDto, 'venue'>>;
 
 export type Pitch = {
-  no: number;
+  name: string;
   price: number;
   pitchCategory: PitchCategory;
   venue: Venue;

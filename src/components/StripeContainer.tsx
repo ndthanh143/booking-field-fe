@@ -3,7 +3,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import PaymentForm, { PaymentFormProps } from './PaymentForm';
-import { getClientSecret } from '@/services/stripe/stripe.service';
+import stripeService from '@/services/stripe/stripe.service';
 
 export interface SripeContainerProps extends PaymentFormProps {
   currency: string;
@@ -15,7 +15,7 @@ export default function StripeContainer({ currency, amount, onSubmit }: SripeCon
   const stripePromise = loadStripe(STRIPE_PUBLIC_KEY);
 
   const { data, mutate } = useMutation({
-    mutationFn: getClientSecret,
+    mutationFn: stripeService.getClientSecret,
   });
 
   useEffect(() => {

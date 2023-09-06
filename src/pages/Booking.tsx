@@ -1,17 +1,20 @@
-import { ReportOutlined } from '@mui/icons-material';
+import { CheckCircle, ReportOutlined } from '@mui/icons-material';
 import { Box, Button, Divider, Grid, Tooltip, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { SocketContext } from '@/App';
+import { OrderEnum } from '@/common/enums/order.enum';
 import { Stepper } from '@/components';
 import StripeContainer from '@/components/StripeContainer';
 import { TimeSelect } from '@/components/TimeSelect';
+import { useAuth } from '@/hooks';
 import { CreateBookingDto } from '@/services/booking/booking.dto';
 import { bookingKeys } from '@/services/booking/booking.query';
-import { createBooking } from '@/services/booking/booking.service';
+import bookingService from '@/services/booking/booking.service';
 import { Pitch } from '@/services/pitch/pitch.dto';
 import { pitchKeys } from '@/services/pitch/pitch.query';
 import { venueKeys } from '@/services/venue/venue.query';
@@ -19,20 +22,34 @@ import { convertCurrency } from '@/utils/convertCurrency';
 import { findFreeTime } from '@/utils/findBookingFreeTime';
 import { convertDecimalToTime } from '@/utils/formatTime';
 
+const convertToDate = (dateString: string, time: number) => {
+  const date = new Date(dateString);
+  const hours = Math.floor(time);
+  const minutes = (time - hours) * 60;
+
+  date.setHours(hours, minutes, 0, 0);
+
+  return date;
+};
+
 export const Booking = () => {
   const stepList = ['Tùy chọn', 'Thanh toán', 'Hoàn tất'];
 
-  const [step, setStep] = useState(0);
+  const navigate = useNavigate();
 
-  const [totalPrice, setTotalPrice] = useState(0);
+  const socket = useContext(SocketContext);
 
-  const [selectedDate, setSelectedDate] = useState<Date | null>();
-  const [selectedTime, setSelectedTime] = useState<number[] | null>();
-  const [selectedPitch, setSelectedPitch] = useState<Pitch>();
+  const { profile } = useAuth();
 
   const { slug } = useParams();
 
   const [searchParams, _] = useSearchParams();
+
+  const [step, setStep] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [selectedDate, setSelectedDate] = useState<Date | null>();
+  const [selectedTime, setSelectedTime] = useState<number[] | null>();
+  const [selectedPitch, setSelectedPitch] = useState<Pitch>();
 
   const venueInstance = venueKeys.detail(slug);
   const { data: venue, refetch: venueRefetch } = useQuery({ ...venueInstance, enabled: !!slug });
@@ -40,6 +57,7 @@ export const Booking = () => {
   const bookingInstance = bookingKeys.list({
     pitchId: selectedPitch?.id,
     date: dayjs(selectedDate).format('YYYY-MM-DD'),
+    sorts: [{ field: 'startTime', order: OrderEnum.Asc }],
   });
 
   const { data: bookings, refetch: bookingsRefetch } = useQuery({
@@ -48,7 +66,10 @@ export const Booking = () => {
   });
 
   const { mutate: createBookingMutate } = useMutation({
-    mutationFn: (payload: CreateBookingDto) => createBooking(payload),
+    mutationFn: (payload: CreateBookingDto) => bookingService.create(payload),
+    onSuccess: (data) => {
+      socket.emit('booking', data.data);
+    },
   });
 
   const pitchCategoryId = Number(searchParams.get('pitchCategory'));
@@ -61,11 +82,23 @@ export const Booking = () => {
 
   const times = bookings && findFreeTime(bookings.data);
 
-  const rangeTime = times?.reduce<number[]>(
-    (arr, time, index) =>
-      index !== times.length - 1 ? [...arr, time.startTime] : [...arr, time.startTime, time.endTime],
-    [],
-  );
+  const rangeTime = times?.reduce<number[]>((arr, time, index) => {
+    if (index !== times.length - 1) {
+      if (time.endTime === times[index + 1].startTime && time.id !== -1) {
+        if (time.startTime === 0) {
+          return [time.startTime];
+        }
+        return arr;
+      }
+
+      return [...arr, time.startTime, time.endTime];
+    } else {
+      if (time.id !== -1) {
+        return [...arr, time.endTime];
+      }
+      return [...arr, time.startTime, time.endTime];
+    }
+  }, []);
 
   const handleNextStep = () => {
     setStep((prev) => prev + 1);
@@ -75,23 +108,13 @@ export const Booking = () => {
     setStep((prev) => prev - 1);
   };
 
-  const convertToDate = (dateString: string, time: number) => {
-    const date = new Date(dateString);
-    const hours = Math.floor(time);
-    const minutes = (time - hours) * 60;
-
-    date.setHours(hours, minutes, 0, 0);
-
-    return date;
-  };
-
   const handleSubmit = () => {
     if (selectedTime && selectedPitch) {
       const startTimeNumber = selectedTime[0];
-      const startDayString = dayjs(selectedDate).format('YYYY-MM-DD');
+      const startDayString = dayjs(selectedDate).format('MM-DD-YYYY');
 
       const endTimeNumber = selectedTime[1];
-      const endDayString = dayjs(selectedDate).format('YYYY-MM-DD');
+      const endDayString = dayjs(selectedDate).format('MM-DD-YYYY');
 
       const startTime = convertToDate(startDayString, startTimeNumber);
       const endTime = convertToDate(endDayString, endTimeNumber);
@@ -117,8 +140,13 @@ export const Booking = () => {
   useEffect(() => {
     if (selectedDate && selectedPitch) {
       bookingsRefetch();
+      setSelectedTime(null);
     }
   }, [selectedDate, selectedPitch, bookingsRefetch]);
+
+  if (!profile) {
+    navigate('/login');
+  }
 
   return (
     pitches && (
@@ -151,7 +179,9 @@ export const Booking = () => {
                       justifyContent='center'
                       alignItems='center'
                     >
-                      <Typography variant='h5'>{item.no}</Typography>
+                      <Typography variant='h5' color='primary.contrastText'>
+                        {item.name}
+                      </Typography>
                     </Box>
                   </Box>
                 </Grid>
@@ -183,7 +213,7 @@ export const Booking = () => {
                 <Tooltip title={`${convertDecimalToTime(selectedTime[0])} - ${convertDecimalToTime(selectedTime[1])}`}>
                   <Box
                     height={20}
-                    bgcolor='secondary.light'
+                    bgcolor='success.main'
                     display='flex'
                     justifyContent='center'
                     alignItems='center'
@@ -194,12 +224,10 @@ export const Booking = () => {
                     borderTop={1}
                     borderLeft={1}
                     borderRight={1}
-                    borderColor='secondary.main'
+                    borderColor='success.dark'
                     left={`${(selectedTime[0] * 100) / 24}%`}
                     width={`${((selectedTime[1] - selectedTime[0]) * 100) / 24}%`}
-                  >
-                    {`${convertDecimalToTime(selectedTime[0])} - ${convertDecimalToTime(selectedTime[1])}`}
-                  </Box>
+                  ></Box>
                 </Tooltip>
               )}
               {rangeTime?.map((time) => (
@@ -210,55 +238,36 @@ export const Booking = () => {
                   width='20px'
                   textAlign='center'
                   ml='-10px'
-                  top='40px'
+                  top='60px'
                 >
                   {convertDecimalToTime(time)}
                 </Typography>
               ))}
             </Box>
-            {times && (
-              <Box display='flex' justifyContent='center' gap={2} marginY={4}>
-                <Box
-                  width={120}
-                  height={40}
-                  fontSize={12}
-                  display='flex'
-                  justifyContent='center'
-                  alignItems='center'
-                  bgcolor='primary.main'
-                  color='primary.contrastText'
-                >
-                  Còn trống
-                </Box>
-                <Box
-                  width={120}
-                  height={40}
-                  fontSize={12}
-                  display='flex'
-                  justifyContent='center'
-                  alignItems='center'
-                  bgcolor='primary.light'
-                >
-                  Đã có người đặt
-                </Box>
-                <Box
-                  width={120}
-                  height={40}
-                  fontSize={12}
-                  display='flex'
-                  justifyContent='center'
-                  alignItems='center'
-                  bgcolor='secondary.light'
-                >
-                  Đang chọn
-                </Box>
+            {selectedTime && (
+              <Box
+                padding={1}
+                marginBottom={2}
+                bgcolor='success.dark'
+                width='fit-content'
+                display='flex'
+                alignItems='center'
+                gap={1}
+              >
+                <CheckCircle sx={{ color: 'secondary.light' }} />
+                <Typography color='success.contrastText'>Thời gian đã chọn:</Typography>
+                <Typography color='success.contrastText' fontWeight={500}>
+                  {`${convertDecimalToTime(selectedTime[0])} - ${convertDecimalToTime(selectedTime[1])}`}
+                </Typography>
               </Box>
             )}
+
             <Box display='flex' justifyContent='center' marginBottom={4}>
               <Button
                 onClick={handleNextStep}
                 variant='contained'
                 disabled={!selectedPitch || !selectedDate || !selectedTime}
+                size='large'
               >
                 Tiếp theo
               </Button>

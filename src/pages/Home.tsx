@@ -76,7 +76,7 @@ export const Home = () => {
           </Typography>
           <Grid container sx={{ width: 'full' }} spacing={4}>
             {data.data.map((category) => (
-              <Grid item xs={12} md={6} lg={3}>
+              <Grid item xs={12} md={6} lg={3} key={category.id}>
                 <Card sx={{ maxWidth: 345, minHeight: 400, borderRadius: 4 }} key={category.id}>
                   <Box
                     position='relative'

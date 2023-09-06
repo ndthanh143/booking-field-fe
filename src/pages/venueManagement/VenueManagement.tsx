@@ -3,10 +3,10 @@ import { SyntheticEvent, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { CustomTabPanel, ImagesManagement, InfoManagement, LocationManagement } from '@/components';
 import { PitchesManagement } from '@/components/VenueManagement/pitchesManagement';
-import { useVenueByUserQuery } from '@/hooks';
+import { useVenueByUser } from '@/hooks';
 
 export const VenueManagement = () => {
-  const { profile, data: venue } = useVenueByUserQuery();
+  const { profile, data: venue } = useVenueByUser();
 
   const [tabIndex, setTabIndex] = useState(0);
 

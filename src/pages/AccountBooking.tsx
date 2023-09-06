@@ -3,29 +3,23 @@ import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import moment from 'moment';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { noResultImage } from '@/assets/images/common';
 import { RatingBox, UserAccountLayout } from '@/components';
-import { useAuth } from '@/hooks';
 import { Booking } from '@/services/booking/booking.dto';
 import { bookingKeys } from '@/services/booking/booking.query';
 import { CreateRatingPayload } from '@/services/rating/rating.dto';
-import { createRating } from '@/services/rating/rating.service';
+import ratingService from '@/services/rating/rating.service';
 import { convertCurrency } from '@/utils/convertCurrency';
 
 export const AccountBooking = () => {
-  const { profile } = useAuth();
-
-  const navigate = useNavigate();
-
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>();
 
   const userBookingInstance = bookingKeys.personal();
   const { data, refetch } = useQuery(userBookingInstance);
 
   const { mutate } = useMutation({
-    mutationFn: (payload: CreateRatingPayload) => createRating(payload),
+    mutationFn: (payload: CreateRatingPayload) => ratingService.create(payload),
     onSuccess: () => {
       refetch();
       setSelectedBooking(null);
@@ -36,10 +30,6 @@ export const AccountBooking = () => {
   const handleRatingSubmit = (payload: CreateRatingPayload) => {
     mutate(payload);
   };
-
-  if (!profile) {
-    navigate('/');
-  }
 
   return (
     <UserAccountLayout>
@@ -75,7 +65,7 @@ export const AccountBooking = () => {
                     />
                   </Grid>
                   <Grid item xs={5}>
-                    <Typography>{`${booking.pitch.pitchCategory.name} - ${booking.pitch.no}`}</Typography>
+                    <Typography>{`${booking.pitch.pitchCategory.name} - ${booking.pitch.name}`}</Typography>
                     <Typography>Ngày: {moment(booking.startTime).format('DD/MM/YYYY')}</Typography>
                     <Typography>
                       Thời gian:{' '}
@@ -133,7 +123,6 @@ export const AccountBooking = () => {
           onSubmit={(payload) => handleRatingSubmit(payload)}
         />
       )}
-      <ToastContainer />
     </UserAccountLayout>
   );
 };

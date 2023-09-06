@@ -27,7 +27,7 @@ export const TimeSelect = ({ onSave, startTime, endTime, id }: TimeSelectProps) 
         transition={{
           duration: 0.3,
         }}
-        height='40px'
+        height='60px'
         display='flex'
         justifyContent='center'
         alignItems='center'
@@ -46,10 +46,17 @@ export const TimeSelect = ({ onSave, startTime, endTime, id }: TimeSelectProps) 
             : {},
           cursor: isFreeTime ? 'pointer' : 'not-allowed',
         }}
-        onClick={setTrue}
+        onClick={() => isFreeTime && setTrue()}
         key={startTime}
       >
-        {isFreeTime && 'Còn trống'}
+        {isFreeTime && (
+          <Box
+            component='img'
+            src='https://cdn-icons-png.flaticon.com/512/5278/5278681.png'
+            height='80%'
+            maxWidth='80%'
+          />
+        )}
       </Box>
       <TimeSelection isOpen={value} onClose={setFalse} onSave={onSave} timeRange={[startTime, endTime]} />
     </>

@@ -20,7 +20,7 @@ import { object, ref, string } from 'yup';
 import { useAuth } from '@/hooks/useAuth';
 import { SignInPayload } from '@/services/user/user.dto';
 import { userKeys } from '@/services/user/user.query';
-import { postRegister } from '@/services/user/user.service';
+import userService from '@/services/user/user.service';
 
 type RegisterInput = SignInPayload & {
   confirmPassword: string;
@@ -49,7 +49,7 @@ export const Register = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: (payload: SignInPayload) => postRegister(payload),
+    mutationFn: (payload: SignInPayload) => userService.register(payload),
     onSuccess: () => {
       queryClient.invalidateQueries(userKeys.profiles());
       navigate('/');

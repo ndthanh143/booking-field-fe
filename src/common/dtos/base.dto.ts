@@ -26,6 +26,10 @@ export type BaseData = {
   updatedAt: Date;
 };
 
+export type BaseQuery = {
+  sorts?: SortQuery[];
+} & PaginationQuery;
+
 export type PaginationQuery = {
   page?: number;
   limit?: number;

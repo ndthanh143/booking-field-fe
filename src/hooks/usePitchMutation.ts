@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { CreatePitchDto, UpdatePitchPayload } from '@/services/pitch/pitch.dto';
-import { createPitch, deletePitch, updatePitch } from '@/services/pitch/pitch.service';
+import pitchService from '@/services/pitch/pitch.service';
 
 export const usePitchMutation = () => {
   const {
@@ -10,7 +10,7 @@ export const usePitchMutation = () => {
     isLoading: isDeleteLoading,
     reset: resetDelete,
   } = useMutation({
-    mutationFn: (id: number) => deletePitch(id),
+    mutationFn: (id: number) => pitchService.delete(id),
     onSuccess: () => {
       toast.success('Xóa sân bóng thành công');
     },
@@ -22,7 +22,7 @@ export const usePitchMutation = () => {
     isLoading: isCreateLoading,
     reset: resetCreate,
   } = useMutation({
-    mutationFn: (data: CreatePitchDto) => createPitch(data),
+    mutationFn: (data: CreatePitchDto) => pitchService.create(data),
     onSuccess: () => {
       toast.success('Thêm sân bóng thành công');
     },
@@ -34,7 +34,7 @@ export const usePitchMutation = () => {
     isLoading: isUpdateLoading,
     reset: resetUpdate,
   } = useMutation({
-    mutationFn: (payload: UpdatePitchPayload) => updatePitch(payload),
+    mutationFn: (payload: UpdatePitchPayload) => pitchService.update(payload),
     onSuccess: () => {
       toast.success('Cập nhật sân bóng thành công');
     },

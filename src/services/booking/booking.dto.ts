@@ -1,7 +1,7 @@
 import { Pitch } from '../pitch/pitch.dto';
 import { Rating } from '../rating/rating.dto';
 import { User } from '../user/user.dto';
-import { BaseData, BasePaginationResponse, BaseResponse } from '@/common/dtos/base.dto';
+import { BaseData, BasePaginationResponse, BaseQuery, BaseResponse } from '@/common/dtos/base.dto';
 
 export type BookingsResponse = BasePaginationResponse<Booking>;
 export type BookingResponse = BaseResponse<Booking>;
@@ -20,10 +20,8 @@ export type Booking = {
 export type GetBookingsDto = {
   pitchId?: number;
   date?: string;
-  page?: number;
-  limit?: number;
   venueId?: number;
-};
+} & BaseQuery;
 
 export type CreateBookingDto = {
   startTime: Date;
