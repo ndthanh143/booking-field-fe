@@ -4,6 +4,7 @@ import StarIcon from '@mui/icons-material/Star';
 import { Box, Grid, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link } from './Link';
+import { useLocale } from '@/locales';
 import { SearchVenueData } from '@/services/venue/venue.dto';
 import convertToAMPM from '@/utils/convertTimestamp';
 
@@ -12,6 +13,8 @@ export interface SearchResultCardProps {
 }
 
 export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
+  const { formatMessage } = useLocale();
+
   return (
     <Box
       component={motion.div}
@@ -72,10 +75,12 @@ export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
                     <StarIcon sx={{ color: 'primary.main', marginRight: 1 }} />
                     <Typography>{data.averageRate}</Typography>
                   </Box>
-                  <Typography marginX={1}>({data.totalReview} Đánh giá)</Typography>
+                  <Typography marginX={1}>
+                    ({data.totalReview} {formatMessage({ id: 'search.result.result.item.rating' })})
+                  </Typography>
                 </Box>
                 <Typography variant='body1' color='primary.main'>
-                  1 giờ
+                  {formatMessage({ id: 'search.result.result.item.unit' })}
                 </Typography>
               </Box>
               <Box display='flex' justifyContent='space-between'>

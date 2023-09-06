@@ -5,10 +5,13 @@ import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { defaultLocations } from '@/common/datas/location.data';
 import { SearchBox } from '@/components/SearchBox';
 import { Slider } from '@/components/Slider';
+import { useLocale } from '@/locales';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
 
 export const Home = () => {
   const navigate = useNavigate();
+
+  const { formatMessage } = useLocale();
 
   const pitchCategoryInstance = pitchCategoryKeys.list();
   const { data } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
@@ -72,7 +75,7 @@ export const Home = () => {
 
         <Box marginY={10}>
           <Typography variant='h5' marginY={2}>
-            Danh mục sân bóng
+            {formatMessage({ id: 'app.home.category-list.title' })}
           </Typography>
           <Grid container sx={{ width: 'full' }} spacing={4}>
             {data.data.map((category) => (

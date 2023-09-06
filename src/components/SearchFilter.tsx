@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { PriceFilter } from './PriceFilter';
+import { useLocale } from '@/locales';
 
 export interface SearchFilterProps {
   isOpen: boolean;
@@ -12,6 +13,8 @@ export interface SearchFilterProps {
 }
 
 export const SearchFilter = ({ isOpen, priceRange, onClose }: SearchFilterProps) => {
+  const { formatMessage } = useLocale();
+
   const [price, setPrice] = useState(priceRange);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -52,7 +55,7 @@ export const SearchFilter = ({ isOpen, priceRange, onClose }: SearchFilterProps)
           paddingY={2}
           position='relative'
         >
-          Bộ lọc
+          {formatMessage({ id: 'search.tool.filter.title' })}
           <Close
             onClick={onClose}
             sx={{
@@ -67,12 +70,12 @@ export const SearchFilter = ({ isOpen, priceRange, onClose }: SearchFilterProps)
         </Typography>
         <Divider />
         <Box marginY={2}>
-          <Typography variant='body1'>Khoảng giá</Typography>
+          <Typography variant='body1'> {formatMessage({ id: 'search.tool.filter.price.range' })}</Typography>
           <PriceFilter priceRange={price} onChange={(value) => setPrice(value)} minDistance={100000} />
         </Box>
         <Divider />
         <Box marginY={2}>
-          <Typography variant='body1'>Điểm đánh giá</Typography>
+          <Typography variant='body1'> {formatMessage({ id: 'search.tool.filter.rating.title' })}</Typography>
           <RadioGroup
             aria-labelledby='demo-controlled-radio-buttons-group'
             name='controlled-radio-buttons-group'
@@ -93,7 +96,7 @@ export const SearchFilter = ({ isOpen, priceRange, onClose }: SearchFilterProps)
             onClose();
           }}
         >
-          Lọc
+          {formatMessage({ id: 'search.tool.filter.button' })}
         </Button>
       </Box>
     </Modal>

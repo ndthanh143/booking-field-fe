@@ -13,6 +13,7 @@ import { MutableRefObject, SyntheticEvent, useMemo, useRef, useState } from 'rea
 import { useNavigate, useParams } from 'react-router-dom';
 import { RATING_PAGE_LIMIT } from '@/common/constants';
 import { ImageLibrary } from '@/components/ImageLibrary';
+import { useLocale } from '@/locales';
 import { pitchKeys } from '@/services/pitch/pitch.query';
 import { ratingKeys } from '@/services/rating/rating.query';
 import { venueKeys } from '@/services/venue/venue.query';
@@ -21,6 +22,8 @@ import convertToAMPM from '@/utils/convertTimestamp';
 import { groupBy } from '@/utils/groupBy';
 
 export const VenueDetail = () => {
+  const { formatMessage } = useLocale();
+
   const navigate = useNavigate();
 
   const pitchesRef = useRef() as MutableRefObject<HTMLDivElement>;
@@ -74,7 +77,7 @@ export const VenueDetail = () => {
           <Typography variant='h3'>{venue.name}</Typography>
           <Box display='flex' alignItems='center'>
             <FavoriteBorderIcon sx={{ marginX: 2 }} />
-            <Typography variant='body1'>Yêu thích</Typography>
+            <Typography variant='body1'>{formatMessage({ id: 'app.venue.favorite' })}</Typography>
           </Box>
         </Box>
         <Box display='flex' justifyContent='space-between' marginY={1}>
@@ -91,14 +94,26 @@ export const VenueDetail = () => {
 
         <Box position='sticky' top={0} bgcolor='primary.contrastText' zIndex={1}>
           <Tabs value={tab} onChange={handleChange}>
-            <Tab label='Danh sách sân' onClick={() => pitchesRef.current.scrollIntoView({ behavior: 'smooth' })} />
-            <Tab label='Đánh giá' onClick={() => ratingsRef.current.scrollIntoView({ behavior: 'smooth' })} />
-            <Tab label='Địa chỉ' onClick={() => addressRef.current.scrollIntoView({ behavior: 'smooth' })} />
-            <Tab label='Giờ hoạt động' onClick={() => operatingRef.current.scrollIntoView({ behavior: 'smooth' })} />
+            <Tab
+              label={formatMessage({ id: 'app.venue.tab.pitch-list' })}
+              onClick={() => pitchesRef.current.scrollIntoView({ behavior: 'smooth' })}
+            />
+            <Tab
+              label={formatMessage({ id: 'app.venue.tab.rating' })}
+              onClick={() => ratingsRef.current.scrollIntoView({ behavior: 'smooth' })}
+            />
+            <Tab
+              label={formatMessage({ id: 'app.venue.tab.address' })}
+              onClick={() => addressRef.current.scrollIntoView({ behavior: 'smooth' })}
+            />
+            <Tab
+              label={formatMessage({ id: 'app.venue.tab.work-time' })}
+              onClick={() => operatingRef.current.scrollIntoView({ behavior: 'smooth' })}
+            />
           </Tabs>
         </Box>
         <Box marginY={4} ref={pitchesRef}>
-          <Typography variant='h4'>Danh sách sân</Typography>
+          <Typography variant='h4'>{formatMessage({ id: 'app.venue.pitches.title' })}</Typography>
           {groupByCategory &&
             groupByCategory.map((item) => (
               <Grid
@@ -130,22 +145,26 @@ export const VenueDetail = () => {
                 </Grid>
                 <Grid item md={3}>
                   <Typography marginBottom={2} fontWeight={500}>
-                    Thông tin sân
+                    {formatMessage({ id: 'app.venue.pitches.item.info' })}
                   </Typography>
                   <Box>
                     <Box display='flex' alignItems='center' marginY={2}>
                       <SportsSoccerIcon />
-                      <Typography marginLeft={1}>Bóng size 4</Typography>
+                      <Typography marginLeft={1}>
+                        {formatMessage({ id: 'app.venue.pitches.item.info.ball' })}
+                      </Typography>
                     </Box>
                     <Box display='flex' alignItems='center' marginY={2}>
                       <LocalDrinkIcon />
-                      <Typography marginLeft={1}>Trà đá</Typography>
+                      <Typography marginLeft={1}>
+                        {formatMessage({ id: 'app.venue.pitches.item.info.drink' })}
+                      </Typography>
                     </Box>
                   </Box>
                 </Grid>
                 <Grid item md={3}>
                   <Typography marginBottom={2} fontWeight={500}>
-                    Số lượng
+                    {formatMessage({ id: 'app.venue.pitches.item.amount' })}
                   </Typography>
                   <Box
                     display='inline-flex'
@@ -161,10 +180,10 @@ export const VenueDetail = () => {
                 </Grid>
                 <Grid item md={3}>
                   <Typography marginBottom={2} fontWeight={500}>
-                    Giá sân
+                    {formatMessage({ id: 'app.venue.pitches.item.price' })}
                   </Typography>
                   <Typography variant='body1' color='primary.main' fontWeight={500} marginY={2}>
-                    1 Giờ
+                    {formatMessage({ id: 'app.venue.pitches.item.price.unit' })}
                   </Typography>
                   <Typography variant='h5' fontWeight={500} marginY={2}>
                     {convertCurrency(item.values[0].price)}
@@ -174,7 +193,7 @@ export const VenueDetail = () => {
                     sx={{ marginY: 2 }}
                     onClick={() => navigate(`/booking/${venue.slug}?pitchCategory=${item.values[0].pitchCategory.id}`)}
                   >
-                    Đặt sân
+                    {formatMessage({ id: 'app.venue.pitches.item.book' })}
                   </Button>
                 </Grid>
               </Grid>
@@ -182,7 +201,7 @@ export const VenueDetail = () => {
         </Box>
 
         <Box marginY={4} ref={ratingsRef}>
-          <Typography variant='h4'>Đánh giá</Typography>
+          <Typography variant='h4'> {formatMessage({ id: 'app.venue.ratings.title' })}</Typography>
           {ratings && ratings.data.length > 0 ? (
             <>
               <Box display='flex' alignItems='center' marginY={2}>
@@ -199,7 +218,7 @@ export const VenueDetail = () => {
                 <Box display='flex' alignItems='center' marginX={2}>
                   <FiberManualRecordIcon sx={{ fontSize: 8 }} />
                   <Typography variant='h5' marginX={1}>
-                    {ratings.pageInfo.count} Đánh giá
+                    {ratings.pageInfo.count} {formatMessage({ id: 'app.venue.ratings.title' })}
                   </Typography>
                 </Box>
               </Box>
@@ -232,7 +251,7 @@ export const VenueDetail = () => {
                         </Box>
                         <Box display='flex' alignItems='center'>
                           <Typography variant='body1' marginX={1}>
-                            Đánh giá
+                            {formatMessage({ id: 'app.venue.ratings.title' })}
                           </Typography>
                           <Rating
                             name='simple-controlled'
@@ -264,39 +283,39 @@ export const VenueDetail = () => {
               </Grid>
             </>
           ) : (
-            <Box marginY={2}>Chưa có đánh giá nào</Box>
+            <Box marginY={2}> {formatMessage({ id: 'app.venue.ratings.no-result' })}</Box>
           )}
         </Box>
 
         <Box marginY={4} ref={addressRef}>
-          <Typography variant='h4'>Địa chỉ</Typography>
+          <Typography variant='h4'> {formatMessage({ id: 'app.venue.address.title' })}</Typography>
           {isLoaded && (
             <Box borderRadius={4} overflow='hidden' marginY={2}>
               <GoogleMap mapContainerStyle={{ width: '100%', height: '50vh' }} center={center} zoom={15}>
-                <Marker position={center} />
+                <Marker position={{ lat: venue.location.lat, lng: venue.location.lng }} />
               </GoogleMap>
             </Box>
           )}
         </Box>
 
         <Box marginY={4} ref={operatingRef}>
-          <Typography variant='h4'>Giờ hoạt động</Typography>
+          <Typography variant='h4'> {formatMessage({ id: 'app.venue.work-time.title' })}</Typography>
           <Box display='flex' justifyContent='space-around' marginY={2}>
             <Box textAlign='center'>
               <Typography variant='h6' fontWeight={500}>
-                Mở cửa
+                {formatMessage({ id: 'app.venue.work-time.open' })}
               </Typography>
               <Typography variant='body1'>{convertToAMPM(venue.openAt)}</Typography>
             </Box>
             <Box textAlign='center'>
               <Typography variant='h6' fontWeight={500}>
-                Đóng cửa
+                {formatMessage({ id: 'app.venue.work-time.close' })}
               </Typography>
               <Typography variant='body1'>{convertToAMPM(venue.closeAt)}</Typography>
             </Box>
             <Box textAlign='center'>
               <Typography variant='h6' fontWeight={500}>
-                Thời gian
+                {formatMessage({ id: 'app.venue.work-time.time' })}
               </Typography>
               <Typography variant='body1'>Cả tuần</Typography>
             </Box>
