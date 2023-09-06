@@ -7,6 +7,7 @@ import { SearchBox } from '@/components/SearchBox';
 import { Slider } from '@/components/Slider';
 import { useLocale } from '@/locales';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
+import { TournamentTypeEnum, createTournament } from '@/utils/createTournament';
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -24,6 +25,8 @@ export const Home = () => {
     slidesToShow: 3,
     swipeToSlide: true,
   };
+
+  const tournament = createTournament(6, TournamentTypeEnum.Knockout);
 
   return (
     data && (
