@@ -93,9 +93,7 @@ export const MenuNotification = ({ variant }: MenuNotificationProps) => {
                       <Typography variant='body2' sx={{ whiteSpace: 'pre-wrap' }}>
                         {notification.message}
                       </Typography>
-                      <Typography variant='caption'>
-                        {moment(notification.createdAt).startOf('hour').fromNow()}
-                      </Typography>
+                      <Typography variant='caption'>{moment(notification.createdAt).fromNow()}</Typography>
                     </Box>
                   </Box>
                 </MenuItem>
