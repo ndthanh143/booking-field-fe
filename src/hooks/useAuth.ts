@@ -1,19 +1,15 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { SocketContext } from '@/App';
+import { useSocket } from '.';
 import { LoginInput } from '@/services/auth/auth.dto';
 import authService from '@/services/auth/auth.service';
 import { userKeys } from '@/services/user/user.query';
 
 export const useAuth = () => {
-  const navigate = useNavigate();
-
   const userInstance = userKeys.profile();
   const { data: profile, isLoading, refetch } = useQuery(userInstance);
 
-  const socket = useContext(SocketContext);
+  const { socket } = useSocket();
 
   const {
     mutate: loginMutation,
@@ -23,8 +19,7 @@ export const useAuth = () => {
     mutationFn: (payload: LoginInput) => authService.login(payload),
     onSuccess: () => {
       refetch();
-      navigate('/');
-      socket.connect();
+      window.location.href = '/';
     },
   });
 
