@@ -26,6 +26,7 @@ import {
   VenueDetail,
   VenueManagement,
   AccountNotification,
+  CreateTournament,
 } from './pages';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -38,6 +39,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'swiper/css';
 import './App.css';
 import 'nprogress/nprogress.css';
+import { TournamentDetail } from './pages/TournamentDetail';
 
 const router = createBrowserRouter([
   {
@@ -88,15 +90,30 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: 'league',
+        element: <MainLayout />,
+        children: [
+          {
+            path: ':id',
+            element: <TournamentDetail />,
+          },
+        ],
+      },
+      {
         path: 'venue',
         element: <MainLayout />,
         children: [
+          {
+            path: 'create-tournament',
+            element: <CreateTournament />,
+          },
           {
             path: ':slug',
             element: <VenueDetail />,
           },
         ],
       },
+
       {
         path: 'booking',
         children: [

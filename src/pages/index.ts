@@ -14,3 +14,4 @@ export * from './ResetPassword';
 export * from './VenueDetail';
 export * from './Booking';
 export * from './AccountNotification';
+export * from './CreateTournament';
