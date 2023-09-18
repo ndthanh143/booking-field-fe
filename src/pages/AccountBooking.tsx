@@ -1,7 +1,6 @@
 import { CheckCircle, GolfCourse } from '@mui/icons-material';
 import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import moment from 'moment';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { noResultImage } from '@/assets/images/common';
@@ -10,7 +9,7 @@ import { Booking } from '@/services/booking/booking.dto';
 import { bookingKeys } from '@/services/booking/booking.query';
 import { CreateRatingPayload } from '@/services/rating/rating.dto';
 import ratingService from '@/services/rating/rating.service';
-import { convertCurrency } from '@/utils/convertCurrency';
+import { convertCurrency, formatDate, formatDateToTime } from '@/utils';
 
 export const AccountBooking = () => {
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>();
@@ -66,10 +65,9 @@ export const AccountBooking = () => {
                   </Grid>
                   <Grid item xs={5}>
                     <Typography>{`${booking.pitch.pitchCategory.name} - ${booking.pitch.name}`}</Typography>
-                    <Typography>Ngày: {moment(booking.startTime).format('DD/MM/YYYY')}</Typography>
+                    <Typography>Ngày: {formatDate(booking.startTime)}</Typography>
                     <Typography>
-                      Thời gian:{' '}
-                      {`${moment(booking.startTime).format('h:mm A')} - ${moment(booking.endTime).format('h:mm A')}`}
+                      Thời gian: {`${formatDateToTime(booking.startTime)} - ${formatDateToTime(booking.endTime)}`}
                     </Typography>
                   </Grid>
                   <Grid item xs={4}>

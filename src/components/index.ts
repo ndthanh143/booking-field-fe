@@ -28,3 +28,7 @@ export * from './UserAccountLayout';
 export * from './MenuNotification';
 export * from './MenuActions';
 export * from './NotificationContainer';
+export * from './TournamentLayout';
+export * from './UploadImage';
+export * from './SetScheduleBox';
+export * from './UpdateScore';

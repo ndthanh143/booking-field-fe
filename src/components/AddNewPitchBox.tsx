@@ -2,7 +2,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Divider, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { number, object, string } from 'yup';
 import { CreatePitchDto } from '@/services/pitch/pitch.dto';
@@ -24,26 +23,26 @@ const schema = object({
 });
 
 export const AddNewPitchBox = ({ venue, isOpen, onClose, onSubmit }: SearchSortProps) => {
-  const pitchCategoryInstance = pitchCategoryKeys.list();
+  const pitchCategoryInstance = pitchCategoryKeys.list({});
 
   const { data: categories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
   const {
     handleSubmit,
     register,
-    setValue,
     reset,
     formState: { errors },
-  } = useForm<CreatePitchDto>({ resolver: yupResolver(schema) });
+  } = useForm<CreatePitchDto>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      venue: venue.id,
+    },
+  });
 
   const onSubmitHandler = (data: CreatePitchDto) => {
     onSubmit(data);
     reset();
   };
-
-  useEffect(() => {
-    setValue('venue', venue.id);
-  }, [setValue, venue.id]);
 
   return (
     <Modal
@@ -92,7 +91,11 @@ export const AddNewPitchBox = ({ venue, isOpen, onClose, onSubmit }: SearchSortP
             <Box paddingY={2}>
               <Typography>Loại Sân</Typography>
               <Select {...register('pitchCategory')} fullWidth>
-                {categories?.data.map((item) => <MenuItem value={item.id}>{item.name}</MenuItem>)}
+                {categories?.data.map((item) => (
+                  <MenuItem value={item.id} key={item.id}>
+                    {item.name}
+                  </MenuItem>
+                ))}
               </Select>
               {errors.pitchCategory && (
                 <Typography variant='caption' color='error.main'>

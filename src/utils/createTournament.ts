@@ -1,3 +1,5 @@
+import { TournamentTypeEnum } from '@/services/tournament/tournament.dto';
+
 type Tournament = {
   round: number;
   matches: Match[];
@@ -8,7 +10,7 @@ type Match = {
   teamB: string;
 };
 
-function interleaveArrays(array1: any[], array2: any[]) {
+const interleaveArrays = (array1: any[], array2: any[]) => {
   const result = [];
   const minLength = Math.min(array1.length, array2.length);
 
@@ -20,11 +22,7 @@ function interleaveArrays(array1: any[], array2: any[]) {
   result.push(...array2.slice(minLength));
 
   return result;
-}
-
-export enum TournamentTypeEnum {
-  Knockout = 'knockout',
-}
+};
 
 const findTournamentKnockout = (
   tournament: Tournament[],
@@ -74,12 +72,37 @@ const findTournamentKnockout = (
   }
 };
 
-export function createTournament(numTeams: number, type: TournamentTypeEnum) {
+const findTournamentRoundRobin = (tournament: Tournament[], numTeams: number, currentRound: number): Tournament[] => {
+  const totalRounds = numTeams % 2 === 0 ? numTeams - 1 : numTeams;
+
+  if (currentRound === totalRounds) return tournament;
+
+  const totalMatchesPerRound = (numTeams * (numTeams - 1)) / (2 * totalRounds);
+
+  const matches = Array(totalMatchesPerRound)
+    .fill(null)
+    .map(() => ({
+      teamA: 'team',
+      teamB: 'team',
+    }));
+
+  tournament.push({
+    round: currentRound,
+    matches,
+  });
+
+  return findTournamentRoundRobin(tournament, numTeams, currentRound + 1);
+};
+
+export const createTournament = (numTeams: number, type: TournamentTypeEnum) => {
   const tournament: Tournament[] = [];
 
   const result = {
     [TournamentTypeEnum.Knockout]: () => findTournamentKnockout(tournament, 0, [], numTeams),
+    [TournamentTypeEnum.RoundRobin]: () => {
+      findTournamentRoundRobin(tournament, numTeams, 0);
+    },
   };
 
   return result[type]();
-}
+};

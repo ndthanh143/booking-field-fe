@@ -3,17 +3,21 @@ import { Box, Button, Grid, Menu, MenuItem } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { MenuNotification, MenuActions } from '.';
+import Logo from '@/assets/logo';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { defaultLocations } from '@/common/datas/location.data';
 import { useMenu } from '@/hooks';
+import { useMediaBreakpoint } from '@/hooks';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
 
 export const Header = () => {
   const navigate = useNavigate();
 
+  const { isMobile, isTablet } = useMediaBreakpoint();
+
   const { anchorEl: anchorCategory, isOpen: isOpenCategory, onClose: closeCategory, onOpen: openCategory } = useMenu();
 
-  const pitchCategoryInstance = pitchCategoryKeys.list();
+  const pitchCategoryInstance = pitchCategoryKeys.list({});
   const { data: pitchCategories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
   return (
@@ -25,20 +29,18 @@ export const Header = () => {
       borderBottom={1}
       borderColor='secondary.light'
     >
-      <Grid item xs={6} md={4} alignItems='center' justifyContent='space-between'>
+      <Grid item xs={4} md={4} alignItems='center' justifyContent='space-between'>
         <Box display='flex' justifyContent='space-between' alignItems='center'>
           <Box
-            component='img'
             sx={{
-              height: '50px',
-              width: 200,
               cursor: 'pointer',
+              objectFit: 'cover',
             }}
-            alt='logo'
-            src='/logo.png'
             onClick={() => navigate('/')}
-          />
-          <Button variant='text' onClick={openCategory} color='secondary'>
+          >
+            <Logo />
+          </Box>
+          <Button variant='text' onClick={openCategory} color='secondary' sx={{ ...(isMobile && { display: 'none' }) }}>
             Danh mục sân bóng
             <KeyboardArrowDown />
           </Button>
@@ -76,6 +78,7 @@ export const Header = () => {
             href='https://docs.google.com/forms/d/e/1FAIpQLScCtwnRHg0BcfpQ_I2fKWAMY5CDwFytHWhx1oI8YlOA99wu2Q/viewform'
             color='secondary'
             target='_blank'
+            sx={{ ...(isTablet && { display: 'none' }) }}
           >
             Dành cho đối tác
           </Button>

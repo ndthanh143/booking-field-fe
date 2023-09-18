@@ -6,7 +6,7 @@ import { createContext, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import * as io from 'socket.io-client';
-import { NotificationContainer } from './components';
+import { NotificationContainer, TournamentLayout } from './components';
 import { MainLayout, SecondaryLayout } from './components/Layout';
 import { VenueManagementLayout } from './components/VenueManagementLayout';
 import {
@@ -27,6 +27,10 @@ import {
   VenueManagement,
   AccountNotification,
   CreateTournament,
+  TournamentSchedule,
+  TournamentStanding,
+  TournamentTeamManagement,
+  TournamentMatch,
 } from './pages';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -39,7 +43,6 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'swiper/css';
 import './App.css';
 import 'nprogress/nprogress.css';
-import { TournamentDetail } from './pages/TournamentDetail';
 
 const router = createBrowserRouter([
   {
@@ -94,8 +97,30 @@ const router = createBrowserRouter([
         element: <MainLayout />,
         children: [
           {
+            path: 'create-tournament',
+            element: <CreateTournament />,
+          },
+          {
             path: ':id',
-            element: <TournamentDetail />,
+            element: <TournamentLayout />,
+            children: [
+              {
+                path: 'schedule',
+                element: <TournamentSchedule />,
+              },
+              {
+                path: 'matches',
+                element: <TournamentMatch />,
+              },
+              {
+                path: 'team-management',
+                element: <TournamentTeamManagement />,
+              },
+              {
+                path: 'standing',
+                element: <TournamentStanding />,
+              },
+            ],
           },
         ],
       },
@@ -104,8 +129,7 @@ const router = createBrowserRouter([
         element: <MainLayout />,
         children: [
           {
-            path: 'create-tournament',
-            element: <CreateTournament />,
+            path: ':slug/create-tournament',
           },
           {
             path: ':slug',
@@ -113,7 +137,6 @@ const router = createBrowserRouter([
           },
         ],
       },
-
       {
         path: 'booking',
         children: [

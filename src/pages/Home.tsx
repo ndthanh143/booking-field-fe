@@ -10,7 +10,7 @@ import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.quer
 export const Home = () => {
   const navigate = useNavigate();
 
-  const pitchCategoryInstance = pitchCategoryKeys.list();
+  const pitchCategoryInstance = pitchCategoryKeys.list({});
   const { data } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
   const SliderSettings = {

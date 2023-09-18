@@ -3,7 +3,6 @@ import { Box, Button, Divider, Grid, Tooltip, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import moment from 'moment';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { SocketContext } from '@/App';
@@ -18,19 +17,8 @@ import bookingService from '@/services/booking/booking.service';
 import { Pitch } from '@/services/pitch/pitch.dto';
 import { pitchKeys } from '@/services/pitch/pitch.query';
 import { venueKeys } from '@/services/venue/venue.query';
-import { convertCurrency } from '@/utils/convertCurrency';
-import { findFreeTime } from '@/utils/findBookingFreeTime';
-import { convertDecimalToTime } from '@/utils/formatTime';
-
-const convertToDate = (dateString: string, time: number) => {
-  const date = new Date(dateString);
-  const hours = Math.floor(time);
-  const minutes = (time - hours) * 60;
-
-  date.setHours(hours, minutes, 0, 0);
-
-  return date;
-};
+import { convertCurrency, formatDate } from '@/utils';
+import { convertDecimalToTime, findFreeTime, convertToDate } from '@/utils';
 
 export const Booking = () => {
   const stepList = ['Tùy chọn', 'Thanh toán', 'Hoàn tất'];
@@ -316,7 +304,7 @@ export const Booking = () => {
                 {selectedDate && (
                   <Box display='flex'>
                     <Typography fontWeight={500}>Ngày:</Typography>
-                    <Typography marginX={1}>{moment(selectedDate).format('DD/MM/YYYY')}</Typography>
+                    <Typography marginX={1}>{formatDate(selectedDate)}</Typography>
                   </Box>
                 )}
                 <Box display='flex'>

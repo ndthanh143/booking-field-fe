@@ -8,17 +8,15 @@ import StarIcon from '@mui/icons-material/Star';
 import { Avatar, Box, Button, Grid, Rating, Tab, Tabs, Typography } from '@mui/material';
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import { useQuery } from '@tanstack/react-query';
-import moment from 'moment';
 import { MutableRefObject, SyntheticEvent, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RATING_PAGE_LIMIT } from '@/common/constants';
+import { Link } from '@/components';
 import { ImageLibrary } from '@/components/ImageLibrary';
 import { pitchKeys } from '@/services/pitch/pitch.query';
 import { ratingKeys } from '@/services/rating/rating.query';
 import { venueKeys } from '@/services/venue/venue.query';
-import { convertCurrency } from '@/utils/convertCurrency';
-import convertToAMPM from '@/utils/convertTimestamp';
-import { groupBy } from '@/utils/groupBy';
+import { convertCurrency, convertToAMPM, formatDate, groupBy } from '@/utils';
 
 export const VenueDetail = () => {
   const navigate = useNavigate();
@@ -213,7 +211,7 @@ export const VenueDetail = () => {
                         </Avatar>
                         <Box>
                           <Typography variant='body1' sx={{ opacity: 0.6 }}>
-                            {moment(rating.createdAt).format('DD/MM/YYYY')}
+                            {formatDate(rating.createdAt)}
                           </Typography>
                           <Box display='flex'>
                             <Typography variant='body1'>Khách hàng:</Typography>

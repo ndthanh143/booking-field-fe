@@ -1,8 +1,7 @@
-import { CategoryOutlined, RoomOutlined } from '@mui/icons-material';
+import { CategoryOutlined, RoomOutlined, SportsSoccer } from '@mui/icons-material';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import RoomOutlinedIcon from '@mui/icons-material/RoomOutlined';
 import SearchIcon from '@mui/icons-material/Search';
-import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import { Box, Button, Grid, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { motion, useInView } from 'framer-motion';
@@ -11,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { SelectBox } from './SelectBox';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { defaultLocations } from '@/common/datas/location.data';
-import { useDebounce } from '@/hooks';
+import { useDebounce, useMediaBreakpoint } from '@/hooks';
 import { locationKeys } from '@/services/location/location.query';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
 import { Venue } from '@/services/venue/venue.dto';
@@ -20,12 +19,14 @@ import { venueKeys } from '@/services/venue/venue.query';
 export const SearchBox = () => {
   const navigate = useNavigate();
 
+  const { isTablet, isDesktop } = useMediaBreakpoint();
+
   const [pitchCategory, setPitchCategory] = useState<string>('');
   const [searchPitchCategory, setSearchPitchCategory] = useState<string>('');
   const [searchAdress, setSearchAdress] = useState<string>('');
   const [seletedVenue, setSeletedVenue] = useState<Venue | null>();
 
-  const pitchCategoryInstance = pitchCategoryKeys.list();
+  const pitchCategoryInstance = pitchCategoryKeys.list({});
   const { data: pitchCategories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
   const debounceSearchAddress = useDebounce(searchAdress);
@@ -73,7 +74,7 @@ export const SearchBox = () => {
         transition={{
           duration: 0.3,
         }}
-        display='flex'
+        display={isTablet ? 'none' : 'flex'}
         marginX={20}
         borderRadius={4}
         boxShadow={4}
@@ -168,7 +169,7 @@ export const SearchBox = () => {
                             key={item.id}
                             borderRadius={2}
                           >
-                            <SportsSoccerIcon sx={{ opacity: 0.7, fontSize: 20, marginRight: 1 }} />
+                            <SportsSoccer sx={{ opacity: 0.7, fontSize: 20, marginRight: 1 }} />
                             <Box overflow='hidden'>
                               <Typography>{item.name}</Typography>
                               <Typography
@@ -177,6 +178,7 @@ export const SearchBox = () => {
                                 overflow='hidden'
                                 textOverflow='ellipsis'
                                 width='50px'
+                                fontStyle='italic'
                               >
                                 {item.address}
                               </Typography>
@@ -239,7 +241,10 @@ export const SearchBox = () => {
           </Grid>
           <Grid item xs={2} display='flex' flex={1} padding={0.5} alignItems='center'>
             <Button variant='contained' onClick={searchHandler} sx={{ borderRadius: 12, height: '100%' }} fullWidth>
-              <SearchIcon /> Tìm kiếm
+              <SearchIcon />
+              <Typography display={isDesktop ? 'none' : 'block'} fontWeight={500}>
+                Tìm kiếm
+              </Typography>
             </Button>
           </Grid>
         </Grid>

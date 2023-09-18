@@ -21,7 +21,7 @@ const schema = object({
 });
 
 export const UpdatePitchBox = ({ pitch, isOpen, onClose, onSubmit }: SearchSortProps) => {
-  const pitchCategoryInstance = pitchCategoryKeys.list();
+  const pitchCategoryInstance = pitchCategoryKeys.list({});
 
   const { data: categories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
@@ -67,7 +67,11 @@ export const UpdatePitchBox = ({ pitch, isOpen, onClose, onSubmit }: SearchSortP
             <Box paddingY={2}>
               <Typography>Loại Sân</Typography>
               <Select defaultValue={pitch.pitchCategory.id} {...register('pitchCategory')} fullWidth>
-                {categories?.data.map((item) => <MenuItem value={item.id}>{item.name}</MenuItem>)}
+                {categories?.data.map((item) => (
+                  <MenuItem value={item.id} key={item.id}>
+                    {item.name}
+                  </MenuItem>
+                ))}
               </Select>
             </Box>
             <Box display='flex' justifyContent='end' gap={2} paddingY={2}>

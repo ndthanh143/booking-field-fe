@@ -1,3 +1,4 @@
+import mediaService from '../media/media.service';
 import { CreateTournamentDto, TournamentResponse, TournamentsResponse } from './tournament.dto';
 import { BaseQuery } from '@/common/dtos/base.dto';
 import axiosInstance from '@/utils/axiosConfig';
@@ -14,7 +15,14 @@ const tournamentService = {
     return data;
   },
   create: async (payload: CreateTournamentDto) => {
-    const { data } = await axiosInstance.post<TournamentResponse>('/tournaments', payload);
+    const { cover } = payload;
+
+    const imageResponse = cover && (await mediaService.uploadImages(cover));
+
+    const { data } = await axiosInstance.post<TournamentResponse>('/tournaments', {
+      ...payload,
+      ...(imageResponse && { cover: imageResponse[0].url }),
+    });
 
     return data;
   },

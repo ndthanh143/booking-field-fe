@@ -1,6 +1,5 @@
 import { CreditCard, People } from '@mui/icons-material';
 import { Box, Card, CardContent, Grid, MenuItem, Select, Typography } from '@mui/material';
-
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { CategoryScale, ChartData, ChartOptions } from 'chart.js';
 import { Chart as ChartJS } from 'chart.js/auto';
@@ -12,8 +11,7 @@ import { useVenueByUser } from '@/hooks';
 import { GetAnalystBookingIncomeDto } from '@/services/booking/booking.dto';
 import { bookingKeys } from '@/services/booking/booking.query';
 import bookingService from '@/services/booking/booking.service';
-import { convertCurrency } from '@/utils/convertCurrency';
-import { getMonthsAgoFromDate } from '@/utils/getMonthsAgo';
+import { convertCurrency, getMonthsAgo } from '@/utils';
 
 ChartJS.register(CategoryScale);
 
@@ -49,8 +47,7 @@ export const Dashboard = () => {
   currentFilterDate.setFullYear(year);
   const filteData = incomeData?.filter(
     (item) =>
-      new Date(item.day) > getMonthsAgoFromDate(currentFilterDate, selectedIncome) &&
-      new Date(item.day) < currentFilterDate,
+      new Date(item.day) > getMonthsAgo(currentFilterDate, selectedIncome) && new Date(item.day) < currentFilterDate,
   );
 
   const listFiveYearFromNow = useMemo(() => Array.from(Array(5), (_, index) => currentDate.getFullYear() - index), []);

@@ -1,5 +1,5 @@
 import { Sort, Tune } from '@mui/icons-material';
-import { Box, Button, Divider, Grid, Pagination, Typography } from '@mui/material';
+import { Box, Button, Grid, Pagination, Typography } from '@mui/material';
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
@@ -30,7 +30,7 @@ export const Search = () => {
 
   const [page, setPage] = useState(1);
 
-  const pitchCategoryInstace = pitchCategoryKeys.list();
+  const pitchCategoryInstace = pitchCategoryKeys.list({});
   const { data: pitchCategories } = useQuery({ ...pitchCategoryInstace, staleTime: STALE_TIME });
 
   const venueInstance = venueKeys.search({
@@ -67,7 +67,6 @@ export const Search = () => {
 
   return (
     <>
-      <Divider sx={{ marginY: 2 }} />
       <Grid container display='flex' justifyContent='space-between' marginY={2}>
         <Grid item xs={4} display='flex' gap={2}>
           {pitchCategories?.data.map((category) => (
@@ -94,7 +93,7 @@ export const Search = () => {
         </Grid>
       </Grid>
       <Grid container borderTop={1} paddingY={2} bgcolor='footer.light'>
-        <Grid item md={7} padding={2} alignItems='center' sx={{ overflowY: 'scroll' }} height='100vh'>
+        <Grid item xs={12} md={7} padding={2} alignItems='center' sx={{ overflowY: 'scroll' }} height='100vh'>
           {venues?.data && venues.data.length > 0 ? (
             <>
               <Typography variant='body2'>Có {venues.data.length} sân bóng phù hợp dành cho bạn</Typography>
@@ -130,7 +129,7 @@ export const Search = () => {
             </Box>
           )}
         </Grid>
-        <Grid item md={5}>
+        <Grid item xs={12} md={5}>
           {isLoaded && (
             <GoogleMap mapContainerStyle={{ width: '100%', height: '100vh' }} center={center} zoom={10}>
               {venues?.data.map((item) => (

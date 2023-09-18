@@ -15,3 +15,7 @@ export * from './VenueDetail';
 export * from './Booking';
 export * from './AccountNotification';
 export * from './CreateTournament';
+export * from './TournamentSchedule';
+export * from './TournamentTeamManagement';
+export * from './TournamentStanding';
+export * from './TournamentMatch';

@@ -1,9 +1,9 @@
 import { Box, Pagination, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
-import moment from 'moment';
 import { useState } from 'react';
 import { useAuth } from '@/hooks';
 import { bookingKeys } from '@/services/booking/booking.query';
+import { formatDate, formatDateToTime } from '@/utils';
 
 export const BookingManagement = () => {
   const { profile } = useAuth();
@@ -33,9 +33,9 @@ export const BookingManagement = () => {
                 <TableRow key={booking.id}>
                   <TableCell>{booking.pitch.name}</TableCell>
                   <TableCell>{booking.pitch.pitchCategory.name}</TableCell>
-                  <TableCell>{moment(booking.startTime).format('DD-MM-YYYY ')}</TableCell>
-                  <TableCell>{`${moment(booking.startTime).format('HH:mm')} - ${moment(booking.endTime).format(
-                    'HH:mm',
+                  <TableCell>{formatDate(booking.startTime)}</TableCell>
+                  <TableCell>{`${formatDateToTime(booking.startTime)} - ${formatDateToTime(
+                    booking.endTime,
                   )}`}</TableCell>
                   <TableCell>{`${booking.user.lastName} ${booking.user.firstName}`}</TableCell>
                 </TableRow>

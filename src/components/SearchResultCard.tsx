@@ -4,14 +4,17 @@ import StarIcon from '@mui/icons-material/Star';
 import { Box, Grid, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link } from './Link';
+import { useMediaBreakpoint } from '@/hooks';
 import { SearchVenueData } from '@/services/venue/venue.dto';
-import convertToAMPM from '@/utils/convertTimestamp';
+import { convertToAMPM } from '@/utils';
 
 export interface SearchResultCardProps {
   data: SearchVenueData;
 }
 
 export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
+  const { isTablet } = useMediaBreakpoint();
+
   return (
     <Box
       component={motion.div}
@@ -24,13 +27,13 @@ export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
     >
       <Link href={`/venue/${data.slug}`}>
         <Grid container bgcolor='primary.contrastText' borderRadius={2} padding={2} marginY={2} {...props}>
-          <Grid item md={3}>
+          <Grid item xs={12} md={3}>
             <Link href='/'>
               {data.imageList?.length > 0 ? (
                 <Box
                   component='img'
-                  height={200}
-                  width={200}
+                  height='100%'
+                  width='100%'
                   sx={{ objectFit: 'cover' }}
                   borderRadius={2}
                   src={data.imageList?.[0].imagePath}
@@ -39,6 +42,7 @@ export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
               ) : (
                 <Box
                   height='100%'
+                  width='100%'
                   display='flex'
                   justifyContent='center'
                   alignItems='center'
@@ -50,7 +54,16 @@ export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
               )}
             </Link>
           </Grid>
-          <Grid item md={9} paddingX={2} display='flex' flexDirection='column' justifyContent='space-between'>
+          <Grid
+            item
+            xs={12}
+            md={9}
+            paddingX={2}
+            paddingY={(isTablet && 2) || 0}
+            display='flex'
+            flexDirection='column'
+            justifyContent='space-between'
+          >
             <Box>
               <Typography variant='h6'>{data.name}</Typography>
               <Box display='flex' gap={2} marginY={1} flexWrap='wrap'>

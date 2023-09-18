@@ -42,15 +42,6 @@ export const AccountProfile = () => {
     }
   };
 
-  useEffect(() => {
-    if (profile) {
-      const { firstName, lastName, phone } = profile;
-      setValue('firstName', firstName);
-      setValue('lastName', lastName);
-      setValue('phone', phone);
-    }
-  }, [profile, setValue]);
-
   return (
     profile && (
       <UserAccountLayout>
@@ -103,8 +94,8 @@ export const AccountProfile = () => {
             <Grid item xs={7}>
               {isUpdating ? (
                 <Box display='flex' justifyContent='space-between' gap={2}>
-                  <TextField {...register('firstName')} />
-                  <TextField {...register('lastName')} />
+                  <TextField {...register('firstName')} defaultValue={profile.firstName} placeholder='FirstName' />
+                  <TextField {...register('lastName')} defaultValue={profile.lastName} placeholder='LastName' />
                 </Box>
               ) : (
                 <Typography fontWeight={500}>{`${profile.firstName} ${profile.lastName}`}</Typography>
@@ -125,7 +116,7 @@ export const AccountProfile = () => {
             <Grid item xs={7}>
               {isUpdating ? (
                 <Box display='flex' justifyContent='space-between'>
-                  <TextField sx={{ flex: 1 }} {...register('phone')} />
+                  <TextField sx={{ flex: 1 }} {...register('phone')} defaultValue={profile.phone} placeholder='Phone' />
                 </Box>
               ) : (
                 <Typography fontWeight={500}>{profile.phone}</Typography>
