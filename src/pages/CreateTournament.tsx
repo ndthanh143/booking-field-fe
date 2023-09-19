@@ -10,7 +10,6 @@ import {
   Select,
   TextField,
   Typography,
-  useMediaQuery,
 } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -324,10 +323,15 @@ export const CreateTournament = () => {
       </Grid>
       <Button
         variant='contained'
-        sx={{ marginY: 2 }}
+        sx={{
+          marginY: 2,
+          width: {
+            xs: '100%',
+            md: 'fit-content',
+          },
+        }}
         type='submit'
         disabled={!pitchCategories}
-        fullWidth={useMediaQuery(theme.breakpoints.down('sm'))}
       >
         Tạo giải
       </Button>

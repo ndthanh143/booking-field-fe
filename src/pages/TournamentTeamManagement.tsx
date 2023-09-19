@@ -19,7 +19,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { UploadImage } from '@/components';
-import { useMediaBreakpoint, useMenu } from '@/hooks';
+import { useMenu } from '@/hooks';
 import mediaService from '@/services/media/media.service';
 import { Team } from '@/services/team/team.dto';
 import teamService from '@/services/team/team.service';
@@ -33,8 +33,6 @@ export const TournamentTeamManagement = () => {
   const { id } = useParams();
 
   const [files, setFiles] = useState<Record<number, FileList>>({});
-
-  const { isMobile } = useMediaBreakpoint();
 
   const tournamentInstance = tournamentKeys.detail(Number(id));
   const { data: tournament } = useQuery({ ...tournamentInstance });
@@ -149,7 +147,16 @@ export const TournamentTeamManagement = () => {
             </Box>
           ))}
           <Box display='flex' justifyContent='center' paddingY={4}>
-            <Button variant='contained' type='submit' fullWidth={isMobile}>
+            <Button
+              variant='contained'
+              type='submit'
+              sx={{
+                width: {
+                  xs: '100%',
+                  md: 'fit-content',
+                },
+              }}
+            >
               Lưu thông tin
             </Button>
           </Box>

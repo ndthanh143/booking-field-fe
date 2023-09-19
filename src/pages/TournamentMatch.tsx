@@ -16,7 +16,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SetScheduleBox, UpdateScore } from '@/components';
-import { useBoolean, useMediaBreakpoint, useMenu } from '@/hooks';
+import { useBoolean, useMenu } from '@/hooks';
 import { CreateBookingDto } from '@/services/booking/booking.dto';
 import bookingService from '@/services/booking/booking.service';
 import { Match } from '@/services/match/match.dto';
@@ -26,8 +26,6 @@ import { convertRoundName, formatDate, formatDateToTime } from '@/utils';
 
 export const TournamentMatch = () => {
   const { id } = useParams();
-
-  const { isMobile } = useMediaBreakpoint();
 
   const tournamentInstance = tournamentKeys.detail(Number(id));
   const { data: tournament, refetch: refetchTournament } = useQuery({ ...tournamentInstance });
@@ -66,7 +64,7 @@ export const TournamentMatch = () => {
                 alignItems='center'
                 paddingY={2}
                 marginY={2}
-                borderBottom={isMobile ? 1 : 0}
+                borderBottom={{ xs: 1, md: 0 }}
                 borderColor='secondary.light'
               >
                 <Grid item padding={2} xs={12} md={2}>

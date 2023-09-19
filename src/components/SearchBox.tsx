@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { SelectBox } from './SelectBox';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { defaultLocations } from '@/common/datas/location.data';
-import { useDebounce, useMediaBreakpoint } from '@/hooks';
+import { useDebounce } from '@/hooks';
 import { locationKeys } from '@/services/location/location.query';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
 import { Venue } from '@/services/venue/venue.dto';
@@ -18,8 +18,6 @@ import { venueKeys } from '@/services/venue/venue.query';
 
 export const SearchBox = () => {
   const navigate = useNavigate();
-
-  const { isTablet, isDesktop } = useMediaBreakpoint();
 
   const [pitchCategory, setPitchCategory] = useState<string>('');
   const [searchPitchCategory, setSearchPitchCategory] = useState<string>('');
@@ -74,7 +72,7 @@ export const SearchBox = () => {
         transition={{
           duration: 0.3,
         }}
-        display={isTablet ? 'none' : 'flex'}
+        display={{ xs: 'none', md: 'none', lg: 'flex' }}
         marginX={20}
         borderRadius={4}
         boxShadow={4}
@@ -242,7 +240,7 @@ export const SearchBox = () => {
           <Grid item xs={2} display='flex' flex={1} padding={0.5} alignItems='center'>
             <Button variant='contained' onClick={searchHandler} sx={{ borderRadius: 12, height: '100%' }} fullWidth>
               <SearchIcon />
-              <Typography display={isDesktop ? 'none' : 'block'} fontWeight={500}>
+              <Typography display={{ xs: 'none', md: 'none', lg: 'block' }} fontWeight={500}>
                 Tìm kiếm
               </Typography>
             </Button>

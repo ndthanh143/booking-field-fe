@@ -4,7 +4,6 @@ import StarIcon from '@mui/icons-material/Star';
 import { Box, Grid, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link } from './Link';
-import { useMediaBreakpoint } from '@/hooks';
 import { SearchVenueData } from '@/services/venue/venue.dto';
 import { convertToAMPM } from '@/utils';
 
@@ -13,8 +12,6 @@ export interface SearchResultCardProps {
 }
 
 export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
-  const { isTablet } = useMediaBreakpoint();
-
   return (
     <Box
       component={motion.div}
@@ -59,7 +56,7 @@ export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
             xs={12}
             md={9}
             paddingX={2}
-            paddingY={(isTablet && 2) || 0}
+            paddingY={{ xs: 2, md: 2, lg: 0 }}
             display='flex'
             flexDirection='column'
             justifyContent='space-between'

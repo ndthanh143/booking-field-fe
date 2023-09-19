@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { SetTimeSchedule } from './SetTimeSchedule';
 import { OrderEnum } from '@/common/enums/order.enum';
-import { useBoolean, useMediaBreakpoint } from '@/hooks';
+import { useBoolean } from '@/hooks';
 import { CreateBookingDto } from '@/services/booking/booking.dto';
 import { bookingKeys } from '@/services/booking/booking.query';
 import { pitchKeys } from '@/services/pitch/pitch.query';
@@ -24,8 +24,6 @@ export type SetScheduleBoxProps = {
 
 export const SetScheduleBox = ({ data, isOpen, onClose, onSubmit }: SetScheduleBoxProps) => {
   const { value, setTrue, setFalse } = useBoolean(false);
-
-  const { isMobile } = useMediaBreakpoint();
 
   const [selectedDate, setSelectedDate] = useState<Date | null>();
   const [selectedTime, setSelectedTime] = useState<number[] | null>();
@@ -159,8 +157,13 @@ export const SetScheduleBox = ({ data, isOpen, onClose, onSubmit }: SetScheduleB
               <Button
                 type='submit'
                 variant='contained'
-                sx={{ marginX: 'auto' }}
-                fullWidth={isMobile}
+                sx={{
+                  marginX: 'auto',
+                  width: {
+                    xs: '100%',
+                    md: 'fit-content',
+                  },
+                }}
                 disabled={!selectedTime}
                 onClick={handleSubmit}
               >

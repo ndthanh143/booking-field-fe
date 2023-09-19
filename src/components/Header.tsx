@@ -7,13 +7,10 @@ import Logo from '@/assets/logo';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { defaultLocations } from '@/common/datas/location.data';
 import { useMenu } from '@/hooks';
-import { useMediaBreakpoint } from '@/hooks';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
 
 export const Header = () => {
   const navigate = useNavigate();
-
-  const { isMobile, isTablet } = useMediaBreakpoint();
 
   const { anchorEl: anchorCategory, isOpen: isOpenCategory, onClose: closeCategory, onOpen: openCategory } = useMenu();
 
@@ -40,7 +37,18 @@ export const Header = () => {
           >
             <Logo />
           </Box>
-          <Button variant='text' onClick={openCategory} color='secondary' sx={{ ...(isMobile && { display: 'none' }) }}>
+          <Button
+            variant='text'
+            onClick={openCategory}
+            color='secondary'
+            sx={{
+              display: {
+                xs: 'none',
+                md: 'none',
+                lg: 'flex',
+              },
+            }}
+          >
             Danh mục sân bóng
             <KeyboardArrowDown />
           </Button>
@@ -78,10 +86,16 @@ export const Header = () => {
             href='https://docs.google.com/forms/d/e/1FAIpQLScCtwnRHg0BcfpQ_I2fKWAMY5CDwFytHWhx1oI8YlOA99wu2Q/viewform'
             color='secondary'
             target='_blank'
-            sx={{ ...(isTablet && { display: 'none' }) }}
+            sx={{
+              display: {
+                xs: 'none',
+                md: 'block',
+              },
+            }}
           >
             Dành cho đối tác
           </Button>
+
           <MenuNotification variant='primary' />
 
           <MenuActions variant='primary' />

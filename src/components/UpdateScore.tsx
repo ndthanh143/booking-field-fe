@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { number, object } from 'yup';
-import { useMediaBreakpoint } from '@/hooks';
 import { Match, UpdateMatchDto, UpdateMatchData } from '@/services/match/match.dto';
 import matchService from '@/services/match/match.service';
 import { tournamentKeys } from '@/services/tournament/tournament.query';
@@ -30,8 +29,6 @@ export const UpdateScore = ({ isOpen, onClose, data: match }: UpdateScoreProps) 
       guestGoals: match.guestGoals,
     },
   });
-
-  const { isMobile } = useMediaBreakpoint();
 
   const queryClient = useQueryClient();
 
@@ -92,8 +89,15 @@ export const UpdateScore = ({ isOpen, onClose, data: match }: UpdateScoreProps) 
           </Box>
           <Button
             variant='contained'
-            sx={{ display: 'flex', marginX: 'auto', marginY: 2 }}
-            fullWidth={isMobile}
+            sx={{
+              display: 'flex',
+              marginX: 'auto',
+              marginY: 2,
+              width: {
+                xs: '100%',
+                md: 'fit-content',
+              },
+            }}
             type='submit'
           >
             Save
