@@ -11,6 +11,7 @@ import { SearchFilter } from '@/components/SearchFilter';
 import { SearchResultCard } from '@/components/SearchResultCard';
 import { SearchSort } from '@/components/SearchSort';
 import { useBoolean } from '@/hooks';
+import { useLocale } from '@/locales';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
 import { venueKeys } from '@/services/venue/venue.query';
 
@@ -18,6 +19,8 @@ const STALE_TIME = 5 * 1000;
 const PAGE_LIMIT = 10;
 export const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const { formatMessage } = useLocale();
 
   const categoryParams = searchParams.get('pitchCategory') || '1';
   const locationParams = searchParams.get('location') || 'Hồ Chí Minh';
@@ -84,11 +87,11 @@ export const Search = () => {
         </Grid>
         <Grid item xs={4} display='flex' justifyContent='end' gap={2}>
           <Button variant='contained' onClick={openFilterModal}>
-            <Tune sx={{ marginRight: 1 }} /> Bộ lọc
+            <Tune sx={{ marginRight: 1 }} /> {formatMessage({ id: 'search.tool.filter.title' })}
           </Button>
           <Button variant='contained' onClick={openSortModal}>
             <Sort sx={{ marginRight: 1 }} />
-            Sắp xếp
+            {formatMessage({ id: 'search.tool.sort.title' })}
           </Button>
         </Grid>
       </Grid>
@@ -122,10 +125,9 @@ export const Search = () => {
                 marginBottom={2}
               />
               <Typography variant='body1' fontWeight={700}>
-                Không tìm thấy Sân bóng.
+                {formatMessage({ id: 'search.result.no-result.title' })}
               </Typography>
-              <Typography variant='body2'>Rất tiếc, chúng tôi không tìm thấy sân bóng nào phù hợp.</Typography>
-              <Typography variant='body2'>Bạn vui lòng thử lại với địa điểm hoặc loại sân khác.</Typography>
+              <Typography variant='body2'>{formatMessage({ id: 'search.result.no-result.sub-title' })}</Typography>
             </Box>
           )}
         </Grid>

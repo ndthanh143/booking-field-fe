@@ -2,6 +2,7 @@ import { Check, Close } from '@mui/icons-material';
 import { Box, Divider, List, ListItem, ListItemButton, ListItemText, Modal, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
+import { useLocale } from '@/locales';
 
 export interface SearchSortProps {
   isOpen: boolean;
@@ -9,11 +10,13 @@ export interface SearchSortProps {
   onClose: () => void;
 }
 export const SearchSort = ({ isOpen, sortParams, onClose }: SearchSortProps) => {
+  const { formatMessage } = useLocale();
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   const sortOptions = [
-    { key: 0, value: 'ASC', label: 'Giá từ thấp đến cao' },
-    { key: 1, value: 'DESC', label: 'Giá từ cao đến thấp' },
+    { key: 0, value: 'ASC', label: formatMessage({ id: 'search.tool.sort.item.price.desc' }) },
+    { key: 1, value: 'DESC', label: formatMessage({ id: 'search.tool.sort.item.price.asc' }) },
   ];
 
   return (
@@ -38,7 +41,7 @@ export const SearchSort = ({ isOpen, sortParams, onClose }: SearchSortProps) => 
       >
         <Box display='flex' alignItems='center' justifyContent='space-between' paddingBottom={2} padding={2}>
           <Typography id='parent-modal-title' textAlign='center' variant='h5' fontWeight={700}>
-            Sắp xếp
+            {formatMessage({ id: 'search.tool.sort.title' })}
           </Typography>
           <Close
             onClick={onClose}

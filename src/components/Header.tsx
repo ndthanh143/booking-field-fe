@@ -1,18 +1,37 @@
-import { KeyboardArrowDown } from '@mui/icons-material';
-import { Box, Button, Grid, Menu, MenuItem } from '@mui/material';
+import { Check, KeyboardArrowDown } from '@mui/icons-material';
+import { Box, Button, Grid, Menu, MenuItem, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { MenuNotification, MenuActions } from '.';
+import { LanguageImages } from '@/assets/images/language';
 import Logo from '@/assets/logo';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { defaultLocations } from '@/common/datas/location.data';
-import { useMenu } from '@/hooks';
+import { useLocalStorage, useMenu } from '@/hooks';
+import { Locale, useLocale } from '@/locales';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
 
 export const Header = () => {
   const navigate = useNavigate();
 
-  const { anchorEl: anchorCategory, isOpen: isOpenCategory, onClose: closeCategory, onOpen: openCategory } = useMenu();
+  const { formatMessage } = useLocale();
+
+  const locale = (localStorage.getItem('locale') as Locale) || 'vi';
+
+  const { storedValue: currentLocale, setValue: setCurrentLocale } = useLocalStorage('locale', locale);
+
+  const {
+    anchorEl: anchorCategoryMenu,
+    isOpen: isOpenCategoryMenu,
+    onClose: closeCategoryMenu,
+    onOpen: openCategoryMenu,
+  } = useMenu();
+  const {
+    anchorEl: anchorTranslationMenu,
+    isOpen: isOpenTranslationMenu,
+    onClose: closeTranslationMenu,
+    onOpen: openTranslationMenu,
+  } = useMenu();
 
   const pitchCategoryInstance = pitchCategoryKeys.list({});
   const { data: pitchCategories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
@@ -39,7 +58,7 @@ export const Header = () => {
           </Box>
           <Button
             variant='text'
-            onClick={openCategory}
+            onClick={openCategoryMenu}
             color='secondary'
             sx={{
               display: {
@@ -49,14 +68,16 @@ export const Header = () => {
               },
             }}
           >
-            Danh mục sân bóng
+            {formatMessage({
+              id: 'app.home.header.category',
+            })}
             <KeyboardArrowDown />
           </Button>
           <Menu
             id='category-menu'
-            anchorEl={anchorCategory}
-            open={isOpenCategory}
-            onClose={closeCategory}
+            anchorEl={anchorCategoryMenu}
+            open={isOpenCategoryMenu}
+            onClose={closeCategoryMenu}
             MenuListProps={{
               'aria-labelledby': 'basic-button',
             }}
@@ -78,9 +99,62 @@ export const Header = () => {
       </Grid>
       <Grid item xs={6}>
         <Box display='flex' justifyContent='end' alignItems='center' gap={2}>
-          <Button variant='text' color='secondary'>
-            Tiếng Việt
+          <Button variant='text' color='secondary' onClick={openTranslationMenu}>
+            <Box
+              component='img'
+              src={LanguageImages[currentLocale]}
+              height={20}
+              width={20}
+              borderRadius='50%'
+              sx={{ objectFit: 'cover' }}
+              marginRight={1}
+            />
+            {formatMessage({
+              id: currentLocale === 'vi' ? 'app.home.header.translate.vi' : 'app.home.header.translate.en',
+            })}
           </Button>
+          <Menu
+            id='translation-menu'
+            anchorEl={anchorTranslationMenu}
+            open={isOpenTranslationMenu}
+            onClose={closeTranslationMenu}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+          >
+            <MenuItem onClick={() => setCurrentLocale('en_US')} sx={{ paddingLeft: 6, position: 'relative' }}>
+              {currentLocale === 'en_US' && (
+                <Box position='absolute' left={12}>
+                  <Check />
+                </Box>
+              )}
+              <Typography>
+                {formatMessage({
+                  id: 'app.home.header.translate.en',
+                })}
+              </Typography>
+            </MenuItem>
+            <MenuItem onClick={() => setCurrentLocale('vi')} sx={{ paddingLeft: 6 }}>
+              {currentLocale === 'vi' && (
+                <Box position='absolute' left={12}>
+                  <Check />
+                </Box>
+              )}
+              <Typography>
+                {formatMessage({
+                  id: 'app.home.header.translate.vi',
+                })}
+              </Typography>
+            </MenuItem>
+          </Menu>
           <Button
             variant='outlined'
             href='https://docs.google.com/forms/d/e/1FAIpQLScCtwnRHg0BcfpQ_I2fKWAMY5CDwFytHWhx1oI8YlOA99wu2Q/viewform'
@@ -93,7 +167,9 @@ export const Header = () => {
               },
             }}
           >
-            Dành cho đối tác
+            {formatMessage({
+              id: 'app.home.header.for-business',
+            })}
           </Button>
 
           <MenuNotification variant='primary' />

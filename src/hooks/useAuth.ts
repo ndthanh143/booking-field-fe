@@ -18,8 +18,8 @@ export const useAuth = () => {
   } = useMutation({
     mutationFn: (payload: LoginInput) => authService.login(payload),
     onSuccess: () => {
-      refetch();
       window.location.href = '/';
+      refetch();
     },
   });
 

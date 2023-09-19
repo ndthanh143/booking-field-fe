@@ -5,6 +5,7 @@ import { Navigation, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperType } from 'swiper/types';
 import { useBoolean } from '@/hooks';
+import { useLocale } from '@/locales';
 import { VenueImage } from '@/services/venue/venue.dto';
 
 export interface ImageLibraryProps {
@@ -12,6 +13,8 @@ export interface ImageLibraryProps {
 }
 
 export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
+  const { formatMessage } = useLocale();
+
   const { value, setTrue, setFalse } = useBoolean(false);
   const [swiper, setSwiper] = useState<SwiperType>();
 
@@ -92,7 +95,7 @@ export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
           }}
           onClick={setTrue}
         >
-          Xem tất cả
+          {formatMessage({ id: 'app.venue.gallery.view-all-button' })}
         </Fab>
       </Grid>
       <Modal

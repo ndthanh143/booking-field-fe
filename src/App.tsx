@@ -2,13 +2,17 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
-import { createContext, useState } from 'react';
+import moment from 'moment';
+import { createContext, useEffect, useState } from 'react';
+import { IntlProvider } from 'react-intl';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import * as io from 'socket.io-client';
 import { NotificationContainer, TournamentLayout } from './components';
 import { MainLayout, SecondaryLayout } from './components/Layout';
 import { VenueManagementLayout } from './components/VenueManagementLayout';
+import { useLocalStorage } from './hooks';
+import { Locale, localeConfig } from './locales';
 import {
   AccountBooking,
   AccountPassword,
@@ -212,15 +216,27 @@ export const SocketContext = createContext(socket);
 function App() {
   const [queryClient] = useState(() => new QueryClient({}));
 
+  const { storedValue: locale } = useLocalStorage<Locale>('locale', 'vi');
+
+  useEffect(() => {
+    if (locale === 'en_US') {
+      moment.locale('en');
+    } else if (locale === 'vi') {
+      moment.locale('vi');
+    }
+  });
+
   return (
     <SocketContext.Provider value={socket}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <ToastContainer />
-        <QueryClientProvider client={queryClient}>
-          <NotificationContainer />
-          <RouterProvider router={router} />
-        </QueryClientProvider>
-      </LocalizationProvider>
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider locale={locale.split('_')[0]} messages={localeConfig[locale]}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <ToastContainer />
+            <NotificationContainer />
+            <RouterProvider router={router} />
+          </LocalizationProvider>
+        </IntlProvider>
+      </QueryClientProvider>
     </SocketContext.Provider>
   );
 }

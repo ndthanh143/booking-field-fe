@@ -11,6 +11,7 @@ import { SelectBox } from './SelectBox';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { defaultLocations } from '@/common/datas/location.data';
 import { useDebounce } from '@/hooks';
+import { useLocale } from '@/locales';
 import { locationKeys } from '@/services/location/location.query';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
 import { Venue } from '@/services/venue/venue.dto';
@@ -18,6 +19,8 @@ import { venueKeys } from '@/services/venue/venue.query';
 
 export const SearchBox = () => {
   const navigate = useNavigate();
+
+  const { formatMessage } = useLocale();
 
   const [pitchCategory, setPitchCategory] = useState<string>('');
   const [searchPitchCategory, setSearchPitchCategory] = useState<string>('');
@@ -101,13 +104,13 @@ export const SearchBox = () => {
               }}
             >
               <Typography variant='caption' position='absolute' left={60} top={10}>
-                Địa điểm
+                {formatMessage({ id: 'app.home.search.place.title' })}
               </Typography>
               <RoomOutlined sx={{ position: 'absolute', left: 30, top: 30 }} />
               <SelectBox
                 value={searchAdress}
                 onChange={(value) => setSearchAdress(value)}
-                placeHolder='Bạn muốn đặt sân ở đâu'
+                placeHolder={formatMessage({ id: 'app.home.search.place.place-holder' })}
               >
                 {searchAdress === '' ? (
                   defaultLocations.map((item) => (
@@ -130,7 +133,7 @@ export const SearchBox = () => {
                     {provinces && provinces.length > 0 && (
                       <>
                         <Typography variant='body2' paddingX={1} paddingY={1} fontWeight={700}>
-                          Địa điểm
+                          {formatMessage({ id: 'app.home.search.place.title' })}
                         </Typography>
                         {provinces?.map((item) => (
                           <Box
@@ -153,7 +156,7 @@ export const SearchBox = () => {
                     {venues && venues.data.length > 0 && (
                       <>
                         <Typography variant='body2' paddingX={1} paddingY={1} fontWeight={700}>
-                          Sân bóng
+                          {formatMessage({ id: 'app.home.search.result.venue' })}
                         </Typography>
                         {venues?.data.map((item) => (
                           <Box
@@ -186,7 +189,9 @@ export const SearchBox = () => {
                       </>
                     )}
                     {provinces?.length === 0 && venues?.data.length === 0 && (
-                      <Typography textAlign='center'>Không có kết quả nào phù hợp</Typography>
+                      <Typography textAlign='center'>
+                        {formatMessage({ id: 'app.home.search.result.no-result' })}
+                      </Typography>
                     )}
                   </Box>
                 )}
@@ -210,13 +215,13 @@ export const SearchBox = () => {
           <Grid item xs={5}>
             <Box width='100%' position='relative'>
               <Typography variant='caption' position='absolute' left={60} top={10}>
-                Loại sân
+                {formatMessage({ id: 'app.home.search.category.title' })}
               </Typography>
               <CategoryOutlined sx={{ position: 'absolute', left: 30, top: 30 }} />
               <SelectBox
                 value={pitchCategory}
                 onChange={(data) => setPitchCategory(data)}
-                placeHolder='Loại sân bạn muốn đặt'
+                placeHolder={formatMessage({ id: 'app.home.search.category.place-holder' })}
               >
                 {pitchCategories.data.map((item) => (
                   <Box
@@ -241,7 +246,7 @@ export const SearchBox = () => {
             <Button variant='contained' onClick={searchHandler} sx={{ borderRadius: 12, height: '100%' }} fullWidth>
               <SearchIcon />
               <Typography display={{ xs: 'none', md: 'none', lg: 'block' }} fontWeight={500}>
-                Tìm kiếm
+                {formatMessage({ id: 'app.home.search.button' })}
               </Typography>
             </Button>
           </Grid>
