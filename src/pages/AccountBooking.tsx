@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { noResultImage } from '@/assets/images/common';
 import { RatingBox } from '@/components';
+import { useLocale } from '@/locales';
 import { Booking } from '@/services/booking/booking.dto';
 import { bookingKeys } from '@/services/booking/booking.query';
 import { CreateRatingPayload } from '@/services/rating/rating.dto';
@@ -12,6 +13,8 @@ import ratingService from '@/services/rating/rating.service';
 import { convertCurrency, formatDate, formatDateToTime } from '@/utils';
 
 export const AccountBooking = () => {
+  const { formatMessage } = useLocale();
+
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>();
 
   const userBookingInstance = bookingKeys.personal();
@@ -35,7 +38,7 @@ export const AccountBooking = () => {
       <Box marginLeft={4} position='absolute' width='100%'>
         <Box display='flex' justifyContent='space-between' marginY={4}>
           <Typography variant='h4' fontWeight={500}>
-            Đặt sân của tôi
+            {formatMessage({ id: 'app.account.menu.my-booking.title' })}
           </Typography>
         </Box>
         {data ? (
@@ -65,9 +68,12 @@ export const AccountBooking = () => {
                   </Grid>
                   <Grid item xs={5}>
                     <Typography>{`${booking.pitch.pitchCategory.name} - ${booking.pitch.name}`}</Typography>
-                    <Typography>Ngày: {formatDate(booking.startTime)}</Typography>
                     <Typography>
-                      Thời gian: {`${formatDateToTime(booking.startTime)} - ${formatDateToTime(booking.endTime)}`}
+                      {formatMessage({ id: 'app.account.menu.my-booking.day' })}: {formatDate(booking.startTime)}
+                    </Typography>
+                    <Typography>
+                      {formatMessage({ id: 'app.account.menu.my-booking.time' })}:{' '}
+                      {`${formatDateToTime(booking.startTime)} - ${formatDateToTime(booking.endTime)}`}
                     </Typography>
                   </Grid>
                   <Grid item xs={4}>
@@ -80,7 +86,7 @@ export const AccountBooking = () => {
                 <Box paddingY={2} display='flex' alignItems='center' gap={1} justifyContent='end'>
                   {booking.rating ? (
                     <Box display='flex' alignItems='center' color='primary' gap={1}>
-                      <Typography>Đã đánh giá</Typography>
+                      <Typography>{formatMessage({ id: 'app.account.menu.my-booking.rated' })}</Typography>
                       <CheckCircle sx={{ color: 'primary.main' }} />
                     </Box>
                   ) : (
@@ -90,7 +96,7 @@ export const AccountBooking = () => {
                         setSelectedBooking(booking);
                       }}
                     >
-                      Đánh giá
+                      {formatMessage({ id: 'app.account.menu.my-booking.rating' })}
                     </Button>
                   )}
                   <Button
@@ -100,7 +106,7 @@ export const AccountBooking = () => {
                       textDecoration: 'underline',
                     }}
                   >
-                    Chi tiết
+                    {formatMessage({ id: 'app.account.menu.my-booking.detail' })}
                   </Button>
                 </Box>
               </Box>
@@ -109,7 +115,7 @@ export const AccountBooking = () => {
         ) : (
           <Box marginY={2}>
             <Box component='img' src={noResultImage.src} alt={noResultImage.name} />
-            <Typography>bạn chưa đặt sân bóng nào</Typography>
+            <Typography>{formatMessage({ id: 'app.account.menu.my-booking.no-result' })}</Typography>
           </Box>
         )}
       </Box>

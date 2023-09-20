@@ -3,9 +3,13 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { Link } from '@/components';
 import { useAuth } from '@/hooks';
+import { useLocale } from '@/locales';
 import { TournamentTypeEnum } from '@/services/tournament/tournament.dto';
 import { tournamentKeys } from '@/services/tournament/tournament.query';
+
 export const AccountTournament = () => {
+  const { formatMessage } = useLocale();
+
   const navigate = useNavigate();
 
   const { profile } = useAuth();
@@ -23,10 +27,10 @@ export const AccountTournament = () => {
       <Box marginLeft={4} position='absolute' width='100%'>
         <Box display='flex' justifyContent='space-between' marginY={4}>
           <Typography variant='h4' fontWeight={500}>
-            Created Tournaments
+            {formatMessage({ id: 'app.account.menu.tournament.title' })}
           </Typography>
           <Button variant='contained' size='small' onClick={() => navigate('/league/create-tournament')}>
-            Create new
+            {formatMessage({ id: 'app.account.menu.tournament.button.create' })}
           </Button>
         </Box>
         {tournaments &&

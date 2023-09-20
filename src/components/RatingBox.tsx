@@ -3,6 +3,7 @@ import { Box, Button, Divider, Modal, Rating, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { TextArea } from './TextArea';
+import { useLocale } from '@/locales';
 import { Booking } from '@/services/booking/booking.dto';
 import { CreateRatingPayload } from '@/services/rating/rating.dto';
 
@@ -14,6 +15,8 @@ export interface IRatingBoxProps {
 }
 
 export const RatingBox = ({ isOpen, onClose, data, onSubmit }: IRatingBoxProps) => {
+  const { formatMessage } = useLocale();
+
   const [rating, setRating] = useState<number | null>();
   const [content, setContent] = useState<string>('');
 
@@ -39,7 +42,7 @@ export const RatingBox = ({ isOpen, onClose, data, onSubmit }: IRatingBoxProps) 
       >
         <Box display='flex' alignItems='center' justifyContent='space-between' paddingBottom={2} padding={2}>
           <Typography id='parent-modal-title' textAlign='center' variant='h5' fontWeight={700}>
-            Đánh giá
+            {formatMessage({ id: 'app.account.menu.my-booking.rating.box.title' })}
           </Typography>
           <Close
             onClick={onClose}
@@ -72,7 +75,7 @@ export const RatingBox = ({ isOpen, onClose, data, onSubmit }: IRatingBoxProps) 
           <TextArea
             aria-label='minimum height'
             minRows={3}
-            placeholder='Minimum 3 rows'
+            placeholder={formatMessage({ id: 'app.account.menu.my-booking.rating.box.description.placeholder' })}
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
@@ -82,7 +85,7 @@ export const RatingBox = ({ isOpen, onClose, data, onSubmit }: IRatingBoxProps) 
             onClick={() => rating && onSubmit({ booking: data.id, rate: rating, content })}
             disabled={!rating}
           >
-            Xác nhận
+            {formatMessage({ id: 'app.account.menu.my-booking.rating.box.submit' })}
           </Button>
         </Box>
       </Box>

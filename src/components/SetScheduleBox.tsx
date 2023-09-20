@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { SetTimeSchedule } from './SetTimeSchedule';
 import { OrderEnum } from '@/common/enums/order.enum';
 import { useBoolean } from '@/hooks';
+import { useLocale } from '@/locales';
 import { CreateBookingDto } from '@/services/booking/booking.dto';
 import { bookingKeys } from '@/services/booking/booking.query';
 import { pitchKeys } from '@/services/pitch/pitch.query';
@@ -23,6 +24,8 @@ export type SetScheduleBoxProps = {
 };
 
 export const SetScheduleBox = ({ data, isOpen, onClose, onSubmit }: SetScheduleBoxProps) => {
+  const { formatMessage } = useLocale();
+
   const { value, setTrue, setFalse } = useBoolean(false);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>();
@@ -94,7 +97,7 @@ export const SetScheduleBox = ({ data, isOpen, onClose, onSubmit }: SetScheduleB
         <Box>
           <Box display='flex' alignItems='center' justifyContent='space-between' paddingBottom={2} padding={2}>
             <Typography id='parent-modal-title' textAlign='center' variant='h5' fontWeight={700}>
-              Xếp lịch đá
+              {formatMessage({ id: 'app.tournament.match.update-schedule.box.title' })}
             </Typography>
             <Close
               onClick={onClose}
@@ -107,7 +110,7 @@ export const SetScheduleBox = ({ data, isOpen, onClose, onSubmit }: SetScheduleB
           <Divider />
           <Box padding={4}>
             <Box marginBottom={2}>
-              <Typography>Chọn sân</Typography>
+              <Typography>{formatMessage({ id: 'app.tournament.match.update-schedule.box.pitch' })}</Typography>
               {pitches && (
                 <Select fullWidth onChange={(e) => setSelectedPitch(Number(e.target.value))} size='small'>
                   {pitches.data.map((pitch) => (
@@ -119,7 +122,7 @@ export const SetScheduleBox = ({ data, isOpen, onClose, onSubmit }: SetScheduleB
               )}
             </Box>
             <Box marginY={2}>
-              <Typography>Chọn ngày đá</Typography>
+              <Typography>{formatMessage({ id: 'app.tournament.match.update-schedule.box.day' })}</Typography>
               <DatePicker
                 value={selectedDate ?? null}
                 sx={{ width: '100%' }}
@@ -144,7 +147,7 @@ export const SetScheduleBox = ({ data, isOpen, onClose, onSubmit }: SetScheduleB
                 disabled={!(selectedPitch && selectedDate)}
                 onClick={setTrue}
               >
-                Chọn thời gian
+                {formatMessage({ id: 'app.tournament.match.update-schedule.box.time' })}
                 <AccessTime />
               </Button>
               {selectedTime && (
@@ -167,7 +170,7 @@ export const SetScheduleBox = ({ data, isOpen, onClose, onSubmit }: SetScheduleB
                 disabled={!selectedTime}
                 onClick={handleSubmit}
               >
-                Chốt
+                {formatMessage({ id: 'app.tournament.match.update-schedule.box.submit' })}
               </Button>
             </Box>
           </Box>

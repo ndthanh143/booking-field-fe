@@ -5,10 +5,13 @@ import { noResultImage } from '@/assets/images/common';
 import { DEFAULT_NOTIFICATION_PAGE } from '@/common/constants';
 import { OrderEnum } from '@/common/enums/order.enum';
 import { useAuth } from '@/hooks';
+import { useLocale } from '@/locales';
 import { notificationKeys } from '@/services/notification/notification.query';
 
 const DEFAULT_NOTIFICATION_LIMIT = 10;
 export const AccountNotification = () => {
+  const { formatMessage } = useLocale();
+
   const { profile } = useAuth();
 
   const [page, setPage] = useState(DEFAULT_NOTIFICATION_PAGE);
@@ -36,7 +39,7 @@ export const AccountNotification = () => {
     <>
       <Box marginLeft={4} position='absolute' width='100%'>
         <Typography variant='h4' fontWeight={500} marginY={4}>
-          Thông báo
+          {formatMessage({ id: 'app.account.menu.notification.title' })}
         </Typography>
         {notifications && notifications.data.length > 0 ? (
           notifications.data.map((notification) => (
@@ -50,7 +53,7 @@ export const AccountNotification = () => {
         ) : (
           <Box marginY={2}>
             <Box component='img' src={noResultImage.src} alt={noResultImage.name} />
-            <Typography>bạn chưa có thông báo nào</Typography>
+            <Typography>{formatMessage({ id: 'app.account.menu.notification.no-result' })}</Typography>
           </Box>
         )}
 

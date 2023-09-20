@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { object, ref, string } from 'yup';
+import { useLocale } from '@/locales';
 import { ChangePasswordPayload } from '@/services/user/user.dto';
 import userService from '@/services/user/user.service';
 
@@ -15,6 +16,8 @@ const schema = object({
     .oneOf([ref('newPassword')], 'Confirm password is not match'),
 });
 export const AccountPassword = () => {
+  const { formatMessage } = useLocale();
+
   const {
     register,
     handleSubmit,
@@ -39,7 +42,7 @@ export const AccountPassword = () => {
     <>
       <Box marginLeft={4} component='form' onSubmit={handleSubmit(onSubmitHandler)}>
         <Box marginY={2}>
-          <Typography>Mật khẩu cũ</Typography>
+          <Typography>{formatMessage({ id: 'app.account.menu.change-password.old-password' })}</Typography>
           <TextField type='password' fullWidth placeholder='Nhập mật khẩu cũ' {...register('currentPassword')} />
           {errors.currentPassword && (
             <Typography sx={{ color: 'error.main' }} variant='body2'>
@@ -48,7 +51,7 @@ export const AccountPassword = () => {
           )}
         </Box>
         <Box marginY={2}>
-          <Typography>Mật khẩu Mới</Typography>
+          <Typography>{formatMessage({ id: 'app.account.menu.change-password.new-password' })}</Typography>
           <TextField type='password' fullWidth placeholder='Nhập mật khẩu mới' {...register('newPassword')} />
           {errors.newPassword && (
             <Typography sx={{ color: 'error.main' }} variant='body2'>
@@ -57,7 +60,7 @@ export const AccountPassword = () => {
           )}
         </Box>
         <Box marginY={2}>
-          <Typography>Nhập lại mật khẩu Mới</Typography>
+          <Typography>{formatMessage({ id: 'app.account.menu.change-password.confirm-password' })}</Typography>
           <TextField type='password' fullWidth placeholder='Nhập lại mật khẩu mới' {...register('confirmPassword')} />
           {errors.confirmPassword && (
             <Typography sx={{ color: 'error.main' }} variant='body2'>
@@ -66,7 +69,7 @@ export const AccountPassword = () => {
           )}
         </Box>
         <Button variant='contained' type='submit'>
-          Đổi mật khẩu
+          {formatMessage({ id: 'app.account.menu.change-password.submit' })}
         </Button>
       </Box>
     </>

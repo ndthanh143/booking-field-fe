@@ -3,9 +3,12 @@ import { useQuery } from '@tanstack/react-query';
 import { SyntheticEvent } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '@/hooks';
+import { useLocale } from '@/locales';
 import { tournamentKeys } from '@/services/tournament/tournament.query';
 
 export const TournamentLayout = () => {
+  const { formatMessage } = useLocale();
+
   const navigate = useNavigate();
 
   const { profile } = useAuth();
@@ -37,10 +40,10 @@ export const TournamentLayout = () => {
               value={routes.findIndex((item) => `${prefix}/${item}` === pathname)}
               onChange={handleChange}
             >
-              <Tab label='Lịch thi đấu' />
-              <Tab label='Trận đấu' disabled={!isOwner} />
-              <Tab label='Bảng xếp hạng' />
-              <Tab label='Quản lý đội' disabled={!isOwner} />
+              <Tab label={formatMessage({ id: 'app.tournament.schedule' })} />
+              <Tab label={formatMessage({ id: 'app.tournament.match' })} disabled={!isOwner} />
+              <Tab label={formatMessage({ id: 'app.tournament.standing' })} />
+              <Tab label={formatMessage({ id: 'app.tournament.team' })} disabled={!isOwner} />
             </Tabs>
           </Box>
         </Box>

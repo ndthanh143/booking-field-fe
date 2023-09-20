@@ -1,8 +1,11 @@
 import { Box, Button, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useLocale } from '@/locales';
 
 export const BookingComplete = () => {
+  const { formatMessage } = useLocale();
+
   const navigate = useNavigate();
   return (
     <Box height='100vh' display='flex' justifyContent='center' alignItems='center'>
@@ -14,10 +17,20 @@ export const BookingComplete = () => {
         transition={{
           duration: 0.3,
         }}
+        textAlign='center'
       >
-        <Typography variant='h1'>Đặt sân thành công</Typography>
+        <Typography variant='h1' color='success.dark'>
+          {formatMessage({ id: 'app.booking.success.title' })}
+        </Typography>
+        <Box
+          component='img'
+          src='https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/owl-as-soccer-player-with-soccer-ball-markus-schnabel.jpg'
+          alt='success booking'
+          sx={{ objectFit: 'cover' }}
+          maxHeight={400}
+        />
         <Button variant='contained' sx={{ margin: 'auto', display: 'flex' }} onClick={() => navigate('/')}>
-          Quay lại trang chủ
+          {formatMessage({ id: 'app.booking.success.go-to-homepage' })}
         </Button>
       </Box>
     </Box>
