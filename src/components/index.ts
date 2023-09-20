@@ -17,7 +17,7 @@ export * from './PaymentForm';
 export * from './StripeContainer';
 export * from './CustomTabPanel';
 export * from './ImageUpload';
-export * from './MapPlace';
+// export * from './MapPlace';
 export * from './VenueManagement/InfoManagement';
 export * from './VenueManagement/ImagesManagement';
 export * from './VenueManagement/LocationManagement';
