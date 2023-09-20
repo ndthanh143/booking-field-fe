@@ -1,4 +1,4 @@
-export default function convertToAMPM(timestamp: string) {
+export const convertToAMPM = (timestamp: string) => {
   const [hours, minutes, _] = timestamp.split(':').map(Number);
   let period = 'AM';
 
@@ -12,4 +12,4 @@ export default function convertToAMPM(timestamp: string) {
   }
 
   return `${hoursFormat.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}${period}`;
-}
+};

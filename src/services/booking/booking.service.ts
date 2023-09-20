@@ -6,6 +6,7 @@ import {
   GetAnalystBookingIncomeDto,
   GetAnalystBookingIncomeResponse,
   GetBookingsDto,
+  UpdateBookingPayload,
 } from './booking.dto';
 import axiosInstance from '@/utils/axiosConfig';
 
@@ -62,6 +63,16 @@ const bookingService = {
     const { data } = await axiosInstance.post<BookingResponse>('/bookings', payload);
 
     return data;
+  },
+  update: async (payload: UpdateBookingPayload) => {
+    const { id, data: updateData } = payload;
+
+    const { data } = await axiosInstance.put<BookingResponse>(`/bookings/${id}`, updateData);
+
+    return data;
+  },
+  delete: async (id: number) => {
+    await axiosInstance.delete(`/bookings/${id}`);
   },
 };
 

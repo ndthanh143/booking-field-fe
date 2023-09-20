@@ -1,9 +1,9 @@
-import { PitchCategoriesResponse, PitchCategoryResponse } from './pitch-category.dto';
+import { GetPitchCategoriesQuery, PitchCategoriesResponse, PitchCategoryResponse } from './pitch-category.dto';
 import axiosInstance from '@/utils/axiosConfig';
 
 const pitchCategoryService = {
-  getAll: async () => {
-    const { data } = await axiosInstance.get<PitchCategoriesResponse>('/pitch-categories');
+  getAll: async (query: GetPitchCategoriesQuery) => {
+    const { data } = await axiosInstance.get<PitchCategoriesResponse>('/pitch-categories', { params: query });
 
     return data;
   },

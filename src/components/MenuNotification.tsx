@@ -1,7 +1,6 @@
 import { NotificationsOutlined } from '@mui/icons-material';
 import { Badge, Box, Divider, IconButton, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { noResultImage } from '@/assets/images/common';
@@ -10,6 +9,7 @@ import { OrderEnum } from '@/common/enums/order.enum';
 import { useAuth, useMenu } from '@/hooks';
 import { useLocale } from '@/locales';
 import { notificationKeys } from '@/services/notification/notification.query';
+import { getRelativeTimeFromNow } from '@/utils';
 
 export type MenuNotificationProps = {
   variant: 'primary' | 'secondary';
@@ -96,7 +96,7 @@ export const MenuNotification = ({ variant }: MenuNotificationProps) => {
                       <Typography variant='body2' sx={{ whiteSpace: 'pre-wrap' }}>
                         {notification.message}
                       </Typography>
-                      <Typography variant='caption'>{moment(notification.createdAt).fromNow()}</Typography>
+                      <Typography variant='caption'>{getRelativeTimeFromNow(notification.createdAt)}</Typography>
                     </Box>
                   </Box>
                 </MenuItem>

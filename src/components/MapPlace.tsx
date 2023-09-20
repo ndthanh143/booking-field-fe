@@ -35,6 +35,8 @@ interface StructuredFormatting {
 interface PlaceType {
   description: string;
   structured_formatting: StructuredFormatting;
+  place_id: string;
+  reference: string;
 }
 
 interface MapPlaceProps {
@@ -106,7 +108,8 @@ export const MapPlace = ({ onChange }: MapPlaceProps) => {
   return (
     <Autocomplete
       id='google-map-demo'
-      sx={{ width: 300 }}
+      sx={{ maxWidth: 320 }}
+      fullWidth
       getOptionLabel={(option) => (typeof option === 'string' ? option : option.description)}
       filterOptions={(x) => x}
       options={options}
@@ -122,13 +125,18 @@ export const MapPlace = ({ onChange }: MapPlaceProps) => {
         if (newValue) {
           const placeService = new google.maps.places.PlacesService(document.createElement('div'));
           placeService.getDetails({ placeId: newValue.place_id }, (place, status) => {
-            if (status === google.maps.places.PlacesServiceStatus.OK) {
-              if (place?.geometry?.location) {
-                const lat = place.geometry.location.lat();
-                const lng = place.geometry.location.lng();
-                onChange({ lat, lng });
-              }
+            if (place?.geometry?.location) {
+              const lat = place.geometry.location.lat();
+              const lng = place.geometry.location.lng();
+              onChange({ lat, lng });
             }
+            // if (status === google.maps.places.PlacesServiceStatus.OK) {
+            //   if (place?.geometry?.location) {
+            //     const lat = place.geometry.location.lat();
+            //     const lng = place.geometry.location.lng();
+            //     onChange({ lat, lng });
+            //   }
+            // }
           });
         } else {
           onChange(null);

@@ -1,8 +1,7 @@
 import { Box, Tab, Tabs } from '@mui/material';
 import { SyntheticEvent, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
-import { CustomTabPanel, ImagesManagement, InfoManagement, LocationManagement } from '@/components';
-import { PitchesManagement } from '@/components/VenueManagement/pitchesManagement';
+import { CustomTabPanel, ImagesManagement, InfoManagement, LocationManagement, PitchesManagement } from '@/components';
 import { useVenueByUser } from '@/hooks';
 
 export const VenueManagement = () => {
@@ -18,7 +17,6 @@ export const VenueManagement = () => {
     profile &&
     venue && (
       <Box>
-        <ToastContainer />
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={tabIndex} onChange={handleChangeTab} aria-label='basic tabs example'>
             <Tab label='Thông tin' />
@@ -39,6 +37,7 @@ export const VenueManagement = () => {
         <CustomTabPanel value={tabIndex} index={3}>
           <PitchesManagement />
         </CustomTabPanel>
+        <ToastContainer />
       </Box>
     )
   );

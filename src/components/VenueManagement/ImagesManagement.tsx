@@ -75,7 +75,7 @@ export const ImagesManagement = () => {
       <Grid container spacing={4}>
         {venue.imageList &&
           venue.imageList.map((item) => (
-            <Grid item xs={3} key={item.imagePath}>
+            <Grid item xs={6} md={3} key={item.imagePath}>
               <Box
                 position='relative'
                 sx={{
@@ -122,7 +122,7 @@ export const ImagesManagement = () => {
               </Box>
             </Grid>
           ))}
-        <Grid item xs={3}>
+        <Grid item xs={6} md={3}>
           <ImageUpload onChange={(files) => setFiles(files)} />
         </Grid>
         <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isUploading}>

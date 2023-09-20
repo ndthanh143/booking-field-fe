@@ -1,7 +1,7 @@
 import { Box, Button, Divider, Modal, Slider, TextField, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { convertDecimalToTime } from '@/utils/formatTime';
+import { convertDecimalToTime } from '@/utils';
 
 export interface TimeSelectionProps {
   isOpen: boolean;

@@ -1,10 +1,9 @@
-import { Box, Divider, Pagination, Typography } from '@mui/material';
+import { Box, Card, Pagination, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { noResultImage } from '@/assets/images/common';
 import { DEFAULT_NOTIFICATION_PAGE } from '@/common/constants';
 import { OrderEnum } from '@/common/enums/order.enum';
-import { UserAccountLayout } from '@/components';
 import { useAuth } from '@/hooks';
 import { notificationKeys } from '@/services/notification/notification.query';
 
@@ -34,26 +33,19 @@ export const AccountNotification = () => {
   }, [page, notificationRefetch]);
 
   return (
-    <UserAccountLayout>
+    <>
       <Box marginLeft={4} position='absolute' width='100%'>
         <Typography variant='h4' fontWeight={500} marginY={4}>
           Thông báo
         </Typography>
         {notifications && notifications.data.length > 0 ? (
           notifications.data.map((notification) => (
-            <>
+            <Card sx={{ padding: 2, marginBottom: 2 }}>
               <Box paddingY={2}>
                 <Typography fontWeight={500}>{notification.title}</Typography>
                 <Typography>{notification.message}</Typography>
               </Box>
-              <Divider />
-
-              <Box paddingY={2}>
-                <Typography fontWeight={500}>{notification.title}</Typography>
-                <Typography>{notification.message}</Typography>
-              </Box>
-              <Divider />
-            </>
+            </Card>
           ))
         ) : (
           <Box marginY={2}>
@@ -71,6 +63,6 @@ export const AccountNotification = () => {
           />
         )}
       </Box>
-    </UserAccountLayout>
+    </>
   );
 };

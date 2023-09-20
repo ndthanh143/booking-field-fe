@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {
+  Alert,
   Avatar,
   Box,
   Button,
@@ -98,11 +99,7 @@ export const Register = () => {
             <Typography component='h1' variant='h5'>
               Sign up
             </Typography>
-            {mutation.isError && (
-              <Typography component='h5' sx={{ color: 'error.light', mt: 1 }} textAlign={'center'}>
-                Username has been existed
-              </Typography>
-            )}
+            {mutation.isError && <Alert severity='error'>Username has been existed</Alert>}
             <Box component='form' onSubmit={handleSubmit(onSubmitHandler)} noValidate sx={{ mt: 3 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>

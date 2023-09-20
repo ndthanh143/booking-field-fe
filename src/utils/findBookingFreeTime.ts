@@ -1,16 +1,9 @@
+import { dateToTimeFloat } from './dateToTimeFloat';
 import { Booking } from '@/services/booking/booking.dto';
 export type FreeTimeBooking = {
   id: number;
   startTime: number;
   endTime: number;
-};
-
-export const dateToTimeFloat = (date: Date) => {
-  const hour = date.getHours();
-
-  const min = date.getMinutes();
-
-  return hour + min / 60;
 };
 
 export const findFreeTime = (bookings: Booking[]) => {

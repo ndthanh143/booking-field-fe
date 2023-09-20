@@ -9,7 +9,7 @@ export interface SripeContainerProps extends PaymentFormProps {
   currency: string;
   amount: number;
 }
-export default function StripeContainer({ currency, amount, onSubmit }: SripeContainerProps) {
+export const StripeContainer = ({ currency, amount, onSubmit }: SripeContainerProps) => {
   const STRIPE_PUBLIC_KEY = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
 
   const stripePromise = loadStripe(STRIPE_PUBLIC_KEY);
@@ -31,4 +31,4 @@ export default function StripeContainer({ currency, amount, onSubmit }: SripeCon
       )}
     </>
   );
-}
+};

@@ -1,4 +1,11 @@
-import { LogoutOutlined, Menu as MenuIcon, HouseOutlined, HistoryOutlined, Person } from '@mui/icons-material';
+import {
+  LogoutOutlined,
+  Menu as MenuIcon,
+  HouseOutlined,
+  HistoryOutlined,
+  Person,
+  EmojiEvents,
+} from '@mui/icons-material';
 import { Avatar, Box, Button, IconButton, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth, useMenu } from '@/hooks';
@@ -22,7 +29,14 @@ export const MenuActions = ({ variant }: MenuActionsProps) => {
       {profile ? (
         <Tooltip title='Account settings'>
           <IconButton onClick={openMenu}>
-            <Avatar sx={{ bgcolor: `${variant}.main` }}>{profile.lastName.charAt(0)}</Avatar>
+            <Avatar
+              sx={{
+                bgcolor: variant === 'primary' ? 'primary.main' : 'secondary.light',
+                color: variant === 'primary' ? 'primary.contrastText' : 'secondary.dark',
+              }}
+            >
+              {profile.lastName.charAt(0)}
+            </Avatar>
           </IconButton>
         </Tooltip>
       ) : (
@@ -66,7 +80,12 @@ export const MenuActions = ({ variant }: MenuActionsProps) => {
                 id: 'app.home.header.account.my-booking',
               })}
             </MenuItem>
-
+            <MenuItem sx={{ paddingY: 1.5 }} onClick={() => navigate('/league/create-tournament')}>
+              <EmojiEvents sx={{ marginRight: 2 }} />
+              {formatMessage({
+                id: 'app.home.header.account.create-tournament',
+              })}
+            </MenuItem>
             {profile.venue && (
               <MenuItem sx={{ paddingY: 1.5, fontWeight: 700 }} onClick={() => navigate('/venue-management/dashboard')}>
                 <HouseOutlined sx={{ marginRight: 2 }} />

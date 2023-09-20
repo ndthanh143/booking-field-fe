@@ -1,11 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { ToastContainer, toast } from 'react-toastify';
 import { object, string } from 'yup';
-import { UserAccountLayout } from '@/components';
 import { useAuth, useBoolean } from '@/hooks';
 import { UpdateUserData, UpdateUserPayload } from '@/services/user/user.dto';
 import userService from '@/services/user/user.service';
@@ -21,7 +19,7 @@ export const AccountProfile = () => {
 
   const { profile, refetch } = useAuth();
 
-  const { register, handleSubmit, setValue } = useForm<UpdateUserData>({
+  const { register, handleSubmit } = useForm<UpdateUserData>({
     resolver: yupResolver(schema),
   });
 
@@ -42,18 +40,9 @@ export const AccountProfile = () => {
     }
   };
 
-  useEffect(() => {
-    if (profile) {
-      const { firstName, lastName, phone } = profile;
-      setValue('firstName', firstName);
-      setValue('lastName', lastName);
-      setValue('phone', phone);
-    }
-  }, [profile, setValue]);
-
   return (
     profile && (
-      <UserAccountLayout>
+      <>
         <Box component='form' onSubmit={handleSubmit(onSubmitHandler)} marginLeft={4}>
           <Box display='flex' justifyContent='space-between' marginY={4}>
             <Typography variant='h4' fontWeight={500}>
@@ -83,10 +72,12 @@ export const AccountProfile = () => {
             borderColor='secondary.light'
           >
             <Grid item xs={5}>
-              <Typography fontSize={18}>Email</Typography>
+              <Typography>Email</Typography>
             </Grid>
             <Grid item xs={7}>
-              <Typography fontWeight={500}>{profile.email}</Typography>
+              <Typography fontWeight={500} overflow='hidden'>
+                {profile.email}
+              </Typography>
             </Grid>
           </Grid>
           <Grid
@@ -98,13 +89,13 @@ export const AccountProfile = () => {
             borderColor='secondary.light'
           >
             <Grid item xs={5}>
-              <Typography fontSize={18}>Họ và Tên</Typography>
+              <Typography>Họ và Tên</Typography>
             </Grid>
             <Grid item xs={7}>
               {isUpdating ? (
                 <Box display='flex' justifyContent='space-between' gap={2}>
-                  <TextField {...register('firstName')} />
-                  <TextField {...register('lastName')} />
+                  <TextField {...register('firstName')} defaultValue={profile.firstName} placeholder='FirstName' />
+                  <TextField {...register('lastName')} defaultValue={profile.lastName} placeholder='LastName' />
                 </Box>
               ) : (
                 <Typography fontWeight={500}>{`${profile.firstName} ${profile.lastName}`}</Typography>
@@ -120,12 +111,12 @@ export const AccountProfile = () => {
             borderColor='secondary.light'
           >
             <Grid item xs={5}>
-              <Typography fontSize={18}>Số điện thoại</Typography>
+              <Typography>Số điện thoại</Typography>
             </Grid>
             <Grid item xs={7}>
               {isUpdating ? (
                 <Box display='flex' justifyContent='space-between'>
-                  <TextField sx={{ flex: 1 }} {...register('phone')} />
+                  <TextField sx={{ flex: 1 }} {...register('phone')} defaultValue={profile.phone} placeholder='Phone' />
                 </Box>
               ) : (
                 <Typography fontWeight={500}>{profile.phone}</Typography>
@@ -134,7 +125,7 @@ export const AccountProfile = () => {
           </Grid>
         </Box>
         <ToastContainer />
-      </UserAccountLayout>
+      </>
     )
   );
 };

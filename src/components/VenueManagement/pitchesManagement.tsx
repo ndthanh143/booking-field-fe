@@ -80,7 +80,7 @@ export const PitchesManagement = () => {
             <Table size='small' sx={{ marginY: 2 }}>
               <TableHead>
                 <TableRow>
-                  <TableCell>No</TableCell>
+                  <TableCell>Tên sân</TableCell>
                   <TableCell>Giá</TableCell>
                   <TableCell>Loại</TableCell>
                   <TableCell>Thao tác</TableCell>

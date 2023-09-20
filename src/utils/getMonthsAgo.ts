@@ -1,4 +1,4 @@
-export const getMonthsAgoFromDate = (currentDate: Date, monthsAgo: number) => {
+export const getMonthsAgo = (currentDate: Date, monthsAgo: number) => {
   const targetDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - monthsAgo, currentDate.getDate());
 
   // Adjust for months with fewer days

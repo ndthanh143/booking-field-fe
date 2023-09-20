@@ -1,16 +1,13 @@
 import { CheckCircle, ReportOutlined } from '@mui/icons-material';
-import { Box, Button, Divider, Grid, Tooltip, Typography } from '@mui/material';
+import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import moment from 'moment';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { SocketContext } from '@/App';
 import { OrderEnum } from '@/common/enums/order.enum';
-import { Stepper } from '@/components';
-import StripeContainer from '@/components/StripeContainer';
-import { TimeSelect } from '@/components/TimeSelect';
+import { Stepper, TimeSelect, StripeContainer } from '@/components';
 import { useAuth } from '@/hooks';
 import { CreateBookingDto } from '@/services/booking/booking.dto';
 import { bookingKeys } from '@/services/booking/booking.query';
@@ -18,19 +15,8 @@ import bookingService from '@/services/booking/booking.service';
 import { Pitch } from '@/services/pitch/pitch.dto';
 import { pitchKeys } from '@/services/pitch/pitch.query';
 import { venueKeys } from '@/services/venue/venue.query';
-import { convertCurrency } from '@/utils/convertCurrency';
-import { findFreeTime } from '@/utils/findBookingFreeTime';
-import { convertDecimalToTime } from '@/utils/formatTime';
-
-const convertToDate = (dateString: string, time: number) => {
-  const date = new Date(dateString);
-  const hours = Math.floor(time);
-  const minutes = (time - hours) * 60;
-
-  date.setHours(hours, minutes, 0, 0);
-
-  return date;
-};
+import { convertCurrency, formatDate } from '@/utils';
+import { convertDecimalToTime, findFreeTime, convertToDate } from '@/utils';
 
 export const Booking = () => {
   const stepList = ['Tùy chọn', 'Thanh toán', 'Hoàn tất'];
@@ -154,37 +140,46 @@ export const Booking = () => {
         <Stepper steps={stepList} activeStep={step} sx={{ marginY: 4 }} />
         {step === 0 && (
           <>
-            <Typography textAlign='center' variant='h5' marginY={4}>
-              Loại sân: {pitches.data?.[0].pitchCategory.name}
+            <Typography
+              textAlign='center'
+              variant='h5'
+              marginY={4}
+              bgcolor='secondary.light'
+              paddingY={2}
+              borderRadius={2}
+            >
+              Loại: {pitches.data?.[0].pitchCategory.name}
             </Typography>
-            <Grid container spacing={4} border={1} paddingBottom={4} borderColor='secondary.light' marginTop={1}>
+            <Grid container border={1} borderColor='secondary.light' marginTop={1}>
               {pitches.data.map((item) => (
-                <Grid item xs={3} position='relative' key={item.id}>
-                  <Box onClick={() => setSelectedPitch(item)}>
-                    <Box
-                      width='100%'
-                      height={100}
-                      borderRadius={4}
-                      sx={{
-                        objectFit: 'cover',
-                        cursor: 'pointer',
-                        opacity: item === selectedPitch ? 1 : 0.5,
-                        ':hover': {
-                          opacity: 1,
-                        },
-                        boxShadow: item === selectedPitch ? 10 : 0,
-                      }}
-                      bgcolor='primary.light'
-                      display='flex'
-                      justifyContent='center'
-                      alignItems='center'
-                    >
-                      <Typography variant='h5' color='primary.contrastText'>
-                        {item.name}
-                      </Typography>
+                <>
+                  <Grid item xs={4} md={3} position='relative' key={item.id} marginY={2} paddingX={4}>
+                    <Box onClick={() => setSelectedPitch(item)}>
+                      <Box
+                        width='100%'
+                        height={100}
+                        borderRadius={4}
+                        sx={{
+                          objectFit: 'cover',
+                          cursor: 'pointer',
+                          opacity: item === selectedPitch ? 1 : 0.5,
+                          ':hover': {
+                            opacity: 1,
+                          },
+                          boxShadow: item === selectedPitch ? 10 : 0,
+                        }}
+                        bgcolor='primary.light'
+                        display='flex'
+                        justifyContent='center'
+                        alignItems='center'
+                      >
+                        <Typography variant='h5' color='primary.contrastText'>
+                          {item.name}
+                        </Typography>
+                      </Box>
                     </Box>
-                  </Box>
-                </Grid>
+                  </Grid>
+                </>
               ))}
             </Grid>
             <Box display='flex' justifyContent='center'>
@@ -209,27 +204,6 @@ export const Booking = () => {
                 times.map((time) => (
                   <TimeSelect key={time.startTime} {...time} onSave={(value) => setSelectedTime(value)} />
                 ))}
-              {selectedTime && (
-                <Tooltip title={`${convertDecimalToTime(selectedTime[0])} - ${convertDecimalToTime(selectedTime[1])}`}>
-                  <Box
-                    height={20}
-                    bgcolor='success.main'
-                    display='flex'
-                    justifyContent='center'
-                    alignItems='center'
-                    fontSize={12}
-                    sx={{ cursor: 'default' }}
-                    position='absolute'
-                    bottom='100%'
-                    borderTop={1}
-                    borderLeft={1}
-                    borderRight={1}
-                    borderColor='success.dark'
-                    left={`${(selectedTime[0] * 100) / 24}%`}
-                    width={`${((selectedTime[1] - selectedTime[0]) * 100) / 24}%`}
-                  ></Box>
-                </Tooltip>
-              )}
               {rangeTime?.map((time) => (
                 <Typography
                   key={time}
@@ -276,19 +250,31 @@ export const Booking = () => {
         )}
         {step === 1 && (
           <Grid container spacing={8} marginY={4}>
-            <Grid item xs={6} width='100%'>
+            <Grid item xs={12} md={6} width='100%'>
               <StripeContainer currency='vnd' amount={totalPrice} onSubmit={handleSubmit} />
-              <Button
-                onClick={handleBackStep}
-                variant='outlined'
-                color='secondary'
-                disabled={!selectedPitch || !selectedDate || !selectedTime}
-              >
+              <Button onClick={handleBackStep} variant='outlined' color='secondary'>
                 Quay lại
               </Button>
             </Grid>
-            <Grid item xs={6}>
-              <Box display='flex' marginBottom={2}>
+            <Grid item xs={12} md={6}>
+              <Box
+                display='flex'
+                marginBottom={2}
+                position='relative'
+                sx={{
+                  ':before': {
+                    content: '""',
+                    width: '60%',
+                    height: '1px',
+                    position: 'absolute',
+                    display: { xs: 'block', md: 'none' },
+                    top: -30,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    bgcolor: 'secondary.light',
+                  },
+                }}
+              >
                 <Box
                   component='img'
                   src={pitches.data[0].venue.imageList?.[0].imagePath}
@@ -316,7 +302,7 @@ export const Booking = () => {
                 {selectedDate && (
                   <Box display='flex'>
                     <Typography fontWeight={500}>Ngày:</Typography>
-                    <Typography marginX={1}>{moment(selectedDate).format('DD/MM/YYYY')}</Typography>
+                    <Typography marginX={1}>{formatDate(selectedDate)}</Typography>
                   </Box>
                 )}
                 <Box display='flex'>

@@ -1,8 +1,7 @@
-import { CategoryOutlined, RoomOutlined } from '@mui/icons-material';
+import { CategoryOutlined, RoomOutlined, SportsSoccer } from '@mui/icons-material';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import RoomOutlinedIcon from '@mui/icons-material/RoomOutlined';
 import SearchIcon from '@mui/icons-material/Search';
-import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import { Box, Button, Grid, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { motion, useInView } from 'framer-motion';
@@ -28,7 +27,7 @@ export const SearchBox = () => {
   const [searchAdress, setSearchAdress] = useState<string>('');
   const [seletedVenue, setSeletedVenue] = useState<Venue | null>();
 
-  const pitchCategoryInstance = pitchCategoryKeys.list();
+  const pitchCategoryInstance = pitchCategoryKeys.list({});
   const { data: pitchCategories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
   const debounceSearchAddress = useDebounce(searchAdress);
@@ -77,12 +76,19 @@ export const SearchBox = () => {
           duration: 0.3,
         }}
         display='flex'
-        marginX={20}
+        marginX={{ xs: 2, md: 12, lg: 20 }}
         borderRadius={4}
         boxShadow={4}
         bgcolor='primary.contrastText'
       >
-        <Grid container marginX={8} marginY={4} borderRadius={50} border={1} borderColor='secondary.main'>
+        <Grid
+          container
+          marginX={{ xs: 2, md: 8 }}
+          marginY={4}
+          borderRadius={50}
+          border={1}
+          borderColor='secondary.main'
+        >
           <Grid item xs={5}>
             <Box
               position='relative'
@@ -171,7 +177,7 @@ export const SearchBox = () => {
                             key={item.id}
                             borderRadius={2}
                           >
-                            <SportsSoccerIcon sx={{ opacity: 0.7, fontSize: 20, marginRight: 1 }} />
+                            <SportsSoccer sx={{ opacity: 0.7, fontSize: 20, marginRight: 1 }} />
                             <Box overflow='hidden'>
                               <Typography>{item.name}</Typography>
                               <Typography
@@ -180,6 +186,7 @@ export const SearchBox = () => {
                                 overflow='hidden'
                                 textOverflow='ellipsis'
                                 width='50px'
+                                fontStyle='italic'
                               >
                                 {item.address}
                               </Typography>
@@ -245,7 +252,9 @@ export const SearchBox = () => {
           <Grid item xs={2} display='flex' flex={1} padding={0.5} alignItems='center'>
             <Button variant='contained' onClick={searchHandler} sx={{ borderRadius: 12, height: '100%' }} fullWidth>
               <SearchIcon />
-              {formatMessage({ id: 'app.home.search.button' })}
+              <Typography display={{ xs: 'none', md: 'none', lg: 'block' }} variant='body2' fontWeight={500}>
+                {formatMessage({ id: 'app.home.search.button' })}
+              </Typography>
             </Button>
           </Grid>
         </Grid>

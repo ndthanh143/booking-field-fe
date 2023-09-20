@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { MenuNotification, MenuActions } from '.';
 import { LanguageImages } from '@/assets/images/language';
+import Logo from '@/assets/logo';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { defaultLocations } from '@/common/datas/location.data';
 import { useLocalStorage, useMenu } from '@/hooks';
@@ -32,7 +33,7 @@ export const Header = () => {
     onOpen: openTranslationMenu,
   } = useMenu();
 
-  const pitchCategoryInstance = pitchCategoryKeys.list();
+  const pitchCategoryInstance = pitchCategoryKeys.list({});
   const { data: pitchCategories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
   return (
@@ -44,20 +45,29 @@ export const Header = () => {
       borderBottom={1}
       borderColor='secondary.light'
     >
-      <Grid item xs={6} md={4} alignItems='center' justifyContent='space-between'>
+      <Grid item xs={4} md={4} alignItems='center' justifyContent='space-between'>
         <Box display='flex' justifyContent='space-between' alignItems='center'>
           <Box
-            component='img'
             sx={{
-              height: '50px',
-              width: 200,
               cursor: 'pointer',
+              objectFit: 'cover',
             }}
-            alt='logo'
-            src='/logo.png'
             onClick={() => navigate('/')}
-          />
-          <Button variant='text' onClick={openCategoryMenu} color='secondary'>
+          >
+            <Logo />
+          </Box>
+          <Button
+            variant='text'
+            onClick={openCategoryMenu}
+            color='secondary'
+            sx={{
+              display: {
+                xs: 'none',
+                md: 'none',
+                lg: 'flex',
+              },
+            }}
+          >
             {formatMessage({
               id: 'app.home.header.category',
             })}
@@ -120,7 +130,13 @@ export const Header = () => {
               horizontal: 'right',
             }}
           >
-            <MenuItem onClick={() => setCurrentLocale('en_US')} sx={{ paddingLeft: 6, position: 'relative' }}>
+            <MenuItem
+              onClick={() => {
+                closeTranslationMenu();
+                setCurrentLocale('en_US');
+              }}
+              sx={{ paddingLeft: 6, position: 'relative' }}
+            >
               {currentLocale === 'en_US' && (
                 <Box position='absolute' left={12}>
                   <Check />
@@ -132,7 +148,13 @@ export const Header = () => {
                 })}
               </Typography>
             </MenuItem>
-            <MenuItem onClick={() => setCurrentLocale('vi')} sx={{ paddingLeft: 6 }}>
+            <MenuItem
+              onClick={() => {
+                closeTranslationMenu();
+                setCurrentLocale('vi');
+              }}
+              sx={{ paddingLeft: 6 }}
+            >
               {currentLocale === 'vi' && (
                 <Box position='absolute' left={12}>
                   <Check />
@@ -150,11 +172,18 @@ export const Header = () => {
             href='https://docs.google.com/forms/d/e/1FAIpQLScCtwnRHg0BcfpQ_I2fKWAMY5CDwFytHWhx1oI8YlOA99wu2Q/viewform'
             color='secondary'
             target='_blank'
+            sx={{
+              display: {
+                xs: 'none',
+                md: 'block',
+              },
+            }}
           >
             {formatMessage({
               id: 'app.home.header.for-business',
             })}
           </Button>
+
           <MenuNotification variant='primary' />
 
           <MenuActions variant='primary' />

@@ -1,5 +1,5 @@
 import { Sort, Tune } from '@mui/icons-material';
-import { Box, Button, Divider, Grid, Pagination, Typography } from '@mui/material';
+import { Box, Button, Grid, Pagination, Typography } from '@mui/material';
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
@@ -7,9 +7,7 @@ import { useSearchParams } from 'react-router-dom';
 import { noResultImage } from '@/assets/images/common';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { OrderEnum } from '@/common/enums/order.enum';
-import { SearchFilter } from '@/components/SearchFilter';
-import { SearchResultCard } from '@/components/SearchResultCard';
-import { SearchSort } from '@/components/SearchSort';
+import { SearchFilter, SearchResultCard, SearchSort } from '@/components';
 import { useBoolean } from '@/hooks';
 import { useLocale } from '@/locales';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
@@ -33,7 +31,7 @@ export const Search = () => {
 
   const [page, setPage] = useState(1);
 
-  const pitchCategoryInstace = pitchCategoryKeys.list();
+  const pitchCategoryInstace = pitchCategoryKeys.list({});
   const { data: pitchCategories } = useQuery({ ...pitchCategoryInstace, staleTime: STALE_TIME });
 
   const venueInstance = venueKeys.search({
@@ -70,9 +68,20 @@ export const Search = () => {
 
   return (
     <>
-      <Divider sx={{ marginY: 2 }} />
       <Grid container display='flex' justifyContent='space-between' marginY={2}>
-        <Grid item xs={4} display='flex' gap={2}>
+        <Grid
+          item
+          xs={12}
+          md={8}
+          sx={{
+            paddingBottom: {
+              xs: 2,
+              md: 0,
+            },
+          }}
+          display='flex'
+          gap={2}
+        >
           {pitchCategories?.data.map((category) => (
             <Button
               variant={Number(categoryParams) == category.id ? 'contained' : 'outlined'}
@@ -86,7 +95,7 @@ export const Search = () => {
             </Button>
           ))}
         </Grid>
-        <Grid item xs={4} display='flex' justifyContent='end' gap={2}>
+        <Grid item xs={12} md={4} display='flex' justifyContent='end' gap={2}>
           <Button variant='contained' onClick={openFilterModal}>
             <Tune sx={{ marginRight: 1 }} /> {formatMessage({ id: 'search.tool.filter.title' })}
           </Button>
@@ -96,8 +105,22 @@ export const Search = () => {
           </Button>
         </Grid>
       </Grid>
-      <Grid container borderTop={1} paddingY={2} bgcolor='footer.light'>
-        <Grid item md={7} padding={2} alignItems='center' sx={{ overflowY: 'scroll' }} height='100vh'>
+      <Grid container borderTop={1} paddingY={2} bgcolor='footer.light' justifyContent='center'>
+        <Grid
+          item
+          xs={12}
+          md={12}
+          lg={8}
+          padding={2}
+          alignItems='center'
+          sx={{
+            overflowY: {
+              xs: 'inherit',
+              md: 'scroll',
+            },
+          }}
+          height='100vh'
+        >
           {venues?.data && venues.data.length > 0 ? (
             <>
               <Typography variant='body2'>Có {venues.data.length} sân bóng phù hợp dành cho bạn</Typography>
@@ -132,9 +155,13 @@ export const Search = () => {
             </Box>
           )}
         </Grid>
-        <Grid item md={5}>
+        <Grid item md={false} lg={4}>
           {isLoaded && (
-            <GoogleMap mapContainerStyle={{ width: '100%', height: '100vh' }} center={center} zoom={10}>
+            <GoogleMap
+              mapContainerStyle={{ width: '100%', height: '100vh', borderRadius: 10 }}
+              center={center}
+              zoom={10}
+            >
               {venues?.data.map((item) => (
                 <Marker position={{ lat: item.location.lat, lng: item.location.lng }} key={item.id} />
               ))}

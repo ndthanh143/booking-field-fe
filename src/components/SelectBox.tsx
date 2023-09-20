@@ -1,4 +1,5 @@
 import { Autocomplete, InputBase, Popper } from '@mui/material';
+import { motion } from 'framer-motion';
 import { PropsWithChildren } from 'react';
 import { defaultLocations } from '@/common/datas/location.data';
 import { useBoolean } from '@/hooks';
@@ -10,16 +11,16 @@ export interface SelectBoxProps extends PropsWithChildren {
 }
 
 export const SelectBox = ({ value, onChange, placeHolder, children, ...props }: SelectBoxProps) => {
-  const { value: isOpenSearchVenue, setFalse: closeSearchVenue, setTrue: openSearchVenue } = useBoolean(false);
+  const { value: isOpen, setFalse, setTrue } = useBoolean(false);
 
   return (
     <Autocomplete
       disablePortal
       id='combo-box-address'
       options={defaultLocations}
-      open={isOpenSearchVenue}
-      onClose={closeSearchVenue}
-      onOpen={openSearchVenue}
+      open={isOpen}
+      onClose={setFalse}
+      onOpen={setTrue}
       onInputChange={(_, newValue) => onChange(newValue)}
       value={value}
       fullWidth
