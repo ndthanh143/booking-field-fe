@@ -130,7 +130,13 @@ export const Header = () => {
               horizontal: 'right',
             }}
           >
-            <MenuItem onClick={() => setCurrentLocale('en_US')} sx={{ paddingLeft: 6, position: 'relative' }}>
+            <MenuItem
+              onClick={() => {
+                closeTranslationMenu();
+                setCurrentLocale('en_US');
+              }}
+              sx={{ paddingLeft: 6, position: 'relative' }}
+            >
               {currentLocale === 'en_US' && (
                 <Box position='absolute' left={12}>
                   <Check />
@@ -142,7 +148,13 @@ export const Header = () => {
                 })}
               </Typography>
             </MenuItem>
-            <MenuItem onClick={() => setCurrentLocale('vi')} sx={{ paddingLeft: 6 }}>
+            <MenuItem
+              onClick={() => {
+                closeTranslationMenu();
+                setCurrentLocale('vi');
+              }}
+              sx={{ paddingLeft: 6 }}
+            >
               {currentLocale === 'vi' && (
                 <Box position='absolute' left={12}>
                   <Check />

@@ -97,11 +97,11 @@ export const Dashboard = () => {
       getBookingIncomeMutation({ year, venueId: venue.id });
       getBookingCategoryMutation({ year, venueId: venue.id });
     }
-  }, [getBookingIncomeMutation, getBookingCategoryMutation, venue, year]);
+  }, [getBookingIncomeMutation, getBookingCategoryMutation, venue, year, selectedIncome]);
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <Card sx={{ backgroundImage: 'linear-gradient(to right, #0606ab, #4f4fff)', color: 'primary.contrastText' }}>
           <CardContent>
             <CreditCard />
@@ -112,7 +112,7 @@ export const Dashboard = () => {
           </CardContent>
         </Card>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={12} md={4}>
         <Card sx={{ backgroundImage: 'linear-gradient(to right, #025e38, #18bb78)', color: 'primary.contrastText' }}>
           <CardContent>
             <People />
@@ -123,8 +123,7 @@ export const Dashboard = () => {
           </CardContent>
         </Card>
       </Grid>
-      <Grid item xs={4}></Grid>
-      <Grid item xs={8} minHeight='75vh'>
+      <Grid item xs={12} md={8} minHeight={{ md: 300, lg: '75vh' }}>
         <Card sx={{ height: '100%' }}>
           <CardContent>
             <Typography fontWeight={500}>Thu nhập hàng tháng</Typography>
@@ -140,7 +139,9 @@ export const Dashboard = () => {
                 onChange={(e) => setYear(Number(e.target.value))}
               >
                 {listFiveYearFromNow.map((item) => (
-                  <MenuItem value={item}>{item}</MenuItem>
+                  <MenuItem value={item} key={item}>
+                    {item}
+                  </MenuItem>
                 ))}
               </Select>
 
@@ -148,12 +149,13 @@ export const Dashboard = () => {
                 labelId='filter-select'
                 id='filter-select'
                 value={selectedIncome}
-                label='Lọc'
                 sx={{ minWidth: 150 }}
                 onChange={(e) => setSelectedIncome(e.target.value as TimePeriodFilter)}
               >
                 {FilterChartOptions.map((item) => (
-                  <MenuItem value={item.value}>{item.label}</MenuItem>
+                  <MenuItem value={item.value} key={item.label}>
+                    {item.label}
+                  </MenuItem>
                 ))}
               </Select>
             </Box>
@@ -164,7 +166,7 @@ export const Dashboard = () => {
           </CardContent>
         </Card>
       </Grid>
-      <Grid item xs={4} minHeight='75vh'>
+      <Grid item xs={12} md={4} minHeight={{ md: 300, lg: '75vh' }}>
         <Card sx={{ height: '100%' }}>
           <CardContent>
             <Typography textAlign='center' fontWeight={500} paddingBottom={4}>

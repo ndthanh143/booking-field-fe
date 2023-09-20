@@ -2,7 +2,7 @@ import { Box, Button, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { MatchDetail } from '@/components/MatchDetail';
+import { MatchDetail } from '@/components';
 import { Match } from '@/services/match/match.dto';
 import { matchKeys } from '@/services/match/match.query';
 import { Round } from '@/services/round/round.dto';
@@ -22,23 +22,24 @@ export const TournamentSchedule = () => {
   const [champion, setChampion] = useState<Team | null>(null);
 
   const tournamentInstance = tournamentKeys.detail(Number(id));
-  const { data: tournament } = useQuery(tournamentInstance);
+  const { data: tournament } = useQuery({ ...tournamentInstance });
 
   const matchInstance = matchKeys.list({ tournamentId: Number(id) });
   const { data: matches } = useQuery({ ...matchInstance, enabled: Boolean(tournament) });
 
   useEffect(() => {
-    if (tournament) {
+    if (tournament && matches) {
       const filteredTournament =
         filterByRound === null
           ? tournament.data.rounds
           : tournament.data.rounds.filter((item) => item.no === filterByRound);
       setRounds(filteredTournament);
 
-      if (tournament?.data.type === TournamentTypeEnum.Knockout) {
-        const finalMatch = matches?.data[tournament.data.totalTeam - 2];
-        if (finalMatch?.hostGoals && finalMatch.guestGoals) {
-          const championTeam = finalMatch?.hostGoals > finalMatch?.guestGoals ? finalMatch?.host : finalMatch?.guest;
+      if (tournament.data.type === TournamentTypeEnum.Knockout) {
+        const finalMatch = matches.data[tournament.data.totalTeam - 2];
+
+        if (finalMatch.hostGoals && finalMatch.guestGoals) {
+          const championTeam = finalMatch.hostGoals > finalMatch?.guestGoals ? finalMatch?.host : finalMatch?.guest;
           setChampion(championTeam);
         }
       }
@@ -48,7 +49,7 @@ export const TournamentSchedule = () => {
   return (
     tournament && (
       <Box paddingY={4}>
-        {champion && <Typography>Đội vô địch: {champion.name}</Typography>}
+        {champion && <Typography marginY={1}>Đội vô địch: {champion.name}</Typography>}
         <Box display='flex' gap={2}>
           <Button
             variant={filterByRound === null ? 'contained' : 'outlined'}
@@ -72,7 +73,7 @@ export const TournamentSchedule = () => {
               onClick={() => setFilterByRound(round.no)}
               key={round.id}
             >
-              {acronym(convertRoundName(round.no, tournament.data.rounds.length))}
+              {acronym(convertRoundName(round.no, tournament.data.rounds.length, tournament.data.type))}
             </Button>
           ))}
         </Box>
@@ -80,7 +81,7 @@ export const TournamentSchedule = () => {
           <Box marginY={4} borderRadius={2} overflow='hidden' key={round.id}>
             <Box bgcolor='primary.dark' padding={1} textAlign='center'>
               <Typography sx={{ color: 'primary.contrastText' }}>
-                {convertRoundName(round.no, tournament.data.rounds.length)}
+                {convertRoundName(round.no, tournament.data.rounds.length, tournament.data.type)}
               </Typography>
             </Box>
             <Box bgcolor='secondary.light'>
@@ -107,7 +108,7 @@ export const TournamentSchedule = () => {
                       sx={{ objectFit: 'cover' }}
                     />
                     <Typography textAlign='left'>
-                      {match.host?.name || `Win ${convertRoundName(roundId - 1, rounds.length)} `}
+                      {match.host?.name || `Win ${convertRoundName(roundId - 1, rounds.length, tournament.data.type)} `}
                     </Typography>
                   </Box>
                   <Box
@@ -140,7 +141,8 @@ export const TournamentSchedule = () => {
 
                   <Box display='flex' justifyContent='right' alignItems='center' gap={2} width={200}>
                     <Typography textAlign='right'>
-                      {match.guest?.name || `Win ${convertRoundName(roundId - 1, rounds.length)} `}
+                      {match.guest?.name ||
+                        `Win ${convertRoundName(roundId - 1, rounds.length, tournament.data.type)} `}
                     </Typography>
                     <Box
                       component='img'

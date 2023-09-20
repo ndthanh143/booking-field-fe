@@ -1,23 +1,52 @@
-import { Box, Pagination, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
+import { Delete } from '@mui/icons-material';
+import {
+  Box,
+  IconButton,
+  Pagination,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useAuth } from '@/hooks';
+import { toast } from 'react-toastify';
+import { ConfirmBox } from '@/components';
+import { useAuth, useBoolean } from '@/hooks';
+import { Booking } from '@/services/booking/booking.dto';
 import { bookingKeys } from '@/services/booking/booking.query';
+import bookingService from '@/services/booking/booking.service';
 import { formatDate, formatDateToTime } from '@/utils';
 
 export const BookingManagement = () => {
   const { profile } = useAuth();
 
   const bookingInstance = bookingKeys.list({ venueId: profile?.venue.id });
-  const { data: bookings } = useQuery({ ...bookingInstance, enabled: !!profile });
+  const { data, refetch } = useQuery({ ...bookingInstance, enabled: !!profile });
 
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [page, setPage] = useState<number>(1);
+
+  const { value: isOpenConfirmBox, setFalse: closeConfirmBox, setTrue: openConfirmBox } = useBoolean(false);
+
+  const { mutate: mutateDeleteBooking } = useMutation({
+    mutationFn: (id: number) => bookingService.delete(id),
+    onSuccess: () => {
+      toast.success('Delete booking successfully');
+      closeConfirmBox();
+      refetch();
+    },
+  });
+
+  const handleDeleteBooking = () => selectedBooking && mutateDeleteBooking(selectedBooking.id);
 
   return (
     profile &&
-    bookings && (
+    data && (
       <Box>
-        {bookings.data.length > 0 ? (
+        {data.data.length > 0 ? (
           <Table size='small' sx={{ marginY: 2 }}>
             <TableHead>
               <TableRow>
@@ -26,10 +55,11 @@ export const BookingManagement = () => {
                 <TableCell>Ngày</TableCell>
                 <TableCell>Thời gian</TableCell>
                 <TableCell>Người đặt</TableCell>
+                <TableCell>Thao tác</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {bookings.data.map((booking) => (
+              {data.data.map((booking) => (
                 <TableRow key={booking.id}>
                   <TableCell>{booking.pitch.name}</TableCell>
                   <TableCell>{booking.pitch.pitchCategory.name}</TableCell>
@@ -38,6 +68,19 @@ export const BookingManagement = () => {
                     booking.endTime,
                   )}`}</TableCell>
                   <TableCell>{`${booking.user.lastName} ${booking.user.firstName}`}</TableCell>
+                  <TableCell>
+                    <Box display='flex' gap={2}>
+                      <IconButton
+                        color='primary'
+                        onClick={() => {
+                          setSelectedBooking(booking);
+                          openConfirmBox();
+                        }}
+                      >
+                        <Delete />
+                      </IconButton>
+                    </Box>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -45,14 +88,21 @@ export const BookingManagement = () => {
         ) : (
           <Typography>Sân của bạn chưa có ai đặt !!</Typography>
         )}
-        {bookings.pageInfo.pageCount > 1 && (
+        {data.pageInfo.pageCount > 1 && (
           <Pagination
             sx={{ display: 'flex', justifyContent: 'center' }}
-            count={bookings.pageInfo.pageCount}
+            count={data.pageInfo.pageCount}
             page={page}
             onChange={(_, value) => setPage(value)}
           />
         )}
+        <ConfirmBox
+          title='Bạn có chắc muốn xóa'
+          subTitle='Bạn sẽ không thể khôi phục dữ liệu sau khi đã xóa'
+          isOpen={isOpenConfirmBox}
+          onClose={closeConfirmBox}
+          onAccept={handleDeleteBooking}
+        />
       </Box>
     )
   );

@@ -4,7 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { noResultImage } from '@/assets/images/common';
-import { RatingBox, UserAccountLayout } from '@/components';
+import { RatingBox } from '@/components';
 import { Booking } from '@/services/booking/booking.dto';
 import { bookingKeys } from '@/services/booking/booking.query';
 import { CreateRatingPayload } from '@/services/rating/rating.dto';
@@ -31,7 +31,7 @@ export const AccountBooking = () => {
   };
 
   return (
-    <UserAccountLayout>
+    <>
       <Box marginLeft={4} position='absolute' width='100%'>
         <Box display='flex' justifyContent='space-between' marginY={4}>
           <Typography variant='h4' fontWeight={500}>
@@ -121,6 +121,6 @@ export const AccountBooking = () => {
           onSubmit={(payload) => handleRatingSubmit(payload)}
         />
       )}
-    </UserAccountLayout>
+    </>
   );
 };

@@ -7,6 +7,7 @@ export const vi_home = {
   'app.home.header.notification.no-result': 'Chưa có thông báo nào',
   'app.home.header.account.view-profile': 'Xem hồ sơ',
   'app.home.header.account.my-booking': 'Đặt sân của tôi',
+  'app.home.header.account.create-tournament': 'Tạo giải đấu',
   'app.home.header.account.venue-management': 'Quản lý sân bóng',
   'app.home.header.account.sign-out': 'Đăng xuất',
   'app.home.header.account.sign-in': 'Đăng nhập',

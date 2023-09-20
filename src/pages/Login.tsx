@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { LoadingButton } from '@mui/lab';
-import { Avatar, Box, Grid, Paper, TextField, Typography } from '@mui/material';
+import { Alert, Avatar, Box, Grid, Paper, TextField, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -67,11 +67,7 @@ export const Login = () => {
               Login with your account
             </Typography>
             <Box component='form' onSubmit={handleSubmit(onSubmitHandler)} noValidate sx={{ mt: 1 }}>
-              {loginError && (
-                <Typography component='h5' sx={{ color: 'error.light', mt: 1 }} textAlign={'center'}>
-                  Wrong username/email or password
-                </Typography>
-              )}
+              {loginError && <Alert severity='error'>Wrong username/email or password</Alert>}
               <TextField
                 margin='normal'
                 required

@@ -1,5 +1,5 @@
 export const enUS_home = {
-  'app.home.header.category': 'Pitch category',
+  'app.home.header.category': 'Pitch Categories',
   'app.home.header.translate.vi': 'Vietnamese',
   'app.home.header.translate.en': 'English',
   'app.home.header.for-business': 'For business',
@@ -7,6 +7,7 @@ export const enUS_home = {
   'app.home.header.notification.no-result': 'No annoucement yet',
   'app.home.header.account.view-profile': 'View profile',
   'app.home.header.account.my-booking': 'My booking',
+  'app.home.header.account.create-tournament': 'Create Tournament',
   'app.home.header.account.venue-management': 'Manage your venue',
   'app.home.header.account.sign-out': 'Logout',
   'app.home.header.account.sign-in': 'Sign in',
@@ -19,7 +20,7 @@ export const enUS_home = {
   'app.home.search.result.venue': 'Venue',
   'app.home.search.result.no-result': 'There are no matching results',
   'app.home.search.button': 'Search',
-  'app.home.category-list.title': 'Pitch category list',
+  'app.home.category-list.title': 'Categories',
 
   'app.footer.support.title': 'Support',
   'app.footer.support.item.hotline': 'Hotline',

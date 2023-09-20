@@ -75,23 +75,33 @@ const findTournamentKnockout = (
 const findTournamentRoundRobin = (tournament: Tournament[], numTeams: number, currentRound: number): Tournament[] => {
   const totalRounds = numTeams % 2 === 0 ? numTeams - 1 : numTeams;
 
+  const teams = Array(numTeams)
+    .fill(null)
+    .map((_, index) => `Đội ${index}`);
+
   if (currentRound === totalRounds) return tournament;
 
   const totalMatchesPerRound = (numTeams * (numTeams - 1)) / (2 * totalRounds);
 
-  const matches = Array(totalMatchesPerRound)
-    .fill(null)
-    .map(() => ({
-      teamA: 'team',
-      teamB: 'team',
-    }));
+  for (let round = 0; round < numTeams - 1; round++) {
+    const matches: Match[] = [];
 
-  tournament.push({
-    round: currentRound,
-    matches,
-  });
+    for (let i = 0; i < totalMatchesPerRound; i++) {
+      const teamA = teams[i];
+      const teamB = teams[numTeams - 1 - i];
 
-  return findTournamentRoundRobin(tournament, numTeams, currentRound + 1);
+      if (teamA !== 'BYE' && teamB !== 'BYE') {
+        matches.push({ teamA, teamB });
+      }
+    }
+
+    tournament.push({ round, matches });
+
+    // Xoay các đội để tạo lịch tiếp theo
+    teams.splice(1, 0, teams.pop() as string);
+  }
+
+  return tournament;
 };
 
 export const createTournament = (numTeams: number, type: TournamentTypeEnum) => {
@@ -99,9 +109,7 @@ export const createTournament = (numTeams: number, type: TournamentTypeEnum) => 
 
   const result = {
     [TournamentTypeEnum.Knockout]: () => findTournamentKnockout(tournament, 0, [], numTeams),
-    [TournamentTypeEnum.RoundRobin]: () => {
-      findTournamentRoundRobin(tournament, numTeams, 0);
-    },
+    [TournamentTypeEnum.RoundRobin]: () => findTournamentRoundRobin(tournament, numTeams, 0),
   };
 
   return result[type]();

@@ -19,10 +19,11 @@ export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
   const [swiper, setSwiper] = useState<SwiperType>();
 
   return (
-    <Grid container borderRadius={4} overflow='hidden' marginY={4} height={500}>
+    <Grid container borderRadius={4} overflow='hidden' height={500}>
       <Grid
         item
-        xs={8}
+        xs={12}
+        md={8}
         sx={{
           ':after': {
             content: '""',
@@ -49,8 +50,16 @@ export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
           sx={{ objectFit: 'cover' }}
         />
       </Grid>
-      <Grid item xs={4} height='100%' position='relative' paddingLeft={2}>
-        <Box width='100%' height='100%' display='flex' flexDirection='column' gap={2}>
+      <Grid
+        item
+        xs={12}
+        md={4}
+        height='100%'
+        position='relative'
+        paddingLeft={{ xs: 0, md: 2 }}
+        marginTop={{ xs: 2, md: 0 }}
+      >
+        <Box width='100%' height='100%' display='flex' flexDirection={{ xs: 'row', md: 'column' }} gap={2}>
           {imageList.slice(1, 4).map((item) => (
             <Box
               width='100%'
@@ -85,6 +94,7 @@ export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
         </Box>
         <Fab
           variant='extended'
+          color='primary'
           sx={{
             position: 'absolute',
             left: '50%',

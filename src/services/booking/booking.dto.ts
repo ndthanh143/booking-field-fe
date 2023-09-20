@@ -44,3 +44,10 @@ export type GetAnalystBookingCategoryData = {
   category: string;
   total: number;
 };
+
+export type UpdateBookingPayload = {
+  id: number;
+  data: UpdateBookingDto;
+};
+
+export type UpdateBookingDto = Partial<Booking>;

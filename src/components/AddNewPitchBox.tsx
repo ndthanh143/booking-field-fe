@@ -8,7 +8,7 @@ import { CreatePitchDto } from '@/services/pitch/pitch.dto';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
 import { Venue } from '@/services/venue/venue.dto';
 
-export interface SearchSortProps {
+export interface AddNewPitchBox {
   venue: Venue;
   isOpen: boolean;
   onClose: () => void;
@@ -22,7 +22,7 @@ const schema = object({
   venue: number().required(),
 });
 
-export const AddNewPitchBox = ({ venue, isOpen, onClose, onSubmit }: SearchSortProps) => {
+export const AddNewPitchBox = ({ venue, isOpen, onClose, onSubmit }: AddNewPitchBox) => {
   const pitchCategoryInstance = pitchCategoryKeys.list({});
 
   const { data: categories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });

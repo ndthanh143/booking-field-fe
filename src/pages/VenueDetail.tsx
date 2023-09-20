@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 import { MutableRefObject, SyntheticEvent, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RATING_PAGE_LIMIT } from '@/common/constants';
-import { ImageLibrary } from '@/components/ImageLibrary';
+import { ImageLibrary } from '@/components';
 import { useLocale } from '@/locales';
 import { pitchKeys } from '@/services/pitch/pitch.query';
 import { ratingKeys } from '@/services/rating/rating.query';
@@ -69,27 +69,37 @@ export const VenueDetail = () => {
 
   return (
     venue && (
-      <Box marginY={8}>
-        <Box display='flex' justifyContent='space-between'>
-          <Typography variant='h3'>{venue.name}</Typography>
-          <Box display='flex' alignItems='center'>
-            <FavoriteBorderIcon sx={{ marginX: 2 }} />
+      <Box marginY={2}>
+        <Grid container spacing={1}>
+          <Grid item xs={12} md={10} order={1}>
+            <Typography variant='h3'>{venue.name}</Typography>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={2}
+            order={2}
+            display='flex'
+            alignItems='center'
+            justifyContent={{ xs: 'start', md: 'end' }}
+          >
+            <FavoriteBorderIcon sx={{ marginRight: 1 }} />
             <Typography variant='body1'>{formatMessage({ id: 'app.venue.favorite' })}</Typography>
-          </Box>
-        </Box>
-        <Box display='flex' justifyContent='space-between' marginY={1}>
-          <Box display='flex' alignItems='center'>
-            <PlaceIcon sx={{ marginX: 1, color: 'primary.main' }} />
-            <Typography variant='body1'>{venue.address}</Typography>{' '}
-          </Box>
-          <Box display='flex' alignItems='center'>
-            <StarIcon sx={{ marginX: 1, color: 'primary.main' }} />
+          </Grid>
+          <Grid item xs={12} md={10} order={3} display='flex'>
+            <PlaceIcon sx={{ marginRight: 1, color: 'primary.main' }} />
+            <Typography variant='body1'>{venue.address}</Typography>
+          </Grid>
+          <Grid item xs={12} md={2} order={4} display='flex' justifyContent={{ xs: 'start', md: 'end' }}>
+            <StarIcon sx={{ marginRight: 1, color: 'primary.main' }} />
             <Typography variant='body1'>{rateAverage}/5</Typography>
-          </Box>
-        </Box>
-        {venue.imageList && venue.imageList.length > 0 && <ImageLibrary imageList={venue.imageList} />}
+          </Grid>
+          <Grid item xs={12} md={12} order={{ xs: 0, md: 5 }} marginY={2}>
+            {venue.imageList && venue.imageList.length > 0 && <ImageLibrary imageList={venue.imageList} />}
+          </Grid>
+        </Grid>
 
-        <Box position='sticky' top={0} bgcolor='primary.contrastText' zIndex={1}>
+        <Box position='sticky' marginY={2} top={0} bgcolor='primary.contrastText' zIndex={1}>
           <Tabs value={tab} onChange={handleChange}>
             <Tab
               label={formatMessage({ id: 'app.venue.tab.pitch-list' })}
@@ -116,6 +126,7 @@ export const VenueDetail = () => {
               <Grid
                 container
                 paddingY={4}
+                spacing={2}
                 borderBottom={1}
                 borderColor='footer.dark'
                 sx={{
@@ -125,11 +136,11 @@ export const VenueDetail = () => {
                 }}
                 key={item.key}
               >
-                <Grid item md={3}>
+                <Grid item xs={12} md={3}>
                   <Box
                     bgcolor='primary.main'
                     color='primary.contrastText'
-                    width={200}
+                    width={{ xs: '100%', md: '80%' }}
                     height={200}
                     borderRadius={4}
                     display='flex'
@@ -140,7 +151,7 @@ export const VenueDetail = () => {
                     {item.key}
                   </Box>
                 </Grid>
-                <Grid item md={3}>
+                <Grid item xs={6} md={3}>
                   <Typography marginBottom={2} fontWeight={500}>
                     {formatMessage({ id: 'app.venue.pitches.item.info' })}
                   </Typography>
@@ -159,7 +170,7 @@ export const VenueDetail = () => {
                     </Box>
                   </Box>
                 </Grid>
-                <Grid item md={3}>
+                <Grid item xs={6} md={3} textAlign={{ xs: 'right', md: 'left' }}>
                   <Typography marginBottom={2} fontWeight={500}>
                     {formatMessage({ id: 'app.venue.pitches.item.amount' })}
                   </Typography>
@@ -175,16 +186,18 @@ export const VenueDetail = () => {
                     {item.values.length}
                   </Box>
                 </Grid>
-                <Grid item md={3}>
+                <Grid item xs={12} md={3}>
                   <Typography marginBottom={2} fontWeight={500}>
                     {formatMessage({ id: 'app.venue.pitches.item.price' })}
                   </Typography>
-                  <Typography variant='body1' color='primary.main' fontWeight={500} marginY={2}>
-                    {formatMessage({ id: 'app.venue.pitches.item.price.unit' })}
-                  </Typography>
-                  <Typography variant='h5' fontWeight={500} marginY={2}>
-                    {convertCurrency(item.values[0].price)}
-                  </Typography>
+                  <Box>
+                    <Typography variant='body1' color='primary.main' fontWeight={500} marginY={2}>
+                      {formatMessage({ id: 'app.venue.pitches.item.price.unit' })}
+                    </Typography>
+                    <Typography variant='h5' fontWeight={500} marginY={2}>
+                      {convertCurrency(item.values[0].price)}
+                    </Typography>
+                  </Box>
                   <Button
                     variant='contained'
                     sx={{ marginY: 2 }}
@@ -298,19 +311,19 @@ export const VenueDetail = () => {
         <Box marginY={4} ref={operatingRef}>
           <Typography variant='h4'> {formatMessage({ id: 'app.venue.work-time.title' })}</Typography>
           <Box display='flex' justifyContent='space-around' marginY={2}>
-            <Box textAlign='center'>
+            <Box textAlign='center' bgcolor='secondary.light' padding={4} borderRadius='50%'>
               <Typography variant='h6' fontWeight={500}>
                 {formatMessage({ id: 'app.venue.work-time.open' })}
               </Typography>
               <Typography variant='body1'>{convertToAMPM(venue.openAt)}</Typography>
             </Box>
-            <Box textAlign='center'>
+            <Box textAlign='center' bgcolor='secondary.light' padding={4} borderRadius='50%'>
               <Typography variant='h6' fontWeight={500}>
                 {formatMessage({ id: 'app.venue.work-time.close' })}
               </Typography>
               <Typography variant='body1'>{convertToAMPM(venue.closeAt)}</Typography>
             </Box>
-            <Box textAlign='center'>
+            <Box textAlign='center' bgcolor='secondary.light' padding={4} borderRadius='50%'>
               <Typography variant='h6' fontWeight={500}>
                 {formatMessage({ id: 'app.venue.work-time.time' })}
               </Typography>

@@ -11,7 +11,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -28,7 +28,9 @@ export const TournamentMatch = () => {
   const { id } = useParams();
 
   const tournamentInstance = tournamentKeys.detail(Number(id));
-  const { data: tournament, refetch: refetchTournament } = useQuery({ ...tournamentInstance });
+  const { data: tournament } = useQuery({ ...tournamentInstance });
+
+  const queryClient = useQueryClient();
 
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
 
@@ -45,7 +47,7 @@ export const TournamentMatch = () => {
     },
     onSuccess: () => {
       toast.success('Set lịch thành công');
-      refetchTournament();
+      queryClient.invalidateQueries(tournamentInstance.queryKey);
       setSelectedMatch(null);
     },
   });
@@ -69,7 +71,8 @@ export const TournamentMatch = () => {
               >
                 <Grid item padding={2} xs={12} md={2}>
                   <Typography>
-                    {convertRoundName(round.no, tournament.data.rounds.length)} - Trận {matchId + 1}:
+                    {convertRoundName(round.no, tournament.data.rounds.length, tournament.data.type)} - Trận{' '}
+                    {matchId + 1}:
                   </Typography>
                 </Grid>
                 <Grid item padding={2} xs={12} md={6} display='flex' justifyContent='space-between' alignItems='center'>
@@ -85,7 +88,8 @@ export const TournamentMatch = () => {
                       sx={{ objectFit: 'cover' }}
                     />
                     <Typography>
-                      {match.host?.name || `Win ${convertRoundName(roundId - 1, tournament.data.rounds.length)} `}
+                      {match.host?.name ||
+                        `Win ${convertRoundName(roundId - 1, tournament.data.rounds.length, tournament.data.type)} `}
                     </Typography>
                   </Box>
                   <Box display='flex' alignItems='center' justifyContent='center' gap={2}>
@@ -99,7 +103,8 @@ export const TournamentMatch = () => {
                   </Box>
                   <Box display='flex' textAlign='right' alignItems='center' gap={1} justifyContent='right' width={200}>
                     <Typography>
-                      {match.guest?.name || `Win ${convertRoundName(roundId - 1, tournament.data.rounds.length)} `}
+                      {match.guest?.name ||
+                        `Win ${convertRoundName(roundId - 1, tournament.data.rounds.length, tournament.data.type)} `}
                     </Typography>
                     <Box
                       component='img'
@@ -144,33 +149,38 @@ export const TournamentMatch = () => {
             ))}
           </Box>
         ))}
-        <Menu
-          id='settings-match-menu'
-          anchorEl={anchorEl}
-          open={isOpen}
-          onClose={onClose}
-          MenuListProps={{
-            'aria-labelledby': 'basic-button',
-          }}
-        >
-          <MenuItem
-            onClick={() => {
-              onClose();
-              openUpdateSchedule();
+        {selectedMatch && (
+          <Menu
+            id='settings-match-menu'
+            anchorEl={anchorEl}
+            open={isOpen}
+            onClose={onClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
             }}
           >
-            Cập nhật lịch đấu
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              onClose();
-              openUpdateScore();
-            }}
-            disabled={!(selectedMatch?.host && selectedMatch?.guest)}
-          >
-            Cập nhật tỉ số
-          </MenuItem>
-        </Menu>
+            <MenuItem
+              onClick={() => {
+                onClose();
+                openUpdateSchedule();
+              }}
+            >
+              Cập nhật lịch đấu
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                onClose();
+                openUpdateScore();
+              }}
+              disabled={
+                !(selectedMatch.host && selectedMatch.guest) ||
+                Boolean(selectedMatch.hostGoals || selectedMatch.guestGoals)
+              }
+            >
+              Cập nhật tỉ số
+            </MenuItem>
+          </Menu>
+        )}
         {selectedMatch && (
           <SetScheduleBox
             data={tournament.data.venue}

@@ -4,16 +4,15 @@ import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { object, ref, string } from 'yup';
-import { UserAccountLayout } from '@/components';
 import { ChangePasswordPayload } from '@/services/user/user.dto';
 import userService from '@/services/user/user.service';
 
 const schema = object({
-  currentPassword: string().required('Vui lòng nhập trường này'),
-  newPassword: string().required('Vui lòng nhập trường này'),
+  currentPassword: string().required('Please fill in this field'),
+  newPassword: string().required('Please fill in this field'),
   confirmPassword: string()
-    .required('Vui lòng nhập trường này')
-    .oneOf([ref('newPassword')], 'Mật khẩu nhập lại không khớp'),
+    .required('Please fill in this field')
+    .oneOf([ref('newPassword')], 'Confirm password is not match'),
 });
 export const AccountPassword = () => {
   const {
@@ -28,7 +27,7 @@ export const AccountPassword = () => {
   const { mutate } = useMutation({
     mutationFn: userService.changePassword,
     onSuccess: () => {
-      toast.success('Cập nhật mật khẩu thành công');
+      toast.success('Update password successfully');
       reset();
     },
   });
@@ -37,7 +36,7 @@ export const AccountPassword = () => {
     mutate(data);
   };
   return (
-    <UserAccountLayout>
+    <>
       <Box marginLeft={4} component='form' onSubmit={handleSubmit(onSubmitHandler)}>
         <Box marginY={2}>
           <Typography>Mật khẩu cũ</Typography>
@@ -70,6 +69,6 @@ export const AccountPassword = () => {
           Đổi mật khẩu
         </Button>
       </Box>
-    </UserAccountLayout>
+    </>
   );
 };

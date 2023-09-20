@@ -8,7 +8,7 @@ import { IntlProvider } from 'react-intl';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import * as io from 'socket.io-client';
-import { NotificationContainer, TournamentLayout } from './components';
+import { NotificationContainer, TournamentLayout, UserAccountLayout } from './components';
 import { MainLayout, SecondaryLayout } from './components/Layout';
 import { VenueManagementLayout } from './components/VenueManagementLayout';
 import { useLocalStorage } from './hooks';
@@ -35,6 +35,7 @@ import {
   TournamentStanding,
   TournamentTeamManagement,
   TournamentMatch,
+  AccountTournament,
 } from './pages';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -183,19 +184,44 @@ const router = createBrowserRouter([
         children: [
           {
             path: 'profile',
-            element: <AccountProfile />,
+            element: (
+              <UserAccountLayout>
+                <AccountProfile />
+              </UserAccountLayout>
+            ),
           },
           {
             path: 'my-booking',
-            element: <AccountBooking />,
+            element: (
+              <UserAccountLayout>
+                <AccountBooking />
+              </UserAccountLayout>
+            ),
           },
           {
             path: 'notification',
-            element: <AccountNotification />,
+            element: (
+              <UserAccountLayout>
+                <AccountNotification />
+              </UserAccountLayout>
+            ),
           },
           {
+            path: 'my-league',
+            element: (
+              <UserAccountLayout>
+                <AccountTournament />
+              </UserAccountLayout>
+            ),
+          },
+
+          {
             path: 'change-password',
-            element: <AccountPassword />,
+            element: (
+              <UserAccountLayout>
+                <AccountPassword />
+              </UserAccountLayout>
+            ),
           },
         ],
       },

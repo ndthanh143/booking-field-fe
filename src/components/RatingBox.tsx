@@ -3,13 +3,13 @@ import { Box, Button, Divider, Modal, Rating, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { TextArea } from './TextArea';
-import { BookingData } from '@/services/booking/booking.dto';
+import { Booking } from '@/services/booking/booking.dto';
 import { CreateRatingPayload } from '@/services/rating/rating.dto';
 
 export interface IRatingBoxProps {
   isOpen: boolean;
   onClose: () => void;
-  data: BookingData;
+  data: Booking;
   onSubmit: (payload: CreateRatingPayload) => void;
 }
 

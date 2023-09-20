@@ -1,12 +1,12 @@
-import { Box, Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import { Box, Card, CardContent, CardMedia, Grid, Typography, useMediaQuery } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { defaultLocations } from '@/common/datas/location.data';
-import { SearchBox } from '@/components/SearchBox';
-import { Slider } from '@/components/Slider';
+import { SearchBox, Slider } from '@/components';
 import { useLocale } from '@/locales';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
+import { theme } from '@/styles/theme';
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -16,12 +16,14 @@ export const Home = () => {
 
   const { data } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
+
   const SliderSettings = {
     dots: false,
     autoplay: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: matches ? 1 : 3,
     swipeToSlide: true,
   };
 
@@ -29,20 +31,34 @@ export const Home = () => {
     data && (
       <>
         <Box position='relative' marginBottom={14}>
-          <Box component='img' sx={{ width: '100%' }} alt='san co nhan tao so 1' src='banner.jpg' />
-          <Box position='absolute' width='100%' bottom={-40}>
+          <Box
+            component='img'
+            sx={{ width: '100%', objectFit: 'cover' }}
+            minHeight={300}
+            alt='san co nhan tao so 1'
+            src='https://www.sfy.org.uk/wp-content/uploads/2021/02/Football-3x1-WEB-scaled.jpg'
+          />
+          <Box position='absolute' left={0} width='100%' bottom={-40}>
             <SearchBox />
           </Box>
         </Box>
         <Box marginY={2}>
           <Slider {...SliderSettings}>
             {data.data.map((category) => (
-              <Box display='flex' justifyContent='center' maxHeight={200} paddingX={4} key={category.id}>
+              <Box
+                display='flex'
+                justifyContent='center'
+                height={{ xs: 300, md: 300, lg: 200 }}
+                paddingX={4}
+                key={category.id}
+              >
                 <Box
                   borderRadius={4}
                   overflow='hidden'
                   position='relative'
-                  maxHeight={200}
+                  width='100%'
+                  height='100%'
+                  margin='auto'
                   sx={{
                     ':before': {
                       content: '""',
@@ -64,6 +80,7 @@ export const Home = () => {
                     width='100%'
                     height='100%'
                     overflow='hidden'
+                    sx={{ objectFit: 'cover' }}
                     alt={category.name}
                     src={category.thumbnail}
                   />
@@ -77,10 +94,19 @@ export const Home = () => {
           <Typography variant='h5' marginY={2}>
             {formatMessage({ id: 'app.home.category-list.title' })}
           </Typography>
-          <Grid container sx={{ width: 'full' }} spacing={4}>
+          <Grid container sx={{ width: '100%' }} spacing={4} justifyContent='center'>
             {data.data.map((category) => (
               <Grid item xs={12} md={6} lg={3} key={category.id}>
-                <Card sx={{ maxWidth: 345, minHeight: 400, borderRadius: 4 }} key={category.id}>
+                <Card
+                  sx={{
+                    width: {
+                      md: '100%',
+                    },
+                    minHeight: 400,
+                    borderRadius: 4,
+                  }}
+                  key={category.id}
+                >
                   <Box
                     position='relative'
                     sx={{
