@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { number, object } from 'yup';
+import { useLocale } from '@/locales';
 import { Match, UpdateMatchDto, UpdateMatchData } from '@/services/match/match.dto';
 import matchService from '@/services/match/match.service';
 import { tournamentKeys } from '@/services/tournament/tournament.query';
@@ -22,6 +23,8 @@ const schema = object({
 });
 
 export const UpdateScore = ({ isOpen, onClose, data: match }: UpdateScoreProps) => {
+  const { formatMessage } = useLocale();
+
   const { register, handleSubmit } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -65,7 +68,7 @@ export const UpdateScore = ({ isOpen, onClose, data: match }: UpdateScoreProps) 
       >
         <Box display='flex' alignItems='center' justifyContent='space-between' paddingBottom={2} padding={2}>
           <Typography id='parent-modal-title' textAlign='center' variant='h5' fontWeight={700}>
-            Cập nhật tỉ số
+            {formatMessage({ id: 'app.tournament.match.update-score.box.title' })}
           </Typography>
           <Close
             onClick={onClose}
@@ -80,11 +83,21 @@ export const UpdateScore = ({ isOpen, onClose, data: match }: UpdateScoreProps) 
           <Box display='flex' gap={2}>
             <Box>
               <Typography>{match.host?.name}</Typography>
-              <TextField type='number' size='small' placeholder='Đội chủ nhà' {...register('hostGoals')} />
+              <TextField
+                type='number'
+                size='small'
+                placeholder={formatMessage({ id: 'app.tournament.match.update-score.box.host' })}
+                {...register('hostGoals')}
+              />
             </Box>
             <Box>
               <Typography textAlign='right'>{match.guest?.name}</Typography>
-              <TextField type='number' size='small' placeholder='Đội khách' {...register('guestGoals')} />
+              <TextField
+                type='number'
+                size='small'
+                placeholder={formatMessage({ id: 'app.tournament.match.update-score.box.guest' })}
+                {...register('guestGoals')}
+              />
             </Box>
           </Box>
           <Button
@@ -100,7 +113,7 @@ export const UpdateScore = ({ isOpen, onClose, data: match }: UpdateScoreProps) 
             }}
             type='submit'
           >
-            Save
+            {formatMessage({ id: 'app.tournament.match.update-score.box.submit' })}
           </Button>
         </Box>
       </Box>

@@ -11,9 +11,9 @@ import { theme } from '@/styles/theme';
 export const Home = () => {
   const navigate = useNavigate();
 
-  const pitchCategoryInstance = pitchCategoryKeys.list({});
   const { formatMessage } = useLocale();
 
+  const pitchCategoryInstance = pitchCategoryKeys.list({});
   const { data } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
   const matches = useMediaQuery(theme.breakpoints.down('md'));

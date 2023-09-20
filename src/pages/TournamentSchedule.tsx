@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { MatchDetail } from '@/components';
+import { useLocale } from '@/locales';
 import { Match } from '@/services/match/match.dto';
 import { matchKeys } from '@/services/match/match.query';
 import { Round } from '@/services/round/round.dto';
@@ -12,6 +13,8 @@ import { tournamentKeys } from '@/services/tournament/tournament.query';
 import { acronym, convertRoundName, formatDateToTime, formatDateWithoutYear } from '@/utils';
 
 export const TournamentSchedule = () => {
+  const { formatMessage } = useLocale();
+
   const { id } = useParams();
 
   const [filterByRound, setFilterByRound] = useState<number | null>(null);
@@ -60,7 +63,7 @@ export const TournamentSchedule = () => {
             }}
             onClick={() => setFilterByRound(null)}
           >
-            Tất cả
+            {formatMessage({ id: 'app.tournament.schedule.filter.all' })}
           </Button>
           {tournament.data.rounds.map((round) => (
             <Button
@@ -134,7 +137,7 @@ export const TournamentSchedule = () => {
                       </Box>
                     ) : (
                       <Typography variant='body2' padding={1}>
-                        Chưa có lịch đấu
+                        {formatMessage({ id: 'app.tournament.schedule.no-schedule' })}
                       </Typography>
                     )}
                   </Box>

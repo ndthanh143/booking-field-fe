@@ -17,6 +17,7 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SetScheduleBox, UpdateScore } from '@/components';
 import { useBoolean, useMenu } from '@/hooks';
+import { useLocale } from '@/locales';
 import { CreateBookingDto } from '@/services/booking/booking.dto';
 import bookingService from '@/services/booking/booking.service';
 import { Match } from '@/services/match/match.dto';
@@ -25,6 +26,8 @@ import { tournamentKeys } from '@/services/tournament/tournament.query';
 import { convertRoundName, formatDate, formatDateToTime } from '@/utils';
 
 export const TournamentMatch = () => {
+  const { formatMessage } = useLocale();
+
   const { id } = useParams();
 
   const tournamentInstance = tournamentKeys.detail(Number(id));
@@ -122,7 +125,7 @@ export const TournamentMatch = () => {
                   <TextField
                     value={match.time && formatDate(match.time)}
                     disabled
-                    placeholder='Ngày thi đấu'
+                    placeholder={formatMessage({ id: 'app.tournament.match.date' })}
                     size='small'
                   />
                 </Grid>
@@ -130,7 +133,7 @@ export const TournamentMatch = () => {
                   <TextField
                     value={match.time && formatDateToTime(match.time)}
                     disabled
-                    placeholder='Giờ đấu'
+                    placeholder={formatMessage({ id: 'app.tournament.match.time' })}
                     size='small'
                   />
                 </Grid>
@@ -165,7 +168,7 @@ export const TournamentMatch = () => {
                 openUpdateSchedule();
               }}
             >
-              Cập nhật lịch đấu
+              {formatMessage({ id: 'app.tournament.match.update-schedule' })}
             </MenuItem>
             <MenuItem
               onClick={() => {
@@ -177,7 +180,7 @@ export const TournamentMatch = () => {
                 Boolean(selectedMatch.hostGoals || selectedMatch.guestGoals)
               }
             >
-              Cập nhật tỉ số
+              {formatMessage({ id: 'app.tournament.match.update-score' })}
             </MenuItem>
           </Menu>
         )}

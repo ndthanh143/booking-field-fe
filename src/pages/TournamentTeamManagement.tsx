@@ -20,6 +20,7 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { UploadImage } from '@/components';
 import { useMenu } from '@/hooks';
+import { useLocale } from '@/locales';
 import mediaService from '@/services/media/media.service';
 import { Team } from '@/services/team/team.dto';
 import teamService from '@/services/team/team.service';
@@ -30,6 +31,8 @@ export type BulkUpdateTeams = {
 };
 
 export const TournamentTeamManagement = () => {
+  const { formatMessage } = useLocale();
+
   const { id } = useParams();
 
   const [files, setFiles] = useState<Record<number, FileList>>({});
@@ -113,10 +116,20 @@ export const TournamentTeamManagement = () => {
                   </Grid>
                 </Tooltip>
                 <Grid item xs={12} md={9} display='flex' flexDirection='column' gap={1}>
-                  <TextField placeholder='Tên đội' fullWidth size='small' {...register(`teams.${index}.name`)} />
-                  <TextField placeholder='SĐT liên hệ' fullWidth size='small' {...register(`teams.${index}.contact`)} />
                   <TextField
-                    placeholder='Tên người liên hệ'
+                    placeholder={formatMessage({ id: 'app.tournament.team.name' })}
+                    fullWidth
+                    size='small'
+                    {...register(`teams.${index}.name`)}
+                  />
+                  <TextField
+                    placeholder={formatMessage({ id: 'app.tournament.team.phone' })}
+                    fullWidth
+                    size='small'
+                    {...register(`teams.${index}.contact`)}
+                  />
+                  <TextField
+                    placeholder={formatMessage({ id: 'app.tournament.team.contact-name' })}
                     fullWidth
                     size='small'
                     {...register(`teams.${index}.contactName`)}
@@ -138,8 +151,8 @@ export const TournamentTeamManagement = () => {
                     open={isOpen}
                     onClose={onClose}
                   >
-                    <MenuItem onClick={onClose}>Xem thông tin</MenuItem>
-                    <MenuItem onClick={onClose}>Xóa đội bóng</MenuItem>
+                    <MenuItem onClick={onClose}>{formatMessage({ id: 'app.tournament.team.action.info' })}</MenuItem>
+                    <MenuItem onClick={onClose}>{formatMessage({ id: 'app.tournament.team.action.delete' })}</MenuItem>
                   </Menu>
                 </Grid>
               </Grid>
@@ -157,7 +170,7 @@ export const TournamentTeamManagement = () => {
                 },
               }}
             >
-              Lưu thông tin
+              {formatMessage({ id: 'app.tournament.team.button.submit' })}
             </Button>
           </Box>
         </Box>

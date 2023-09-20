@@ -21,8 +21,11 @@ import {
 import { PropsWithChildren } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks';
+import { useLocale } from '@/locales';
 
 export const UserAccountLayout = ({ children }: PropsWithChildren) => {
+  const { formatMessage } = useLocale();
+
   const { profile, logout } = useAuth();
 
   const navigate = useNavigate();
@@ -105,7 +108,7 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
                       md: 'block',
                     },
                   }}
-                  primary='Hồ sơ của tôi'
+                  primary={formatMessage({ id: 'app.account.menu.profile' })}
                 />
               </ListItemButton>
               <ListItemButton
@@ -122,7 +125,7 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
                       md: 'block',
                     },
                   }}
-                  primary='Đặt sân của tôi'
+                  primary={formatMessage({ id: 'app.account.menu.my-booking' })}
                 />
               </ListItemButton>
               <ListItemButton
@@ -139,7 +142,7 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
                       md: 'block',
                     },
                   }}
-                  primary='Danh sách giải đấu'
+                  primary={formatMessage({ id: 'app.account.menu.tournament' })}
                 />
               </ListItemButton>
               <ListItemButton
@@ -156,7 +159,7 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
                       md: 'block',
                     },
                   }}
-                  primary='Thông báo'
+                  primary={formatMessage({ id: 'app.account.menu.notification' })}
                 />
               </ListItemButton>
               <ListItemButton
@@ -173,7 +176,7 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
                       md: 'block',
                     },
                   }}
-                  primary='Đổi mật khẩu'
+                  primary={formatMessage({ id: 'app.account.menu.change-password' })}
                 />
               </ListItemButton>
               <Divider sx={{ marginY: 2 }} />
@@ -188,7 +191,7 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
                       md: 'block',
                     },
                   }}
-                  primary='Đăng xuất'
+                  primary={formatMessage({ id: 'app.account.menu.logout' })}
                 />
               </ListItemButton>
             </List>

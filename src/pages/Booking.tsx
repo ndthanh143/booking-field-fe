@@ -9,6 +9,7 @@ import { SocketContext } from '@/App';
 import { OrderEnum } from '@/common/enums/order.enum';
 import { Stepper, TimeSelect, StripeContainer } from '@/components';
 import { useAuth } from '@/hooks';
+import { useLocale } from '@/locales';
 import { CreateBookingDto } from '@/services/booking/booking.dto';
 import { bookingKeys } from '@/services/booking/booking.query';
 import bookingService from '@/services/booking/booking.service';
@@ -19,7 +20,13 @@ import { convertCurrency, formatDate } from '@/utils';
 import { convertDecimalToTime, findFreeTime, convertToDate } from '@/utils';
 
 export const Booking = () => {
-  const stepList = ['Tùy chọn', 'Thanh toán', 'Hoàn tất'];
+  const { formatMessage } = useLocale();
+
+  const stepList = [
+    formatMessage({ id: 'app.booking.step.custom' }),
+    formatMessage({ id: 'app.booking.step.payment' }),
+    formatMessage({ id: 'app.booking.step.finish' }),
+  ];
 
   const navigate = useNavigate();
 
@@ -148,7 +155,7 @@ export const Booking = () => {
               paddingY={2}
               borderRadius={2}
             >
-              Loại: {pitches.data?.[0].pitchCategory.name}
+              {formatMessage({ id: 'app.booking.category' })}: {pitches.data?.[0].pitchCategory.name}
             </Typography>
             <Grid container border={1} borderColor='secondary.light' marginTop={1}>
               {pitches.data.map((item) => (
@@ -185,7 +192,7 @@ export const Booking = () => {
             <Box display='flex' justifyContent='center'>
               <DatePicker
                 value={selectedDate ?? null}
-                label='Chọn ngày muốn đặt'
+                label={formatMessage({ id: 'app.booking.day-picker.placeholder' })}
                 sx={{ marginY: 4 }}
                 format='DD/MM/YYYY'
                 disablePast
@@ -229,7 +236,9 @@ export const Booking = () => {
                 gap={1}
               >
                 <CheckCircle sx={{ color: 'secondary.light' }} />
-                <Typography color='success.contrastText'>Thời gian đã chọn:</Typography>
+                <Typography color='success.contrastText'>
+                  {formatMessage({ id: 'app.booking.time-picker.result' })}:
+                </Typography>
                 <Typography color='success.contrastText' fontWeight={500}>
                   {`${convertDecimalToTime(selectedTime[0])} - ${convertDecimalToTime(selectedTime[1])}`}
                 </Typography>
@@ -243,7 +252,7 @@ export const Booking = () => {
                 disabled={!selectedPitch || !selectedDate || !selectedTime}
                 size='large'
               >
-                Tiếp theo
+                {formatMessage({ id: 'app.booking.button.continue' })}
               </Button>
             </Box>
           </>
@@ -253,7 +262,7 @@ export const Booking = () => {
             <Grid item xs={12} md={6} width='100%'>
               <StripeContainer currency='vnd' amount={totalPrice} onSubmit={handleSubmit} />
               <Button onClick={handleBackStep} variant='outlined' color='secondary'>
-                Quay lại
+                {formatMessage({ id: 'app.booking.payment.button.return' })}
               </Button>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -296,17 +305,17 @@ export const Booking = () => {
 
               <Box marginY={2}>
                 <Box display='flex'>
-                  <Typography fontWeight={500}>Loại:</Typography>
+                  <Typography fontWeight={500}>{formatMessage({ id: 'app.booking.info.category' })}:</Typography>
                   <Typography marginX={1}>{pitches.data?.[0].pitchCategory.name}</Typography>
                 </Box>
                 {selectedDate && (
                   <Box display='flex'>
-                    <Typography fontWeight={500}>Ngày:</Typography>
+                    <Typography fontWeight={500}>{formatMessage({ id: 'app.booking.info.day' })}:</Typography>
                     <Typography marginX={1}>{formatDate(selectedDate)}</Typography>
                   </Box>
                 )}
                 <Box display='flex'>
-                  <Typography fontWeight={500}>Thời gian:</Typography>
+                  <Typography fontWeight={500}>{formatMessage({ id: 'app.booking.info.time' })}:</Typography>
                   {selectedTime && (
                     <Typography marginX={1}>
                       {convertDecimalToTime(selectedTime[0])} - {convertDecimalToTime(selectedTime[1])}
@@ -316,25 +325,24 @@ export const Booking = () => {
               </Box>
               <Divider sx={{ marginTop: 1 }} />
               <Box display='flex' justifyContent='space-between' paddingY={2}>
-                <Typography fontWeight={500}>Giá:</Typography>
+                <Typography fontWeight={500}>{formatMessage({ id: 'app.booking.info.price' })}:</Typography>
                 <Typography>{selectedPitch && convertCurrency(selectedPitch.price)}</Typography>
               </Box>
               <Divider />
               <Box display='flex' justifyContent='space-between' paddingY={2}>
-                <Typography fontWeight={500}>Tổng cộng:</Typography>
+                <Typography fontWeight={500}>{formatMessage({ id: 'app.booking.info.total-price' })}:</Typography>
                 <Typography fontWeight={700}>{convertCurrency(totalPrice)}</Typography>
               </Box>
               <Box display='flex' alignItems='center'>
                 <ReportOutlined />
                 <Typography variant='caption' marginX={1}>
-                  Mọi thay đổi hoặc hủy bỏ đều do địa điểm quyết định và thường không được chấp thuận.
+                  {formatMessage({ id: 'app.booking.note-cancel' })}
                 </Typography>
               </Box>
               <Box display='flex' alignItems='center'>
                 <ReportOutlined />
                 <Typography variant='caption' marginX={1}>
-                  Bằng cách đặt hàng, bạn đồng ý với Điều khoản và Điều kiện & Chính sách quyền riêng tư của Playfinder
-                  cũng như điều khoản sử dụng của địa điểm
+                  {formatMessage({ id: 'app.booking.note-rules' })}
                 </Typography>
               </Box>
             </Grid>

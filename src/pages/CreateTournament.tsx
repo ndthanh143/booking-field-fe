@@ -19,12 +19,12 @@ import { toast } from 'react-toastify';
 import { mixed, number, object, string } from 'yup';
 import { UploadImage } from '@/components';
 import { useAuth, useDebounce } from '@/hooks';
+import { useLocale } from '@/locales';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
 import { CreateTournamentDto, TournamentTypeEnum } from '@/services/tournament/tournament.dto';
 import tournamentService from '@/services/tournament/tournament.service';
 import { Venue } from '@/services/venue/venue.dto';
 import { venueKeys } from '@/services/venue/venue.query';
-import { createTournament } from '@/utils';
 
 export enum StateEnum {
   Private = 'private',
@@ -42,6 +42,8 @@ const schema = object({
 });
 
 export const CreateTournament = () => {
+  const { formatMessage } = useLocale();
+
   const { profile } = useAuth();
 
   const navigate = useNavigate();
@@ -88,14 +90,19 @@ export const CreateTournament = () => {
 
   const state = [
     {
-      label: 'Riêng tư',
+      label: formatMessage({ id: 'app.tournament.create-tournament.mode.private' }),
       value: StateEnum.Private,
     },
     {
-      label: 'Công khai',
+      label: formatMessage({ id: 'app.tournament.create-tournament.mode.public' }),
       value: StateEnum.Public,
     },
   ];
+
+  const humanTournamentTypeName = {
+    [TournamentTypeEnum.Knockout]: formatMessage({ id: 'app.tournament.create-tournament.type.knockout' }),
+    [TournamentTypeEnum.RoundRobin]: formatMessage({ id: 'app.tournament.create-tournament.type.round-robin' }),
+  };
 
   const onSubmitHandler = (data: CreateTournamentDto) => mutateCreateTournament(data);
 
@@ -112,13 +119,13 @@ export const CreateTournament = () => {
   return (
     profile && (
       <Box component='form' onSubmit={handleSubmit(onSubmitHandler)} padding={4}>
-        <Typography variant='h5'>Tạo giải</Typography>
+        <Typography variant='h5'>{formatMessage({ id: 'app.tournament.create-tournament.heading' })}</Typography>
         <Typography variant='caption' fontStyle='italic'>
-          Vui lòng nhập thông tin hợp lệ cho các trường được yêu cầu
+          {formatMessage({ id: 'app.tournament.create-tournament.sub-heading' })}
         </Typography>
         <Grid container spacing={4} paddingY={2}>
           <Grid item xs={12} md={4} height={240}>
-            <Typography variant='body2'>Hình giải đấu</Typography>
+            <Typography variant='body2'>{formatMessage({ id: 'app.tournament.create-tournament.cover' })} </Typography>
             <Box width='100%' height='100%' paddingBottom={2}>
               <UploadImage
                 files={files}
@@ -144,7 +151,7 @@ export const CreateTournament = () => {
                     },
                   }}
                 >
-                  Tên giải đấu
+                  {formatMessage({ id: 'app.tournament.create-tournament.name' })}
                 </Typography>
                 <TextField fullWidth size='small' {...register('name')} />
                 {errors.name && (
@@ -163,7 +170,7 @@ export const CreateTournament = () => {
                     },
                   }}
                 >
-                  Số điện thoại
+                  {formatMessage({ id: 'app.tournament.create-tournament.phone' })}
                 </Typography>
                 <TextField size='small' fullWidth />
               </Grid>
@@ -177,7 +184,7 @@ export const CreateTournament = () => {
                     },
                   }}
                 >
-                  Chế độ
+                  {formatMessage({ id: 'app.tournament.create-tournament.mode' })}
                 </Typography>
                 <Select defaultValue={StateEnum.Private} size='small' fullWidth {...register('mode')}>
                   {state.map((item) => (
@@ -202,7 +209,7 @@ export const CreateTournament = () => {
                     },
                   }}
                 >
-                  Địa điểm
+                  {formatMessage({ id: 'app.tournament.create-tournament.address' })}
                 </Typography>
                 <Autocomplete
                   id='country-select-demo'
@@ -248,7 +255,7 @@ export const CreateTournament = () => {
               }}
               marginBottom={1}
             >
-              Hình thức thi đấu
+              {formatMessage({ id: 'app.tournament.create-tournament.type' })}
             </Typography>
             {errors.type && (
               <Typography variant='caption' color='error'>
@@ -265,7 +272,7 @@ export const CreateTournament = () => {
                 },
               }}
             >
-              {Object.entries(TournamentTypeEnum).map(([key, value]) => (
+              {Object.entries(TournamentTypeEnum).map(([_, value]) => (
                 <Box
                   display='flex'
                   justifyContent='center'
@@ -282,7 +289,7 @@ export const CreateTournament = () => {
                   }}
                   key={value}
                 >
-                  {key}
+                  {humanTournamentTypeName[value]}
                 </Box>
               ))}
             </Box>
@@ -295,7 +302,7 @@ export const CreateTournament = () => {
               }}
               marginTop={2}
             >
-              Số đội tham gia [2 - 128]
+              {`${formatMessage({ id: 'app.tournament.create-tournament.participant' })} [2 - 128]`}
             </Typography>
             <TextField fullWidth type='number' size='small' defaultValue={2} {...register('totalTeam')} />
             {errors.totalTeam && (
@@ -305,7 +312,8 @@ export const CreateTournament = () => {
             )}
             {type && (
               <Typography marginY={2} paddingY={1} paddingX={2} bgcolor='secondary.light' borderRadius={1}>
-                Đối với cấu hình này thì số trận đấu của giải là {totalMatches(watch('totalTeam'), type)}
+                {formatMessage({ id: 'app.tournament.create-tournament.total-match' })}
+                {totalMatches(watch('totalTeam'), type)}
               </Typography>
             )}
             <Box marginY={2}>
@@ -317,9 +325,11 @@ export const CreateTournament = () => {
                   },
                 }}
               >
-                Loại sân của giải đấu
+                {formatMessage({ id: 'app.tournament.create-tournament.pitch.type.title' })}
               </Typography>
-              <Typography variant='caption'>Tương ứng số lượng người thi đấu trên sân của mỗi đội.</Typography>
+              <Typography variant='caption'>
+                {formatMessage({ id: 'app.tournament.create-tournament.pitch.type.sub-title' })}
+              </Typography>
               {pitchCategories && (
                 <Select defaultValue={pitchCategories.data[0].id} {...register('pitchCategory')} fullWidth>
                   {pitchCategories.data.map((item) => (
@@ -349,7 +359,7 @@ export const CreateTournament = () => {
           type='submit'
           disabled={!pitchCategories}
         >
-          Tạo giải
+          {formatMessage({ id: 'app.tournament.create-tournament.button.create' })}
         </Button>
         <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isLoading}>
           <CircularProgress color='inherit' />
