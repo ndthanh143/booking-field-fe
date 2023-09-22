@@ -31,7 +31,7 @@ export const Search = () => {
 
   const [page, setPage] = useState(1);
 
-  const pitchCategoryInstace = pitchCategoryKeys.list({});
+  const pitchCategoryInstace = pitchCategoryKeys.list();
   const { data: pitchCategories } = useQuery({ ...pitchCategoryInstace, staleTime: STALE_TIME });
 
   const venueInstance = venueKeys.search({

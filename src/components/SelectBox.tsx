@@ -1,5 +1,4 @@
 import { Autocomplete, InputBase, Popper } from '@mui/material';
-import { motion } from 'framer-motion';
 import { PropsWithChildren } from 'react';
 import { defaultLocations } from '@/common/datas/location.data';
 import { useBoolean } from '@/hooks';

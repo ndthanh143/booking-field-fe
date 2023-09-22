@@ -102,7 +102,10 @@ export const Dashboard = () => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} md={4}>
-        <Card sx={{ backgroundImage: 'linear-gradient(to right, #0606ab, #4f4fff)', color: 'primary.contrastText' }}>
+        <Card
+          variant='outlined'
+          sx={{ backgroundImage: 'linear-gradient(to right, #0606ab, #4f4fff)', color: 'primary.contrastText' }}
+        >
           <CardContent>
             <CreditCard />
             <Box>
@@ -113,7 +116,10 @@ export const Dashboard = () => {
         </Card>
       </Grid>
       <Grid item xs={12} md={4}>
-        <Card sx={{ backgroundImage: 'linear-gradient(to right, #025e38, #18bb78)', color: 'primary.contrastText' }}>
+        <Card
+          variant='outlined'
+          sx={{ backgroundImage: 'linear-gradient(to right, #025e38, #18bb78)', color: 'primary.contrastText' }}
+        >
           <CardContent>
             <People />
             <Typography>
@@ -124,7 +130,7 @@ export const Dashboard = () => {
         </Card>
       </Grid>
       <Grid item xs={12} md={8} minHeight={{ md: 300, lg: '75vh' }}>
-        <Card sx={{ height: '100%' }}>
+        <Card variant='outlined' sx={{ height: '100%' }}>
           <CardContent>
             <Typography fontWeight={500}>Thu nhập hàng tháng</Typography>
             <Typography variant='caption' fontStyle='italic' fontWeight={200}>
@@ -167,7 +173,7 @@ export const Dashboard = () => {
         </Card>
       </Grid>
       <Grid item xs={12} md={4} minHeight={{ md: 300, lg: '75vh' }}>
-        <Card sx={{ height: '100%' }}>
+        <Card variant='outlined' sx={{ height: '100%' }}>
           <CardContent>
             <Typography textAlign='center' fontWeight={500} paddingBottom={4}>
               Thống kê số lượng sân được sử dụng
