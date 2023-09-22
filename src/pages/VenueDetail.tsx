@@ -29,7 +29,6 @@ export const VenueDetail = () => {
   const operatingRef = useRef() as MutableRefObject<HTMLDivElement>;
 
   const [tab, setTab] = useState(0);
-  const [page, _] = useState(1);
 
   const { slug } = useParams();
 
@@ -42,7 +41,7 @@ export const VenueDetail = () => {
   const pitchInstance = pitchKeys.list({ venueId: venue?.id });
   const { data: pitches } = useQuery({ ...pitchInstance, enabled: !!venue });
 
-  const ratingInstance = ratingKeys.list({ venueId: venue?.id, page, limit: RATING_PAGE_LIMIT });
+  const ratingInstance = ratingKeys.list({ venueId: venue?.id, page: 1, limit: RATING_PAGE_LIMIT });
   const { data: ratings } = useQuery({ ...ratingInstance, enabled: !!venue });
 
   const center = useMemo(

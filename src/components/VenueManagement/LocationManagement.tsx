@@ -1,9 +1,9 @@
 import { Backdrop, Box, Button, CircularProgress } from '@mui/material';
 import { useState } from 'react';
+import { MapPlace } from '..';
 import { LocationPicker } from '../LocationPicker';
 import { useVenueByUser, useVenueMutation } from '@/hooks';
 import { LocationMap } from '@/services/venue/venue.dto';
-const { MapPlace } = await import('../MapPlace');
 
 export const LocationManagement = () => {
   const { data: venue } = useVenueByUser();
