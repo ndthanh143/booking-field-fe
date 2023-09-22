@@ -43,7 +43,7 @@ export const AccountNotification = () => {
         </Typography>
         {notifications && notifications.data.length > 0 ? (
           notifications.data.map((notification) => (
-            <Card sx={{ padding: 2, marginBottom: 2 }}>
+            <Card variant='outlined' sx={{ padding: 2, marginBottom: 2 }} key={notification.id}>
               <Box paddingY={2}>
                 <Typography fontWeight={500}>{notification.title}</Typography>
                 <Typography>{notification.message}</Typography>

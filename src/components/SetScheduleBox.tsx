@@ -1,5 +1,18 @@
 import { AccessTime, Close } from '@mui/icons-material';
-import { Box, Button, Divider, MenuItem, Modal, Select, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Modal,
+  OutlinedInput,
+  Select,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
@@ -12,6 +25,7 @@ import { useLocale } from '@/locales';
 import { CreateBookingDto } from '@/services/booking/booking.dto';
 import { bookingKeys } from '@/services/booking/booking.query';
 import { pitchKeys } from '@/services/pitch/pitch.query';
+import { Tournament } from '@/services/tournament/tournament.dto';
 import { Venue } from '@/services/venue/venue.dto';
 import { venueKeys } from '@/services/venue/venue.query';
 import { convertDecimalToTime, convertToDate, findFreeTime } from '@/utils';
@@ -21,9 +35,10 @@ export type SetScheduleBoxProps = {
   onClose: () => void;
   onSubmit: (data: CreateBookingDto) => void;
   data: Venue;
+  tournament: Tournament;
 };
 
-export const SetScheduleBox = ({ data, isOpen, onClose, onSubmit }: SetScheduleBoxProps) => {
+export const SetScheduleBox = ({ data, tournament, isOpen, onClose, onSubmit }: SetScheduleBoxProps) => {
   const { formatMessage } = useLocale();
 
   const { value, setTrue, setFalse } = useBoolean(false);
@@ -35,7 +50,7 @@ export const SetScheduleBox = ({ data, isOpen, onClose, onSubmit }: SetScheduleB
   const venueInstance = venueKeys.detail(data.slug);
   const { data: venue } = useQuery({ ...venueInstance });
 
-  const pitchInstance = pitchKeys.list({ venueId: venue?.id, pitchCategoryId: 2 });
+  const pitchInstance = pitchKeys.list({ venueId: venue?.id, pitchCategoryId: tournament.pitchCategory.id });
   const { data: pitches } = useQuery({
     ...pitchInstance,
     enabled: !!venue,
@@ -133,28 +148,26 @@ export const SetScheduleBox = ({ data, isOpen, onClose, onSubmit }: SetScheduleB
               />
             </Box>
             <Box marginY={3}>
-              <Button
-                variant='contained'
-                color='secondary'
+              <Typography>{formatMessage({ id: 'app.tournament.match.update-schedule.box.time' })}</Typography>
+              <OutlinedInput
+                size='small'
                 fullWidth
-                size='large'
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  borderBottomLeftRadius: 0,
-                  borderBottomRightRadius: 0,
-                }}
-                disabled={!(selectedPitch && selectedDate)}
-                onClick={setTrue}
-              >
-                {formatMessage({ id: 'app.tournament.match.update-schedule.box.time' })}
-                <AccessTime />
-              </Button>
-              {selectedTime && (
-                <Typography bgcolor='secondary.light' padding={1} boxShadow={2}>{`${convertDecimalToTime(
-                  selectedTime[0],
-                )} - ${convertDecimalToTime(selectedTime[1])}`}</Typography>
-              )}
+                id='outlined-choose-time'
+                readOnly
+                value={
+                  selectedTime
+                    ? `${convertDecimalToTime(selectedTime[0])} - ${convertDecimalToTime(selectedTime[1])}`
+                    : ''
+                }
+                placeholder='hh:mm'
+                endAdornment={
+                  <InputAdornment position='end'>
+                    <IconButton aria-label='toggle password visibility' onClick={setTrue} edge='end'>
+                      <AccessTime />
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
             </Box>
             <Box marginY={2} display='flex'>
               <Button

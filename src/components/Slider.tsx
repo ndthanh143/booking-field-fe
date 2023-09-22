@@ -65,8 +65,20 @@ const SliderNextArrow = ({ onClick }: ArrowProps) => {
 
 export const Slider = ({ children, ...props }: SliderProps) => {
   return (
-    <ReactSlider prevArrow={<SliderPrevArrow />} nextArrow={<SliderNextArrow />} {...props}>
+    <Box
+      component={ReactSlider}
+      prevArrow={<SliderPrevArrow />}
+      nextArrow={<SliderNextArrow />}
+      sx={{
+        '.slick-list': { mx: -1.5 },
+        '.slick-track': {
+          display: 'flex',
+          columnGap: 3,
+        },
+      }}
+      {...props}
+    >
       {children}
-    </ReactSlider>
+    </Box>
   );
 };

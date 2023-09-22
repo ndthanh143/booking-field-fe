@@ -1,4 +1,6 @@
 export const vi_search = {
+  'app.search.card.open': 'Mở cửa',
+  'app.search.card.close': 'Đóng cửa',
   'search.tool.filter.title': 'Bộ lọc',
   'search.tool.filter.price.range': 'Khoảng giá',
   'search.tool.filter.price.min': 'Giá tối thiểu',

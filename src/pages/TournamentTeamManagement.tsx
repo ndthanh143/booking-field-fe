@@ -1,6 +1,7 @@
 import { Settings } from '@mui/icons-material';
 import {
   Backdrop,
+  Badge,
   Box,
   Button,
   CircularProgress,
@@ -79,39 +80,36 @@ export const TournamentTeamManagement = () => {
               <Grid container spacing={2} paddingY={4}>
                 <Tooltip title='Nhấp vào để thay đổi hình ảnh'>
                   <Grid item xs={12} md={2} display='flex' justifyContent='center' flexWrap='wrap'>
-                    <Grid
-                      item
-                      xs={4}
-                      md={12}
-                      marginX={2}
-                      maxHeight={140}
-                      position='relative'
-                      sx={{
-                        ':before': {
-                          content: `"${index + 1}"`,
-                          position: 'absolute',
-                          zIndex: 1,
-                          top: 0,
-                          left: 0,
-                          bgcolor: 'primary.main',
-                          paddingX: 2,
-                          paddingY: 1,
-                          borderRadius: 4,
-                          color: 'primary.contrastText',
-                        },
-                      }}
-                    >
-                      <UploadImage
-                        number={team.id}
-                        files={files[team.id]}
-                        url={
-                          team.avatar ||
-                          'https://www.seekpng.com/png/detail/28-289657_espn-soccer-team-logo-default.png'
-                        }
-                        onChange={(e) =>
-                          setFiles((prev) => ({ ...prev, ...(e.target.files && { [team.id]: e.target.files }) }))
-                        }
-                      />
+                    <Grid item xs={4} md={12} marginX={2} maxHeight={140} position='relative'>
+                      <Badge
+                        badgeContent={index + 1}
+                        color='primary'
+                        anchorOrigin={{
+                          vertical: 'top',
+                          horizontal: 'left',
+                        }}
+                        sx={{
+                          '.MuiBadge-badge': {
+                            width: 30,
+                            height: 30,
+                            borderRadius: '50%',
+                          },
+                          width: '100%',
+                          height: '100%',
+                        }}
+                      >
+                        <UploadImage
+                          number={team.id}
+                          files={files[team.id]}
+                          url={
+                            team.avatar ||
+                            'https://www.seekpng.com/png/detail/28-289657_espn-soccer-team-logo-default.png'
+                          }
+                          onChange={(e) =>
+                            setFiles((prev) => ({ ...prev, ...(e.target.files && { [team.id]: e.target.files }) }))
+                          }
+                        />
+                      </Badge>
                     </Grid>
                   </Grid>
                 </Tooltip>

@@ -21,7 +21,7 @@ const schema = object({
 });
 
 export const UpdatePitchBox = ({ pitch, isOpen, onClose, onSubmit }: SearchSortProps) => {
-  const pitchCategoryInstance = pitchCategoryKeys.list({});
+  const pitchCategoryInstance = pitchCategoryKeys.list();
 
   const { data: categories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 

@@ -124,19 +124,12 @@ export const MapPlace = ({ onChange }: MapPlaceProps) => {
 
         if (newValue) {
           const placeService = new google.maps.places.PlacesService(document.createElement('div'));
-          placeService.getDetails({ placeId: newValue.place_id }, (place, _) => {
+          placeService.getDetails({ placeId: newValue.place_id }, (place) => {
             if (place?.geometry?.location) {
               const lat = place.geometry.location.lat();
               const lng = place.geometry.location.lng();
               onChange({ lat, lng });
             }
-            // if (status === google.maps.places.PlacesServiceStatus.OK) {
-            //   if (place?.geometry?.location) {
-            //     const lat = place.geometry.location.lat();
-            //     const lng = place.geometry.location.lng();
-            //     onChange({ lat, lng });
-            //   }
-            // }
           });
         } else {
           onChange(null);

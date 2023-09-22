@@ -18,6 +18,7 @@ export const useAuth = () => {
   } = useMutation({
     mutationFn: (payload: LoginInput) => authService.login(payload),
     onSuccess: () => {
+      toast.success('Login successfully');
       window.location.href = '/';
       refetch();
     },

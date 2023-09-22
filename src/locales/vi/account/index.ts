@@ -8,7 +8,6 @@ export const vi_account = {
   'app.account.menu.profile.fullname': 'Họ và tên',
   'app.account.menu.profile.first-name': 'Họ',
   'app.account.menu.profile.last-name': 'Tên',
-
   'app.account.menu.profile.phone': 'Số điện thoại',
 
   'app.account.menu.my-booking': 'Đặt sân của tôi',
@@ -24,6 +23,7 @@ export const vi_account = {
   'app.account.menu.my-booking.detail': 'Chi tiết',
 
   'app.account.menu.tournament': 'Danh sách giải đấu',
+  'app.account.menu.tournament.no-result': 'Bạn chưa tạo giải đấu nào',
   'app.account.menu.tournament.title': 'Giải đấu đã tạo',
   'app.account.menu.tournament.button.create': 'Tạo giải',
 

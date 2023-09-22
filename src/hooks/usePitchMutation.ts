@@ -12,7 +12,7 @@ export const usePitchMutation = () => {
   } = useMutation({
     mutationFn: (id: number) => pitchService.delete(id),
     onSuccess: () => {
-      toast.success('Xóa sân bóng thành công');
+      toast.success('Delete pitch successfully');
     },
   });
 
@@ -24,7 +24,7 @@ export const usePitchMutation = () => {
   } = useMutation({
     mutationFn: (data: CreatePitchDto) => pitchService.create(data),
     onSuccess: () => {
-      toast.success('Thêm sân bóng thành công');
+      toast.success('Add pitch successfully');
     },
   });
 
@@ -36,7 +36,7 @@ export const usePitchMutation = () => {
   } = useMutation({
     mutationFn: (payload: UpdatePitchPayload) => pitchService.update(payload),
     onSuccess: () => {
-      toast.success('Cập nhật sân bóng thành công');
+      toast.success('Update pitch successfully');
     },
   });
   return {

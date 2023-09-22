@@ -159,34 +159,32 @@ export const Booking = () => {
             </Typography>
             <Grid container border={1} borderColor='secondary.light' marginTop={1}>
               {pitches.data.map((item) => (
-                <>
-                  <Grid item xs={4} md={3} position='relative' key={item.id} marginY={2} paddingX={4}>
-                    <Box onClick={() => setSelectedPitch(item)}>
-                      <Box
-                        width='100%'
-                        height={100}
-                        borderRadius={4}
-                        sx={{
-                          objectFit: 'cover',
-                          cursor: 'pointer',
-                          opacity: item === selectedPitch ? 1 : 0.5,
-                          ':hover': {
-                            opacity: 1,
-                          },
-                          boxShadow: item === selectedPitch ? 10 : 0,
-                        }}
-                        bgcolor='primary.light'
-                        display='flex'
-                        justifyContent='center'
-                        alignItems='center'
-                      >
-                        <Typography variant='h5' color='primary.contrastText'>
-                          {item.name}
-                        </Typography>
-                      </Box>
+                <Grid item xs={4} md={3} position='relative' key={item.id} marginY={2} paddingX={4}>
+                  <Box onClick={() => setSelectedPitch(item)}>
+                    <Box
+                      width='100%'
+                      height={100}
+                      borderRadius={4}
+                      sx={{
+                        objectFit: 'cover',
+                        cursor: 'pointer',
+                        opacity: item === selectedPitch ? 1 : 0.5,
+                        ':hover': {
+                          opacity: 1,
+                        },
+                        boxShadow: item === selectedPitch ? 10 : 0,
+                      }}
+                      bgcolor='primary.light'
+                      display='flex'
+                      justifyContent='center'
+                      alignItems='center'
+                    >
+                      <Typography variant='h5' color='primary.contrastText'>
+                        {item.name}
+                      </Typography>
                     </Box>
-                  </Grid>
-                </>
+                  </Box>
+                </Grid>
               ))}
             </Grid>
             <Box display='flex' justifyContent='center'>
