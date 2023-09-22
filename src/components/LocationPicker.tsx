@@ -22,7 +22,7 @@ export const LocationPicker = ({ location, onChange }: LocationPickerProps) => {
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
   });
 
-  const [map, setMap] = useState<google.maps.Map | null>(null);
+  const [_, setMap] = useState<google.maps.Map | null>(null);
 
   const center = useMemo(() => location, [location]);
 
