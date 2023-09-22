@@ -1,6 +1,7 @@
 import { Box, Button, Card, Chip, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { noResultImage } from '@/assets/images/common';
 import { Link } from '@/components';
 import { useAuth } from '@/hooks';
 import { useLocale } from '@/locales';
@@ -14,7 +15,7 @@ export const AccountTournament = () => {
 
   const { profile } = useAuth();
 
-  const tournamentInstance = tournamentKeys.list({});
+  const tournamentInstance = tournamentKeys.currentUserList();
   const { data: tournaments } = useQuery(tournamentInstance);
 
   const humanTournamentTypeName = {
@@ -33,10 +34,10 @@ export const AccountTournament = () => {
             {formatMessage({ id: 'app.account.menu.tournament.button.create' })}
           </Button>
         </Box>
-        {tournaments &&
+        {tournaments && tournaments.data.length > 0 ? (
           tournaments.data.map((tournament) => (
-            <Link href={`/league/${tournament.id}/schedule`}>
-              <Card sx={{ padding: 2, marginBottom: 2 }}>
+            <Link href={`/league/${tournament.id}/schedule`} key={tournament.id}>
+              <Card variant='outlined' sx={{ padding: 2, marginBottom: 2 }}>
                 <Box display='flex' alignItems='center' key={tournament.id}>
                   <Box
                     component='img'
@@ -67,7 +68,13 @@ export const AccountTournament = () => {
                 </Box>
               </Card>
             </Link>
-          ))}
+          ))
+        ) : (
+          <Box marginY={2}>
+            <Box component='img' src={noResultImage.src} alt={noResultImage.name} />
+            <Typography>{formatMessage({ id: 'app.account.menu.tournament.no-result' })}</Typography>
+          </Box>
+        )}
       </Box>
     )
   );

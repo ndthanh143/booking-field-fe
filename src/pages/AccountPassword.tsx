@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, TextField, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -27,8 +27,8 @@ export const AccountPassword = () => {
     resolver: yupResolver(schema),
   });
 
-  const { mutate } = useMutation({
-    mutationFn: userService.changePassword,
+  const { mutate, isError } = useMutation({
+    mutationFn: (data: ChangePasswordPayload) => userService.changePassword(data),
     onSuccess: () => {
       toast.success('Update password successfully');
       reset();
@@ -41,6 +41,8 @@ export const AccountPassword = () => {
   return (
     <>
       <Box marginLeft={4} component='form' onSubmit={handleSubmit(onSubmitHandler)}>
+        {isError && <Alert severity='error'>Password is not correct</Alert>}
+
         <Box marginY={2}>
           <Typography>{formatMessage({ id: 'app.account.menu.change-password.old-password' })}</Typography>
           <TextField type='password' fullWidth placeholder='Nhập mật khẩu cũ' {...register('currentPassword')} />

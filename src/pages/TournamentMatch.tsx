@@ -49,7 +49,7 @@ export const TournamentMatch = () => {
       }
     },
     onSuccess: () => {
-      toast.success('Set lịch thành công');
+      toast.success('Update schedule successfully');
       queryClient.invalidateQueries(tournamentInstance.queryKey);
       setSelectedMatch(null);
     },
@@ -62,9 +62,10 @@ export const TournamentMatch = () => {
     tournament.data.rounds && (
       <Container maxWidth='xl'>
         {tournament.data.rounds.map((round, roundId) => (
-          <Box>
+          <Box key={round.id}>
             {round.matches.map((match, matchId) => (
               <Grid
+                key={match.id}
                 container
                 alignItems='center'
                 paddingY={2}
@@ -187,6 +188,7 @@ export const TournamentMatch = () => {
         {selectedMatch && (
           <SetScheduleBox
             data={tournament.data.venue}
+            tournament={tournament.data}
             isOpen={isOpenUpdateSchedule}
             onClose={() => {
               closeUpdateSchedule();

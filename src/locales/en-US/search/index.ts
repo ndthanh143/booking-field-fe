@@ -1,4 +1,6 @@
 export const enUS_search = {
+  'app.search.card.open': 'Open',
+  'app.search.card.close': 'Close',
   'search.tool.filter.title': 'Filter',
   'search.tool.filter.price.range': 'Price range',
   'search.tool.filter.price.min': 'Min price',

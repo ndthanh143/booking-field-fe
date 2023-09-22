@@ -16,7 +16,7 @@ export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
   const { formatMessage } = useLocale();
 
   const { value, setTrue, setFalse } = useBoolean(false);
-  const [swiper, setSwiper] = useState<SwiperType>();
+  const [_, setSwiper] = useState<SwiperType | null>(null);
 
   return (
     <Grid container borderRadius={4} overflow='hidden' height={500}>
@@ -80,15 +80,9 @@ export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
                 cursor: 'pointer',
               }}
               position='relative'
+              key={item.imagePath}
             >
-              <Box
-                component='img'
-                width='100%'
-                height='100%'
-                sx={{ objectFit: 'cover' }}
-                src={item.imagePath}
-                key={item.imagePath}
-              />
+              <Box component='img' width='100%' height='100%' sx={{ objectFit: 'cover' }} src={item.imagePath} />
             </Box>
           ))}
         </Box>
@@ -115,18 +109,25 @@ export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
         aria-describedby='parent-modal-description'
         sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
       >
-        <Box maxWidth={800} maxHeight={800} paddingX={3} paddingY={3} bgcolor='primary.contrastText' borderRadius={4}>
+        <Box
+          maxWidth={{ xs: 500, md: 800 }}
+          maxHeight={800}
+          paddingX={3}
+          paddingY={3}
+          bgcolor='primary.contrastText'
+          borderRadius={4}
+        >
           <Box maxHeight={500} overflow='hidden' borderRadius={4} position='relative'>
-            <Swiper
-              spaceBetween={50}
-              slidesPerView={1}
-              centeredSlides={true}
-              modules={[Navigation, Thumbs]}
-              thumbs={{ swiper }}
-            >
+            <Swiper spaceBetween={50} slidesPerView={1} centeredSlides={true} modules={[Navigation, Thumbs]}>
               {imageList.map((item) => (
                 <SwiperSlide key={item.imagePath}>
-                  <Box component='img' src={item.imagePath} width='100%' />
+                  <Box
+                    component='img'
+                    src={item.imagePath}
+                    width='100%'
+                    height={{ xs: 300, md: 500 }}
+                    sx={{ objectFit: 'cover' }}
+                  />
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -147,13 +148,19 @@ export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
           <Box maxHeight={50} overflow='hidden' marginTop={4}>
             <Swiper
               spaceBetween={10}
-              slidesPerView={8}
+              slidesPerView={7}
               modules={[Navigation, Thumbs]}
               onSwiper={(swiper) => setSwiper(swiper)}
             >
               {imageList.map((item) => (
                 <SwiperSlide key={item.imagePath}>
-                  <Box component='img' src={item.imagePath} width='100%' height='100%' sx={{ cursor: 'pointer' }} />
+                  <Box
+                    component='img'
+                    src={item.imagePath}
+                    width='100%'
+                    minHeight={70}
+                    sx={{ cursor: 'pointer', objectFit: 'cover' }}
+                  />
                 </SwiperSlide>
               ))}
             </Swiper>

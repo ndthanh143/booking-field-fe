@@ -1,7 +1,7 @@
 import { Image } from '@mui/icons-material';
 import PlaceIcon from '@mui/icons-material/Place';
 import StarIcon from '@mui/icons-material/Star';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Chip, Grid, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { Link } from './Link';
@@ -71,46 +71,24 @@ export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
           >
             <Box>
               <Typography variant='h6'>{data.name}</Typography>
-              <Box display='flex' gap={2} marginY={1} flexWrap='wrap'>
+              <Box display='flex' gap={1} marginY={1} flexWrap='wrap'>
                 {pitchCategories?.data.map((pitchCategory) => (
-                  <Typography
-                    variant='body2'
-                    bgcolor='primary.main'
-                    color='primary.contrastText'
-                    borderRadius={2}
-                    paddingX={1}
-                    lineHeight={1.8}
-                  >
-                    {pitchCategory.name}
-                  </Typography>
+                  <Chip label={pitchCategory.name} color='primary' key={pitchCategory.id} />
                 ))}
               </Box>
               <Box gap={2}>
                 <Box display='flex' alignItems='center' gap={1} marginY={1}>
-                  <Typography variant='body2'>Mở cửa:</Typography>
-                  <Typography
-                    variant='body2'
-                    lineHeight={2}
-                    bgcolor='secondary.light'
-                    width='fit-content'
-                    paddingX={1}
-                    borderRadius={2}
-                  >
-                    {convertToAMPM(data.openAt)}
+                  <Typography variant='body2' fontWeight={500}>
+                    {formatMessage({ id: 'app.search.card.open' })}:
                   </Typography>
+
+                  <Chip label={convertToAMPM(data.openAt)} />
                 </Box>
                 <Box display='flex' alignItems='center' gap={1} marginY={1}>
-                  <Typography variant='body2'>Đóng cửa:</Typography>
-                  <Typography
-                    variant='body2'
-                    lineHeight={2}
-                    bgcolor='secondary.light'
-                    width='fit-content'
-                    paddingX={1}
-                    borderRadius={2}
-                  >
-                    {convertToAMPM(data.closeAt)}
+                  <Typography variant='body2' fontWeight={500}>
+                    {formatMessage({ id: 'app.search.card.close' })}:
                   </Typography>
+                  <Chip label={convertToAMPM(data.closeAt)} />
                 </Box>
               </Box>
             </Box>
