@@ -9,6 +9,11 @@ const tournamentService = {
 
     return data;
   },
+  getByCurrentUser: async (query: BaseQuery) => {
+    const { data } = await axiosInstance.get<TournamentsResponse>('/tournaments/me', { params: query });
+
+    return data;
+  },
   getOne: async (id: number) => {
     const { data } = await axiosInstance.get<TournamentResponse>(`/tournaments/${id}`);
 

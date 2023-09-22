@@ -23,7 +23,7 @@ const schema = object({
 });
 
 export const AddNewPitchBox = ({ venue, isOpen, onClose, onSubmit }: AddNewPitchBox) => {
-  const pitchCategoryInstance = pitchCategoryKeys.list({});
+  const pitchCategoryInstance = pitchCategoryKeys.list();
 
   const { data: categories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 

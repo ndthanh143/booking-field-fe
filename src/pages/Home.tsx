@@ -1,6 +1,7 @@
 import { Box, Card, CardContent, CardMedia, Grid, Typography, useMediaQuery } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { Settings } from 'react-slick';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { defaultLocations } from '@/common/datas/location.data';
 import { SearchBox, Slider } from '@/components';
@@ -13,12 +14,12 @@ export const Home = () => {
 
   const { formatMessage } = useLocale();
 
-  const pitchCategoryInstance = pitchCategoryKeys.list({});
+  const pitchCategoryInstance = pitchCategoryKeys.list();
   const { data } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
   const matches = useMediaQuery(theme.breakpoints.down('md'));
 
-  const SliderSettings = {
+  const sliderSettings: Settings = {
     dots: false,
     autoplay: true,
     infinite: true,
@@ -43,15 +44,9 @@ export const Home = () => {
           </Box>
         </Box>
         <Box marginY={2}>
-          <Slider {...SliderSettings}>
+          <Slider {...sliderSettings}>
             {data.data.map((category) => (
-              <Box
-                display='flex'
-                justifyContent='center'
-                height={{ xs: 300, md: 300, lg: 200 }}
-                paddingX={4}
-                key={category.id}
-              >
+              <Box display='flex' justifyContent='center' height={{ xs: 300, md: 300, lg: 200 }} key={category.id}>
                 <Box
                   borderRadius={4}
                   overflow='hidden'
@@ -94,16 +89,16 @@ export const Home = () => {
           <Typography variant='h5' marginY={2}>
             {formatMessage({ id: 'app.home.category-list.title' })}
           </Typography>
-          <Grid container sx={{ width: '100%' }} spacing={4} justifyContent='center'>
+          <Grid container spacing={3} justifyContent='center'>
             {data.data.map((category) => (
               <Grid item xs={12} md={6} lg={3} key={category.id}>
                 <Card
+                  variant='outlined'
                   sx={{
                     width: {
                       md: '100%',
                     },
                     minHeight: 400,
-                    borderRadius: 4,
                   }}
                   key={category.id}
                 >

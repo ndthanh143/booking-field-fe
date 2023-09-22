@@ -15,8 +15,8 @@ export const SearchSort = ({ isOpen, sortParams, onClose }: SearchSortProps) => 
   const [searchParams, setSearchParams] = useSearchParams();
 
   const sortOptions = [
-    { key: 0, value: 'ASC', label: formatMessage({ id: 'search.tool.sort.item.price.desc' }) },
-    { key: 1, value: 'DESC', label: formatMessage({ id: 'search.tool.sort.item.price.asc' }) },
+    { key: 0, value: 'ASC', label: formatMessage({ id: 'search.tool.sort.item.price.asc' }) },
+    { key: 1, value: 'DESC', label: formatMessage({ id: 'search.tool.sort.item.price.desc' }) },
   ];
 
   return (
@@ -54,21 +54,20 @@ export const SearchSort = ({ isOpen, sortParams, onClose }: SearchSortProps) => 
         <Divider />
         <List>
           {sortOptions.map((item) => (
-            <>
-              <ListItem
-                disablePadding
-                onClick={() => {
-                  searchParams.set('sort', item.value);
-                  setSearchParams((prev) => [...prev]);
-                  onClose();
-                }}
-              >
-                <ListItemButton>
-                  <ListItemText primary={item.label} />
-                  {sortParams === item.value && <Check />}
-                </ListItemButton>
-              </ListItem>
-            </>
+            <ListItem
+              disablePadding
+              onClick={() => {
+                searchParams.set('sort', item.value);
+                setSearchParams((prev) => [...prev]);
+                onClose();
+              }}
+              key={item.key}
+            >
+              <ListItemButton>
+                <ListItemText primary={item.label} />
+                {sortParams === item.value && <Check />}
+              </ListItemButton>
+            </ListItem>
           ))}
         </List>
       </Box>

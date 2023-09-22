@@ -15,7 +15,7 @@ export const useVenueMutation = () => {
     mutationFn: ({ id, data }: UpdateVenuePayload) => venueService.update({ id, data }),
     onSuccess: () => {
       queryClient.invalidateQueries(venueKeys.details());
-      toast.success('Cập nhật thông tin sân thành công');
+      toast.success('Update venue successfully');
     },
   });
 

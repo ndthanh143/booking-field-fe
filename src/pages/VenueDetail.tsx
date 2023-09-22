@@ -29,7 +29,7 @@ export const VenueDetail = () => {
   const operatingRef = useRef() as MutableRefObject<HTMLDivElement>;
 
   const [tab, setTab] = useState(0);
-  const [page, setPage] = useState(1);
+  const [page, _] = useState(1);
 
   const { slug } = useParams();
 
@@ -61,9 +61,10 @@ export const VenueDetail = () => {
     setTab(newValue);
   };
 
-  const rateAverage = ratings
-    ? (ratings.data.reduce((acc, cur) => acc + Number(cur.rate), 0) / ratings.data.length).toFixed(1)
-    : 0;
+  const rateAverage =
+    ratings && ratings.data.length > 0
+      ? (ratings.data.reduce((acc, cur) => acc + Number(cur.rate), 0) / ratings.data.length).toFixed(1)
+      : 0;
 
   const groupByCategory = pitches && groupBy(pitches.data, (item) => item.pitchCategory.name);
 
@@ -88,7 +89,7 @@ export const VenueDetail = () => {
           </Grid>
           <Grid item xs={12} md={10} order={3} display='flex'>
             <PlaceIcon sx={{ marginRight: 1, color: 'primary.main' }} />
-            <Typography variant='body1'>{venue.address}</Typography>
+            <Typography variant='body1'>{`${venue.address}, ${venue.district}, ${venue.province}`}</Typography>
           </Grid>
           <Grid item xs={12} md={2} order={4} display='flex' justifyContent={{ xs: 'start', md: 'end' }}>
             <StarIcon sx={{ marginRight: 1, color: 'primary.main' }} />

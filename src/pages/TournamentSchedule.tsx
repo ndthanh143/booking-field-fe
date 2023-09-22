@@ -115,7 +115,7 @@ export const TournamentSchedule = () => {
                     </Typography>
                   </Box>
                   <Box
-                    bgcolor={match.hostGoals && match.guestGoals ? 'primary.main' : 'secondary.main'}
+                    bgcolor={match.hostGoals && match.guestGoals ? 'primary.main' : 'primary.dark'}
                     color='primary.contrastText'
                     paddingY={1}
                     marginX={2}

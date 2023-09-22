@@ -27,7 +27,7 @@ export const SearchBox = () => {
   const [searchAdress, setSearchAdress] = useState<string>('');
   const [seletedVenue, setSeletedVenue] = useState<Venue | null>();
 
-  const pitchCategoryInstance = pitchCategoryKeys.list({});
+  const pitchCategoryInstance = pitchCategoryKeys.list();
   const { data: pitchCategories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
   const debounceSearchAddress = useDebounce(searchAdress);

@@ -17,6 +17,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { object, ref, string } from 'yup';
 import { useAuth } from '@/hooks/useAuth';
 import { SignInPayload } from '@/services/user/user.dto';
@@ -54,6 +55,7 @@ export const Register = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(userKeys.profiles());
       navigate('/');
+      toast.success('Sign up account successfully');
     },
   });
 

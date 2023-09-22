@@ -312,7 +312,7 @@ export const CreateTournament = () => {
             )}
             {type && (
               <Typography marginY={2} paddingY={1} paddingX={2} bgcolor='secondary.light' borderRadius={1}>
-                {formatMessage({ id: 'app.tournament.create-tournament.total-match' })}
+                {formatMessage({ id: 'app.tournament.create-tournament.total-match' })}{' '}
                 {totalMatches(watch('totalTeam'), type)}
               </Typography>
             )}

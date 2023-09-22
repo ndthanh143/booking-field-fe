@@ -25,7 +25,7 @@ export const AccountBooking = () => {
     onSuccess: () => {
       refetch();
       setSelectedBooking(null);
-      toast.success('Cảm ơn bạn đã đánh giá');
+      toast.success('Thanks for rating');
     },
   });
 
@@ -41,10 +41,10 @@ export const AccountBooking = () => {
             {formatMessage({ id: 'app.account.menu.my-booking.title' })}
           </Typography>
         </Box>
-        {data ? (
+        {data && data.data.length > 0 ? (
           <Box display='flex' flexDirection='column' gap={2}>
             {data.data.map((booking) => (
-              <Box border={1} paddingX={2} borderRadius={4} borderColor='secondary.light'>
+              <Box border={1} paddingX={2} borderRadius={4} borderColor='secondary.light' key={booking.id}>
                 <Box display='flex' alignItems='center' paddingY={2}>
                   <GolfCourse />
                   <Typography

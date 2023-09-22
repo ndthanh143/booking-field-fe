@@ -18,7 +18,9 @@ const userService = {
     return data;
   },
   changePassword: async (payload: ChangePasswordPayload) => {
-    const { data } = await axiosInstance.put('/users/change-password', payload);
+    const { currentPassword, newPassword } = payload;
+
+    const { data } = await axiosInstance.post('/users/change-password', { currentPassword, newPassword });
 
     return data;
   },

@@ -33,7 +33,7 @@ export const Header = () => {
     onOpen: openTranslationMenu,
   } = useMenu();
 
-  const pitchCategoryInstance = pitchCategoryKeys.list({});
+  const pitchCategoryInstance = pitchCategoryKeys.list();
   const { data: pitchCategories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
   return (
