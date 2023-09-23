@@ -2,6 +2,7 @@ import { Box, Card, CardContent, CardMedia, Grid, Typography, useMediaQuery } fr
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { Settings } from 'react-slick';
+import { commonImages } from '@/assets/images/common';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { defaultLocations } from '@/common/datas/location.data';
 import { SearchBox, Slider } from '@/components';
@@ -32,13 +33,18 @@ export const Home = () => {
     data && (
       <>
         <Box position='relative' marginBottom={14}>
-          <Box
-            component='img'
-            sx={{ width: '100%', objectFit: 'cover' }}
-            minHeight={300}
-            alt='san co nhan tao so 1'
-            src='https://www.sfy.org.uk/wp-content/uploads/2021/02/Football-3x1-WEB-scaled.jpg'
-          />
+          <Box height={500}>
+            <Box
+              component='img'
+              sx={{ objectFit: 'cover' }}
+              width='100%'
+              height='100%'
+              borderRadius={3}
+              overflow='hidden'
+              src='/banner.jpg'
+              alt='banner'
+            />
+          </Box>
           <Box position='absolute' left={0} width='100%' bottom={-40}>
             <SearchBox />
           </Box>
@@ -48,7 +54,7 @@ export const Home = () => {
             {data.data.map((category) => (
               <Box display='flex' justifyContent='center' height={{ xs: 300, md: 300, lg: 200 }} key={category.id}>
                 <Box
-                  borderRadius={4}
+                  borderRadius={3}
                   overflow='hidden'
                   position='relative'
                   width='100%'
@@ -99,6 +105,7 @@ export const Home = () => {
                       md: '100%',
                     },
                     minHeight: 400,
+                    borderRadius: 3,
                   }}
                   key={category.id}
                 >

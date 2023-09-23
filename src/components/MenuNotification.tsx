@@ -3,7 +3,7 @@ import { Badge, Box, Divider, IconButton, Menu, MenuItem, Tooltip, Typography } 
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { noResultImage } from '@/assets/images/common';
+import { commonImages } from '@/assets/images/common';
 import { DEFAULT_NOTIFICATION_LIMIT, DEFAULT_NOTIFICATION_PAGE } from '@/common/constants';
 import { OrderEnum } from '@/common/enums/order.enum';
 import { useAuth, useMenu } from '@/hooks';
@@ -104,7 +104,13 @@ export const MenuNotification = ({ variant }: MenuNotificationProps) => {
             ) : (
               <Box display='flex' justifyContent='center' paddingY={4}>
                 <Box>
-                  <Box component='img' src={noResultImage.src} alt={noResultImage.name} width={100} height={100} />
+                  <Box
+                    component='img'
+                    src={commonImages.noResult.src}
+                    alt={commonImages.noResult.name}
+                    width={100}
+                    height={100}
+                  />
                   <Typography variant='body2' paddingY={1}>
                     Chưa có thông báo nào
                   </Typography>

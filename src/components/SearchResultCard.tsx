@@ -31,7 +31,7 @@ export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
       }}
     >
       <Link href={`/venue/${data.slug}`}>
-        <Grid container bgcolor='primary.contrastText' borderRadius={2} padding={2} marginY={2} {...props}>
+        <Grid container bgcolor='primary.contrastText' borderRadius={3} padding={2} marginY={2} {...props}>
           <Grid item xs={12} md={3}>
             <Link href='/'>
               {data.imageList?.length > 0 ? (
@@ -40,7 +40,7 @@ export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
                   height='100%'
                   width='100%'
                   sx={{ objectFit: 'cover' }}
-                  borderRadius={2}
+                  borderRadius={3}
                   src={data.imageList?.[0].imagePath}
                   alt={data.name}
                 />
@@ -52,7 +52,7 @@ export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
                   justifyContent='center'
                   alignItems='center'
                   bgcolor='secondary.light'
-                  borderRadius={2}
+                  borderRadius={3}
                 >
                   <Image fontSize='large' />
                 </Box>
