@@ -3,7 +3,7 @@ import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { noResultImage } from '@/assets/images/common';
+import { commonImages } from '@/assets/images/common';
 import { RatingBox } from '@/components';
 import { useLocale } from '@/locales';
 import { Booking } from '@/services/booking/booking.dto';
@@ -114,7 +114,7 @@ export const AccountBooking = () => {
           </Box>
         ) : (
           <Box marginY={2}>
-            <Box component='img' src={noResultImage.src} alt={noResultImage.name} />
+            <Box component='img' src={commonImages.noResult.src} alt={commonImages.noResult.name} />
             <Typography>{formatMessage({ id: 'app.account.menu.my-booking.no-result' })}</Typography>
           </Box>
         )}

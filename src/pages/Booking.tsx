@@ -153,18 +153,18 @@ export const Booking = () => {
               marginY={4}
               bgcolor='secondary.light'
               paddingY={2}
-              borderRadius={2}
+              borderRadius={3}
             >
               {formatMessage({ id: 'app.booking.category' })}: {pitches.data?.[0].pitchCategory.name}
             </Typography>
-            <Grid container border={1} borderColor='secondary.light' marginTop={1}>
+            <Grid container border={1} borderRadius={3} borderColor='secondary.light' marginTop={1}>
               {pitches.data.map((item) => (
                 <Grid item xs={4} md={3} position='relative' key={item.id} marginY={2} paddingX={4}>
                   <Box onClick={() => setSelectedPitch(item)}>
                     <Box
                       width='100%'
                       height={100}
-                      borderRadius={4}
+                      borderRadius={3}
                       sx={{
                         objectFit: 'cover',
                         cursor: 'pointer',

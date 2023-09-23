@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { MenuNotification, MenuActions } from '.';
 import { LanguageImages } from '@/assets/images/language';
-import Logo from '@/assets/logo';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { defaultLocations } from '@/common/datas/location.data';
 import { useLocalStorage, useMenu } from '@/hooks';
@@ -54,7 +53,8 @@ export const Header = () => {
             }}
             onClick={() => navigate('/')}
           >
-            <Logo />
+            {/* <Logo /> */}
+            <Box component='img' src='/logo.png' height={50} />
           </Box>
           <Button
             variant='text'

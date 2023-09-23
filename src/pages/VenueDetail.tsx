@@ -142,7 +142,7 @@ export const VenueDetail = () => {
                     color='primary.contrastText'
                     width={{ xs: '100%', md: '80%' }}
                     height={200}
-                    borderRadius={4}
+                    borderRadius={3}
                     display='flex'
                     justifyContent='center'
                     alignItems='center'

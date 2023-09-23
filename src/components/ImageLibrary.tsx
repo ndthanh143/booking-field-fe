@@ -19,7 +19,7 @@ export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
   const [_, setSwiper] = useState<SwiperType | null>(null);
 
   return (
-    <Grid container borderRadius={4} overflow='hidden' height={500}>
+    <Grid container borderRadius={3} overflow='hidden' height={500}>
       <Grid
         item
         xs={12}
@@ -115,9 +115,9 @@ export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
           paddingX={3}
           paddingY={3}
           bgcolor='primary.contrastText'
-          borderRadius={4}
+          borderRadius={3}
         >
-          <Box maxHeight={500} overflow='hidden' borderRadius={4} position='relative'>
+          <Box maxHeight={500} overflow='hidden' borderRadius={3} position='relative'>
             <Swiper spaceBetween={50} slidesPerView={1} centeredSlides={true} modules={[Navigation, Thumbs]}>
               {imageList.map((item) => (
                 <SwiperSlide key={item.imagePath}>
