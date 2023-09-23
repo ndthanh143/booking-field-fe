@@ -2,7 +2,6 @@ import { Box, Card, CardContent, CardMedia, Grid, Typography, useMediaQuery } fr
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { Settings } from 'react-slick';
-import { commonImages } from '@/assets/images/common';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { defaultLocations } from '@/common/datas/location.data';
 import { SearchBox, Slider } from '@/components';
