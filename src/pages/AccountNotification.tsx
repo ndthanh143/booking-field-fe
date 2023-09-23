@@ -1,7 +1,7 @@
 import { Box, Card, Pagination, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { noResultImage } from '@/assets/images/common';
+import { commonImages } from '@/assets/images/common';
 import { DEFAULT_NOTIFICATION_PAGE } from '@/common/constants';
 import { OrderEnum } from '@/common/enums/order.enum';
 import { useAuth } from '@/hooks';
@@ -52,7 +52,7 @@ export const AccountNotification = () => {
           ))
         ) : (
           <Box marginY={2}>
-            <Box component='img' src={noResultImage.src} alt={noResultImage.name} />
+            <Box component='img' src={commonImages.noResult.src} alt={commonImages.noResult.name} />
             <Typography>{formatMessage({ id: 'app.account.menu.notification.no-result' })}</Typography>
           </Box>
         )}

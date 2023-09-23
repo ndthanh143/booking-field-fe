@@ -77,18 +77,11 @@ export const SearchBox = () => {
         }}
         display='flex'
         marginX={{ xs: 2, md: 12, lg: 20 }}
-        borderRadius={4}
+        borderRadius={3}
         boxShadow={4}
         bgcolor='primary.contrastText'
       >
-        <Grid
-          container
-          marginX={{ xs: 2, md: 8 }}
-          marginY={4}
-          borderRadius={50}
-          border={1}
-          borderColor='secondary.main'
-        >
+        <Grid container marginX={{ xs: 2, md: 8 }} marginY={4} borderRadius={3} border={1} borderColor='secondary.main'>
           <Grid item xs={5}>
             <Box
               position='relative'
@@ -150,7 +143,7 @@ export const SearchBox = () => {
                             display='flex'
                             alignItems='center'
                             padding={1}
-                            borderRadius={2}
+                            borderRadius={3}
                             sx={{ cursor: 'pointer', ':hover': { bgcolor: '#ccc' }, ':focus': { bgcolor: '#ccc' } }}
                             key={item.code}
                           >
@@ -175,7 +168,7 @@ export const SearchBox = () => {
                             padding={1}
                             sx={{ cursor: 'pointer', ':hover': { bgcolor: '#ccc' }, ':focus': { bgcolor: '#ccc' } }}
                             key={item.id}
-                            borderRadius={2}
+                            borderRadius={3}
                           >
                             <SportsSoccer sx={{ opacity: 0.7, fontSize: 20, marginRight: 1 }} />
                             <Box overflow='hidden'>
@@ -250,7 +243,7 @@ export const SearchBox = () => {
             </Box>
           </Grid>
           <Grid item xs={2} display='flex' flex={1} padding={0.5} alignItems='center'>
-            <Button variant='contained' onClick={searchHandler} sx={{ borderRadius: 12, height: '100%' }} fullWidth>
+            <Button variant='contained' onClick={searchHandler} sx={{ height: '100%', borderRadius: 3 }} fullWidth>
               <SearchIcon />
               <Typography display={{ xs: 'none', md: 'none', lg: 'block' }} variant='body2' fontWeight={500}>
                 {formatMessage({ id: 'app.home.search.button' })}

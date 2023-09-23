@@ -4,7 +4,7 @@ import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { noResultImage } from '@/assets/images/common';
+import { commonImages } from '@/assets/images/common';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { OrderEnum } from '@/common/enums/order.enum';
 import { SearchFilter, SearchResultCard, SearchSort } from '@/components';
@@ -67,7 +67,7 @@ export const Search = () => {
   }, [searchParams, venueRefetch, page]);
 
   return (
-    <>
+    <Box height='100vh'>
       <Grid container display='flex' justifyContent='space-between' marginY={2}>
         <Grid
           item
@@ -106,21 +106,7 @@ export const Search = () => {
         </Grid>
       </Grid>
       <Grid container borderTop={1} paddingY={2} bgcolor='footer.light' justifyContent='center'>
-        <Grid
-          item
-          xs={12}
-          md={12}
-          lg={8}
-          padding={2}
-          alignItems='center'
-          sx={{
-            overflowY: {
-              xs: 'inherit',
-              md: 'scroll',
-            },
-          }}
-          height='100vh'
-        >
+        <Grid item xs={12} md={12} lg={8} padding={2} alignItems='center'>
           {venues?.data && venues.data.length > 0 ? (
             <>
               <Typography variant='body2'>Có {venues.data.length} sân bóng phù hợp dành cho bạn</Typography>
@@ -142,8 +128,8 @@ export const Search = () => {
             <Box textAlign='center'>
               <Box
                 component='img'
-                src={noResultImage.src}
-                alt={noResultImage.name}
+                src={commonImages.noResult.src}
+                alt={commonImages.noResult.name}
                 width={150}
                 height={150}
                 marginBottom={2}
@@ -155,10 +141,10 @@ export const Search = () => {
             </Box>
           )}
         </Grid>
-        <Grid item md={false} lg={4}>
+        <Grid item md={false} lg={4} height='100vh' position='sticky' top={10}>
           {isLoaded && (
             <GoogleMap
-              mapContainerStyle={{ width: '100%', height: '100vh', borderRadius: 10 }}
+              mapContainerStyle={{ width: '100%', height: '100%', borderRadius: 10 }}
               center={center}
               zoom={10}
             >
@@ -172,6 +158,6 @@ export const Search = () => {
 
       <SearchSort isOpen={isOpenSortModal} sortParams={sortParams} onClose={closeSortModal} />
       <SearchFilter isOpen={isOpenFilterModal} priceRange={[minPrice, maxPrice]} onClose={closeFilterModal} />
-    </>
+    </Box>
   );
 };
