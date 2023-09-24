@@ -235,6 +235,7 @@ const socket = io.connect(`${import.meta.env.VITE_API_URL}`, {
   extraHeaders: {
     Authorization: `Bearer ${accessToken}`,
   },
+  withCredentials: true,
   path: '/events',
 });
 
