@@ -231,7 +231,7 @@ const router = createBrowserRouter([
 
 const accessToken = Cookies.get('access_token');
 
-const socket = io.connect(`wss://${import.meta.env.VITE_SOCKET_API_URL}`, {
+const socket = io.connect(`ws://${import.meta.env.VITE_SOCKET_API_URL}`, {
   extraHeaders: {
     Authorization: `Bearer ${accessToken}`,
   },
