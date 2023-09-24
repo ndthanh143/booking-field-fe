@@ -235,7 +235,6 @@ const socket = io.connect(`wss://${import.meta.env.VITE_SOCKET_API_URL}`, {
   extraHeaders: {
     Authorization: `Bearer ${accessToken}`,
   },
-  withCredentials: true,
 });
 
 export const SocketContext = createContext(socket);
