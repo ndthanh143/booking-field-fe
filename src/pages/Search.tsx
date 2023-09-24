@@ -149,7 +149,7 @@ export const Search = () => {
               zoom={10}
             >
               {venues?.data.map((item) => (
-                <Marker position={{ lat: item.location.lat, lng: item.location.lng }} key={item.id} />
+                <Marker position={{ lat: item.location?.lat, lng: item.location?.lng }} key={item.id} />
               ))}
             </GoogleMap>
           )}

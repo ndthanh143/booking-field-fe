@@ -231,10 +231,11 @@ const router = createBrowserRouter([
 
 const accessToken = Cookies.get('access_token');
 
-const socket = io.connect(`ws://${import.meta.env.VITE_SOCKET_URL}/events`, {
+const socket = io.connect(`${import.meta.env.VITE_API_URL}`, {
   extraHeaders: {
     Authorization: `Bearer ${accessToken}`,
   },
+  path: '/events',
 });
 
 export const SocketContext = createContext(socket);
