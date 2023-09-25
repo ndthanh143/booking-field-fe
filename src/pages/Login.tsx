@@ -18,9 +18,7 @@ const schema = object({
 export const Login = () => {
   const navigate = useNavigate();
 
-  const {
-    state: { redirect },
-  } = useLocation();
+  const { state } = useLocation();
 
   const { register, handleSubmit } = useForm<LoginInput>({
     resolver: yupResolver(schema),
@@ -34,7 +32,7 @@ export const Login = () => {
 
   useEffect(() => {
     if (profile) {
-      navigate(redirect || '/');
+      navigate(state?.redirect || '/');
     }
   }, [profile, navigate]);
 
