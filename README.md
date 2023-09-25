@@ -1,6 +1,6 @@
-# Booking Football Pitch
+# GO2PLAY
 
-A football booking pitch website
+A football booking venue website
 
 ## Description
 
@@ -288,7 +288,8 @@ $ yarn dev
 ├── vite.config.ts
 └── yarn.lock
 ```
-
+## Architecture Diagram
+![architecture-diagram](https://github.com/alex-go-nguyen/booking-field-fe/assets/133078261/1258fa2b-4e00-4e05-af1a-0fccf7cd758e)
 
 ## Database Diagram
 ![mermaid-diagram-2023-09-20-151717](https://github.com/alex-go-nguyen/booking-field-be/assets/133078261/fcb47320-6afa-4efe-ae9b-7815ec8c9898)
