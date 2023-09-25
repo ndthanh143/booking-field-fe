@@ -127,6 +127,8 @@ export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
                     width='100%'
                     height={{ xs: 300, md: 500 }}
                     sx={{ objectFit: 'cover' }}
+                    border={1}
+                    borderColor='secondary.light'
                   />
                 </SwiperSlide>
               ))}
@@ -159,6 +161,8 @@ export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
                     src={item.imagePath}
                     width='100%'
                     minHeight={70}
+                    border={1}
+                    borderColor='secondary.light'
                     sx={{ cursor: 'pointer', objectFit: 'cover' }}
                   />
                 </SwiperSlide>

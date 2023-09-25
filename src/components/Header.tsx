@@ -44,7 +44,7 @@ export const Header = () => {
       borderBottom={1}
       borderColor='secondary.light'
     >
-      <Grid item xs={4} md={4} alignItems='center' justifyContent='space-between'>
+      <Grid item xs={6} md={4} alignItems='center' justifyContent='space-between'>
         <Box display='flex' justifyContent='space-between' alignItems='center'>
           <Box
             sx={{
@@ -53,8 +53,7 @@ export const Header = () => {
             }}
             onClick={() => navigate('/')}
           >
-            {/* <Logo /> */}
-            <Box component='img' src='/logo.png' height={50} />
+            <Box component='img' src='/logo.png' alt='go2play-logo' height={50} width='100%' />
           </Box>
           <Button
             variant='text'
@@ -99,10 +98,21 @@ export const Header = () => {
       </Grid>
       <Grid item xs={6}>
         <Box display='flex' justifyContent='end' alignItems='center' gap={2}>
-          <Button variant='text' color='secondary' onClick={openTranslationMenu}>
+          <Button
+            variant='text'
+            color='secondary'
+            sx={{
+              display: {
+                xs: 'none',
+                md: 'flex',
+              },
+            }}
+            onClick={openTranslationMenu}
+          >
             <Box
               component='img'
               src={LanguageImages[currentLocale]}
+              alt={currentLocale}
               height={20}
               width={20}
               borderRadius='50%'

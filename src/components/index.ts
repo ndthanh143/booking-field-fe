@@ -37,3 +37,5 @@ export * from './AddNewPitchBox';
 export * from './ConfirmBox';
 export * from './MatchDetail';
 export * from './StripeContainer';
+export * from './LoadingContainer';
+export * from './Seo/Seo';

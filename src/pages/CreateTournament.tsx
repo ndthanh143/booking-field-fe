@@ -14,7 +14,7 @@ import {
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { mixed, number, object, string } from 'yup';
 import { UploadImage } from '@/components';
@@ -43,6 +43,8 @@ const schema = object({
 
 export const CreateTournament = () => {
   const { formatMessage } = useLocale();
+
+  const { pathname } = useLocation();
 
   const { profile } = useAuth();
 
@@ -112,8 +114,12 @@ export const CreateTournament = () => {
     if (type === TournamentTypeEnum.RoundRobin) return (numTeams * (numTeams - 1)) / 2;
   };
 
-  if (!profile) {
-    navigate('/login');
+  if (!profile?.username) {
+    navigate('/login', {
+      state: {
+        redirect: pathname,
+      },
+    });
   }
 
   return (
@@ -279,10 +285,12 @@ export const CreateTournament = () => {
                   alignItems='center'
                   width={150}
                   height={100}
-                  bgcolor={type === value ? 'primary.dark' : 'primary.light'}
+                  bgcolor={type === value ? 'primary.main' : ''}
                   borderRadius={4}
                   padding={2}
-                  sx={{ color: 'primary.contrastText', cursor: 'pointer' }}
+                  border={1}
+                  borderColor='primary.main'
+                  sx={{ color: type === value ? 'primary.contrastText' : 'inherit', cursor: 'pointer' }}
                   onClick={() => {
                     setValue('type', value);
                     setType(value);

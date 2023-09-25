@@ -1,4 +1,4 @@
-import { Box, Card, Pagination, Typography } from '@mui/material';
+import { Box, Card, Pagination, Skeleton, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { commonImages } from '@/assets/images/common';
@@ -26,14 +26,20 @@ export const AccountNotification = () => {
       },
     ],
   });
-  const { data: notifications, refetch: notificationRefetch } = useQuery({
+  const {
+    data: notifications,
+    refetch: refetchNotification,
+    isLoading: isNotificationLoading,
+  } = useQuery({
     ...notificationInstance,
     enabled: !!profile,
   });
 
   useEffect(() => {
-    notificationRefetch();
-  }, [page, notificationRefetch]);
+    refetchNotification();
+  }, [page, refetchNotification]);
+
+  console.log(isNotificationLoading, notifications);
 
   return (
     <>
@@ -41,7 +47,13 @@ export const AccountNotification = () => {
         <Typography variant='h4' fontWeight={500} marginY={4}>
           {formatMessage({ id: 'app.account.menu.notification.title' })}
         </Typography>
-        {notifications && notifications.data.length > 0 ? (
+        {isNotificationLoading || !notifications ? (
+          Array(3)
+            .fill(null)
+            .map((_, index) => (
+              <Skeleton variant='rectangular' height={100} sx={{ borderRadius: 2, marginY: 2 }} key={index} />
+            ))
+        ) : notifications.data.length > 0 ? (
           notifications.data.map((notification) => (
             <Card variant='outlined' sx={{ padding: 2, marginBottom: 2 }} key={notification.id}>
               <Box paddingY={2}>

@@ -4,7 +4,7 @@ import { LoadingButton } from '@mui/lab';
 import { Alert, Avatar, Box, Grid, Paper, TextField, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
 import { Link } from '@/components';
 import { useAuth } from '@/hooks/useAuth';
@@ -18,6 +18,10 @@ const schema = object({
 export const Login = () => {
   const navigate = useNavigate();
 
+  const {
+    state: { redirect },
+  } = useLocation();
+
   const { register, handleSubmit } = useForm<LoginInput>({
     resolver: yupResolver(schema),
   });
@@ -30,7 +34,7 @@ export const Login = () => {
 
   useEffect(() => {
     if (profile) {
-      navigate('/');
+      navigate(redirect || '/');
     }
   }, [profile, navigate]);
 
