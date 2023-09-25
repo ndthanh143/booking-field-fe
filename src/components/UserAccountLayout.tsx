@@ -26,14 +26,18 @@ import { useLocale } from '@/locales';
 export const UserAccountLayout = ({ children }: PropsWithChildren) => {
   const { formatMessage } = useLocale();
 
+  const { pathname } = useLocation();
+
   const { profile, logout } = useAuth();
 
   const navigate = useNavigate();
 
-  const { pathname } = useLocation();
-
   if (!profile) {
-    navigate('/');
+    navigate('/login', {
+      state: {
+        redirect: pathname,
+      },
+    });
   }
 
   return (

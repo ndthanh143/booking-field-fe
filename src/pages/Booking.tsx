@@ -4,7 +4,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { SocketContext } from '@/App';
 import { OrderEnum } from '@/common/enums/order.enum';
 import { Stepper, TimeSelect, StripeContainer } from '@/components';
@@ -29,6 +29,8 @@ export const Booking = () => {
   ];
 
   const navigate = useNavigate();
+
+  const { pathname } = useLocation();
 
   const socket = useContext(SocketContext);
 
@@ -138,7 +140,11 @@ export const Booking = () => {
   }, [selectedDate, selectedPitch, bookingsRefetch]);
 
   if (!profile) {
-    navigate('/login');
+    navigate('/login', {
+      state: {
+        redirect: pathname,
+      },
+    });
   }
 
   return (

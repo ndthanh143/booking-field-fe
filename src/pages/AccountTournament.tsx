@@ -1,4 +1,4 @@
-import { Box, Button, Card, Chip, Typography } from '@mui/material';
+import { Box, Button, Card, Chip, Skeleton, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { commonImages } from '@/assets/images/common';
@@ -16,7 +16,7 @@ export const AccountTournament = () => {
   const { profile } = useAuth();
 
   const tournamentInstance = tournamentKeys.currentUserList();
-  const { data: tournaments } = useQuery(tournamentInstance);
+  const { data: tournaments, isLoading: isLoadingTournament } = useQuery(tournamentInstance);
 
   const humanTournamentTypeName = {
     [TournamentTypeEnum.Knockout]: 'Knock out',
@@ -34,7 +34,13 @@ export const AccountTournament = () => {
             {formatMessage({ id: 'app.account.menu.tournament.button.create' })}
           </Button>
         </Box>
-        {tournaments && tournaments.data.length > 0 ? (
+        {isLoadingTournament || !tournaments ? (
+          Array(3)
+            .fill(null)
+            .map((_, index) => (
+              <Skeleton variant='rectangular' height={100} sx={{ borderRadius: 2, marginY: 2 }} key={index} />
+            ))
+        ) : tournaments.data.length > 0 ? (
           tournaments.data.map((tournament) => (
             <Link href={`/league/${tournament.id}/schedule`} key={tournament.id}>
               <Card variant='outlined' sx={{ padding: 2, marginBottom: 2 }}>

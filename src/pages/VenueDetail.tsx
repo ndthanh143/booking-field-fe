@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 import { MutableRefObject, SyntheticEvent, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RATING_PAGE_LIMIT } from '@/common/constants';
-import { ImageLibrary } from '@/components';
+import { ImageLibrary, Seo } from '@/components';
 import { useLocale } from '@/locales';
 import { pitchKeys } from '@/services/pitch/pitch.query';
 import { ratingKeys } from '@/services/rating/rating.query';
@@ -70,6 +70,7 @@ export const VenueDetail = () => {
   return (
     venue && (
       <Box marginY={2}>
+        <Seo title={venue.name} description={venue.description} />
         <Grid container spacing={1}>
           <Grid item xs={12} md={10} order={1}>
             <Typography variant='h3'>{venue.name}</Typography>

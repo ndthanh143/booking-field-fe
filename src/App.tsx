@@ -8,7 +8,7 @@ import { IntlProvider } from 'react-intl';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import * as io from 'socket.io-client';
-import { NotificationContainer, TournamentLayout, UserAccountLayout } from './components';
+import { NotificationContainer, Seo, TournamentLayout, UserAccountLayout } from './components';
 import { MainLayout, SecondaryLayout } from './components/Layout';
 import { VenueManagementLayout } from './components/VenueManagementLayout';
 import { useLocalStorage } from './hooks';
@@ -54,7 +54,11 @@ const router = createBrowserRouter([
     path: '/',
     children: [
       {
-        element: <MainLayout />,
+        element: (
+          <Seo title='Go2Play' description='Football venue booking app'>
+            <MainLayout />
+          </Seo>
+        ),
         children: [
           {
             index: true,

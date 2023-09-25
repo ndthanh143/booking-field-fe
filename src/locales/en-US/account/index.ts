@@ -23,7 +23,7 @@ export const enUS_account = {
   'app.account.menu.my-booking.rated': 'Rated',
   'app.account.menu.my-booking.detail': 'Details',
 
-  'app.account.menu.tournament': 'Tournament List',
+  'app.account.menu.tournament': 'Tournament',
   'app.account.menu.tournament.no-result': 'You have no tournament',
   'app.account.menu.tournament.title': 'Your tournaments',
   'app.account.menu.tournament.button.create': 'Create Tournament',

@@ -10,7 +10,7 @@ export const NotificationContainer = () => {
   socket.on('booking', (message) => {
     Push.create('Thông báo đặt sân', {
       body: message,
-      icon: '/logo.svg',
+      icon: '/logo.png',
       timeout: 4000,
     });
     queryClient.invalidateQueries(notificationKeys.lists());

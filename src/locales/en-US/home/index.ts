@@ -21,6 +21,7 @@ export const enUS_home = {
   'app.home.search.result.no-result': 'There are no matching results',
   'app.home.search.button': 'Search',
   'app.home.category-list.title': 'Categories',
+  'app.home.tournament.title': 'Tournaments',
 
   'app.footer.support.title': 'Support',
   'app.footer.support.item.hotline': 'Hotline',

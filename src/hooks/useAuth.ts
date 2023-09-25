@@ -19,7 +19,7 @@ export const useAuth = () => {
     mutationFn: (payload: LoginInput) => authService.login(payload),
     onSuccess: () => {
       toast.success('Login successfully');
-      window.location.href = '/';
+      // window.location.href = '/';
       refetch();
     },
   });

@@ -2,6 +2,7 @@ import { Box, Tab, Tabs } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { SyntheticEvent } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Seo } from '.';
 import { useAuth } from '@/hooks';
 import { useLocale } from '@/locales';
 import { tournamentKeys } from '@/services/tournament/tournament.query';
@@ -33,6 +34,7 @@ export const TournamentLayout = () => {
   return (
     tournament && (
       <Box>
+        <Seo title={tournament.data.name} description={tournament.data.type} />
         <Box display='flex' justifyContent='center'>
           <Box zIndex={1}>
             <Tabs

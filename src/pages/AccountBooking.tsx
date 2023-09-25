@@ -1,5 +1,5 @@
 import { CheckCircle, GolfCourse } from '@mui/icons-material';
-import { Box, Button, Divider, Grid, Typography } from '@mui/material';
+import { Box, Button, Divider, Grid, Skeleton, Typography } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -18,7 +18,7 @@ export const AccountBooking = () => {
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>();
 
   const userBookingInstance = bookingKeys.personal();
-  const { data, refetch } = useQuery(userBookingInstance);
+  const { data, refetch, isLoading } = useQuery(userBookingInstance);
 
   const { mutate } = useMutation({
     mutationFn: (payload: CreateRatingPayload) => ratingService.create(payload),
@@ -41,7 +41,16 @@ export const AccountBooking = () => {
             {formatMessage({ id: 'app.account.menu.my-booking.title' })}
           </Typography>
         </Box>
-        {data && data.data.length > 0 ? (
+        {isLoading || !data ? (
+          <Box>
+            <Skeleton variant='rectangular' height={40} sx={{ borderRadius: 2 }} />
+            <Skeleton variant='rectangular' height={80} sx={{ marginY: 2, borderRadius: 2 }} />
+            <Box display='flex' gap={2} justifyContent='end'>
+              <Skeleton variant='rectangular' height={30} width={80} sx={{ borderRadius: 2 }} />
+              <Skeleton variant='rectangular' height={30} width={80} sx={{ borderRadius: 2 }} />
+            </Box>
+          </Box>
+        ) : data.data.length > 0 ? (
           <Box display='flex' flexDirection='column' gap={2}>
             {data.data.map((booking) => (
               <Box border={1} paddingX={2} borderRadius={4} borderColor='secondary.light' key={booking.id}>
@@ -99,13 +108,7 @@ export const AccountBooking = () => {
                       {formatMessage({ id: 'app.account.menu.my-booking.rating' })}
                     </Button>
                   )}
-                  <Button
-                    variant='text'
-                    color='secondary'
-                    sx={{
-                      textDecoration: 'underline',
-                    }}
-                  >
+                  <Button variant='text' color='secondary'>
                     {formatMessage({ id: 'app.account.menu.my-booking.detail' })}
                   </Button>
                 </Box>
