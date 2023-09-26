@@ -114,7 +114,7 @@ export const CreateTournament = () => {
     if (type === TournamentTypeEnum.RoundRobin) return (numTeams * (numTeams - 1)) / 2;
   };
 
-  if (!profile?.username) {
+  if (!profile) {
     navigate('/login', {
       state: {
         redirect: pathname,
@@ -123,209 +123,32 @@ export const CreateTournament = () => {
   }
 
   return (
-    profile && (
-      <Box component='form' onSubmit={handleSubmit(onSubmitHandler)} padding={4}>
-        <Typography variant='h5'>{formatMessage({ id: 'app.tournament.create-tournament.heading' })}</Typography>
-        <Typography variant='caption' fontStyle='italic'>
-          {formatMessage({ id: 'app.tournament.create-tournament.sub-heading' })}
-        </Typography>
-        <Grid container spacing={4} paddingY={2}>
-          <Grid item xs={12} md={4} height={240}>
-            <Typography variant='body2'>{formatMessage({ id: 'app.tournament.create-tournament.cover' })} </Typography>
-            <Box width='100%' height='100%' paddingBottom={2}>
-              <UploadImage
-                files={files}
-                onChange={(e) => {
-                  const files = e.target.files;
-                  if (files) {
-                    setFiles(files);
-                    setValue('cover', files);
-                  }
-                }}
-              />
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={8}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Typography
-                  variant='body2'
-                  sx={{
-                    ':after': {
-                      content: '"*"',
-                      color: 'error.main',
-                    },
-                  }}
-                >
-                  {formatMessage({ id: 'app.tournament.create-tournament.name' })}
-                </Typography>
-                <TextField fullWidth size='small' {...register('name')} />
-                {errors.name && (
-                  <Typography variant='caption' color='error'>
-                    {errors.name.message}
-                  </Typography>
-                )}
-              </Grid>
-              <Grid item xs={6} md={9}>
-                <Typography
-                  variant='body2'
-                  sx={{
-                    ':after': {
-                      content: '"*"',
-                      color: 'error.main',
-                    },
-                  }}
-                >
-                  {formatMessage({ id: 'app.tournament.create-tournament.phone' })}
-                </Typography>
-                <TextField size='small' fullWidth />
-              </Grid>
-              <Grid item xs={6} md={3}>
-                <Typography
-                  variant='body2'
-                  sx={{
-                    ':after': {
-                      content: '"*"',
-                      color: 'error.main',
-                    },
-                  }}
-                >
-                  {formatMessage({ id: 'app.tournament.create-tournament.mode' })}
-                </Typography>
-                <Select defaultValue={StateEnum.Private} size='small' fullWidth {...register('mode')}>
-                  {state.map((item) => (
-                    <MenuItem value={item.value} key={item.value}>
-                      {item.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-                {errors.mode && (
-                  <Typography variant='caption' color='error'>
-                    {errors.mode.message}
-                  </Typography>
-                )}
-              </Grid>
-              <Grid item xs={12}>
-                <Typography
-                  variant='body2'
-                  sx={{
-                    ':after': {
-                      content: '"*"',
-                      color: 'error.main',
-                    },
-                  }}
-                >
-                  {formatMessage({ id: 'app.tournament.create-tournament.address' })}
-                </Typography>
-                <Autocomplete
-                  id='country-select-demo'
-                  options={venues?.data || []}
-                  onInputChange={(_, value) => setSearchAddress(value)}
-                  onChange={(_, value) => {
-                    setValue('venue', Number(value?.id));
-                    setSelectedVenue(value);
-                  }}
-                  getOptionLabel={(option) => option.name}
-                  size='small'
-                  fullWidth
-                  renderOption={(props, option) => (
-                    <Box component='li' sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-                      <Box>
-                        <Typography>{option.name}</Typography>
-                        <Typography variant='caption' fontStyle='italic'>
-                          {option.address}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  )}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      inputProps={{
-                        ...params.inputProps,
-                        autoComplete: 'new-password',
-                      }}
-                    />
-                  )}
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography
-              sx={{
-                ':after': {
-                  content: '"*"',
-                  color: 'error.main',
-                },
+    <Box component='form' onSubmit={handleSubmit(onSubmitHandler)} padding={4}>
+      <Typography variant='h5'>{formatMessage({ id: 'app.tournament.create-tournament.heading' })}</Typography>
+      <Typography variant='caption' fontStyle='italic'>
+        {formatMessage({ id: 'app.tournament.create-tournament.sub-heading' })}
+      </Typography>
+      <Grid container spacing={4} paddingY={2}>
+        <Grid item xs={12} md={4} height={240}>
+          <Typography variant='body2'>{formatMessage({ id: 'app.tournament.create-tournament.cover' })} </Typography>
+          <Box width='100%' height='100%' paddingBottom={2}>
+            <UploadImage
+              files={files}
+              onChange={(e) => {
+                const files = e.target.files;
+                if (files) {
+                  setFiles(files);
+                  setValue('cover', files);
+                }
               }}
-              marginBottom={1}
-            >
-              {formatMessage({ id: 'app.tournament.create-tournament.type' })}
-            </Typography>
-            {errors.type && (
-              <Typography variant='caption' color='error'>
-                {errors.type.message}
-              </Typography>
-            )}
-            <Box
-              display='flex'
-              gap={2}
-              sx={{
-                overflowX: 'scroll',
-                '&::-webkit-scrollbar': {
-                  width: 0,
-                },
-              }}
-            >
-              {Object.entries(TournamentTypeEnum).map(([_, value]) => (
-                <Box
-                  display='flex'
-                  justifyContent='center'
-                  alignItems='center'
-                  width={150}
-                  height={100}
-                  bgcolor={type === value ? 'primary.main' : ''}
-                  borderRadius={4}
-                  padding={2}
-                  border={1}
-                  borderColor='primary.main'
-                  sx={{ color: type === value ? 'primary.contrastText' : 'inherit', cursor: 'pointer' }}
-                  onClick={() => {
-                    setValue('type', value);
-                    setType(value);
-                  }}
-                  key={value}
-                >
-                  {humanTournamentTypeName[value]}
-                </Box>
-              ))}
-            </Box>
-            <Typography
-              sx={{
-                ':after': {
-                  content: '"*"',
-                  color: 'error.main',
-                },
-              }}
-              marginTop={2}
-            >
-              {`${formatMessage({ id: 'app.tournament.create-tournament.participant' })} [2 - 128]`}
-            </Typography>
-            <TextField fullWidth type='number' size='small' defaultValue={2} {...register('totalTeam')} />
-            {errors.totalTeam && (
-              <Typography variant='caption' color='error'>
-                {errors.totalTeam.message}
-              </Typography>
-            )}
-            {type && (
-              <Typography marginY={2} paddingY={1} paddingX={2} bgcolor='secondary.light' borderRadius={1}>
-                {formatMessage({ id: 'app.tournament.create-tournament.total-match' })}{' '}
-                {totalMatches(watch('totalTeam'), type)}
-              </Typography>
-            )}
-            <Box marginY={2}>
+            />
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={8}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
               <Typography
+                variant='body2'
                 sx={{
                   ':after': {
                     content: '"*"',
@@ -333,46 +156,221 @@ export const CreateTournament = () => {
                   },
                 }}
               >
-                {formatMessage({ id: 'app.tournament.create-tournament.pitch.type.title' })}
+                {formatMessage({ id: 'app.tournament.create-tournament.name' })}
               </Typography>
-              <Typography variant='caption'>
-                {formatMessage({ id: 'app.tournament.create-tournament.pitch.type.sub-title' })}
-              </Typography>
-              {pitchCategories && (
-                <Select defaultValue={pitchCategories.data[0].id} {...register('pitchCategory')} fullWidth>
-                  {pitchCategories.data.map((item) => (
-                    <MenuItem value={item.id} key={item.id}>
-                      {item.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              )}
-              {errors.pitchCategory && (
+              <TextField fullWidth size='small' {...register('name')} />
+              {errors.name && (
                 <Typography variant='caption' color='error'>
-                  {errors.pitchCategory.message}
+                  {errors.name.message}
                 </Typography>
               )}
-            </Box>
+            </Grid>
+            <Grid item xs={6} md={9}>
+              <Typography
+                variant='body2'
+                sx={{
+                  ':after': {
+                    content: '"*"',
+                    color: 'error.main',
+                  },
+                }}
+              >
+                {formatMessage({ id: 'app.tournament.create-tournament.phone' })}
+              </Typography>
+              <TextField size='small' fullWidth />
+            </Grid>
+            <Grid item xs={6} md={3}>
+              <Typography
+                variant='body2'
+                sx={{
+                  ':after': {
+                    content: '"*"',
+                    color: 'error.main',
+                  },
+                }}
+              >
+                {formatMessage({ id: 'app.tournament.create-tournament.mode' })}
+              </Typography>
+              <Select defaultValue={StateEnum.Private} size='small' fullWidth {...register('mode')}>
+                {state.map((item) => (
+                  <MenuItem value={item.value} key={item.value}>
+                    {item.label}
+                  </MenuItem>
+                ))}
+              </Select>
+              {errors.mode && (
+                <Typography variant='caption' color='error'>
+                  {errors.mode.message}
+                </Typography>
+              )}
+            </Grid>
+            <Grid item xs={12}>
+              <Typography
+                variant='body2'
+                sx={{
+                  ':after': {
+                    content: '"*"',
+                    color: 'error.main',
+                  },
+                }}
+              >
+                {formatMessage({ id: 'app.tournament.create-tournament.address' })}
+              </Typography>
+              <Autocomplete
+                id='country-select-demo'
+                options={venues?.data || []}
+                onInputChange={(_, value) => setSearchAddress(value)}
+                onChange={(_, value) => {
+                  setValue('venue', Number(value?.id));
+                  setSelectedVenue(value);
+                }}
+                getOptionLabel={(option) => option.name}
+                size='small'
+                fullWidth
+                renderOption={(props, option) => (
+                  <Box component='li' sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                    <Box>
+                      <Typography>{option.name}</Typography>
+                      <Typography variant='caption' fontStyle='italic'>
+                        {option.address}
+                      </Typography>
+                    </Box>
+                  </Box>
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    inputProps={{
+                      ...params.inputProps,
+                      autoComplete: 'new-password',
+                    }}
+                  />
+                )}
+              />
+            </Grid>
           </Grid>
         </Grid>
-        <Button
-          variant='contained'
-          sx={{
-            marginY: 2,
-            width: {
-              xs: '100%',
-              md: 'fit-content',
-            },
-          }}
-          type='submit'
-          disabled={!pitchCategories}
-        >
-          {formatMessage({ id: 'app.tournament.create-tournament.button.create' })}
-        </Button>
-        <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isLoading}>
-          <CircularProgress color='inherit' />
-        </Backdrop>
-      </Box>
-    )
+        <Grid item xs={12}>
+          <Typography
+            sx={{
+              ':after': {
+                content: '"*"',
+                color: 'error.main',
+              },
+            }}
+            marginBottom={1}
+          >
+            {formatMessage({ id: 'app.tournament.create-tournament.type' })}
+          </Typography>
+          {errors.type && (
+            <Typography variant='caption' color='error'>
+              {errors.type.message}
+            </Typography>
+          )}
+          <Box
+            display='flex'
+            gap={2}
+            sx={{
+              overflowX: 'scroll',
+              '&::-webkit-scrollbar': {
+                width: 0,
+              },
+            }}
+          >
+            {Object.entries(TournamentTypeEnum).map(([_, value]) => (
+              <Box
+                display='flex'
+                justifyContent='center'
+                alignItems='center'
+                width={150}
+                height={100}
+                bgcolor={type === value ? 'primary.main' : ''}
+                borderRadius={4}
+                padding={2}
+                border={1}
+                borderColor='primary.main'
+                sx={{ color: type === value ? 'primary.contrastText' : 'inherit', cursor: 'pointer' }}
+                onClick={() => {
+                  setValue('type', value);
+                  setType(value);
+                }}
+                key={value}
+              >
+                {humanTournamentTypeName[value]}
+              </Box>
+            ))}
+          </Box>
+          <Typography
+            sx={{
+              ':after': {
+                content: '"*"',
+                color: 'error.main',
+              },
+            }}
+            marginTop={2}
+          >
+            {`${formatMessage({ id: 'app.tournament.create-tournament.participant' })} [2 - 128]`}
+          </Typography>
+          <TextField fullWidth type='number' size='small' defaultValue={2} {...register('totalTeam')} />
+          {errors.totalTeam && (
+            <Typography variant='caption' color='error'>
+              {errors.totalTeam.message}
+            </Typography>
+          )}
+          {type && (
+            <Typography marginY={2} paddingY={1} paddingX={2} bgcolor='secondary.light' borderRadius={1}>
+              {formatMessage({ id: 'app.tournament.create-tournament.total-match' })}{' '}
+              {totalMatches(watch('totalTeam'), type)}
+            </Typography>
+          )}
+          <Box marginY={2}>
+            <Typography
+              sx={{
+                ':after': {
+                  content: '"*"',
+                  color: 'error.main',
+                },
+              }}
+            >
+              {formatMessage({ id: 'app.tournament.create-tournament.pitch.type.title' })}
+            </Typography>
+            <Typography variant='caption'>
+              {formatMessage({ id: 'app.tournament.create-tournament.pitch.type.sub-title' })}
+            </Typography>
+            {pitchCategories && (
+              <Select defaultValue={pitchCategories.data[0].id} {...register('pitchCategory')} fullWidth>
+                {pitchCategories.data.map((item) => (
+                  <MenuItem value={item.id} key={item.id}>
+                    {item.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+            {errors.pitchCategory && (
+              <Typography variant='caption' color='error'>
+                {errors.pitchCategory.message}
+              </Typography>
+            )}
+          </Box>
+        </Grid>
+      </Grid>
+      <Button
+        variant='contained'
+        sx={{
+          marginY: 2,
+          width: {
+            xs: '100%',
+            md: 'fit-content',
+          },
+        }}
+        type='submit'
+        disabled={!pitchCategories}
+      >
+        {formatMessage({ id: 'app.tournament.create-tournament.button.create' })}
+      </Button>
+      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isLoading}>
+        <CircularProgress color='inherit' />
+      </Backdrop>
+    </Box>
   );
 };

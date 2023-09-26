@@ -32,7 +32,7 @@ export const Login = () => {
 
   useEffect(() => {
     if (profile) {
-      navigate(state?.redirect || '/');
+      window.location.href = state?.redirect || '/';
     }
   }, [profile, navigate]);
 
@@ -69,6 +69,11 @@ export const Login = () => {
               Login with your account
             </Typography>
             <Box component='form' onSubmit={handleSubmit(onSubmitHandler)} noValidate sx={{ mt: 1 }}>
+              {state?.redirect && (
+                <Alert severity='info' sx={{ marginY: 1 }}>
+                  Please login before
+                </Alert>
+              )}
               {loginError && <Alert severity='error'>Wrong username/email or password</Alert>}
               <TextField
                 margin='normal'
@@ -110,7 +115,6 @@ export const Login = () => {
                   </Link>
                 </Grid>
               </Grid>
-              {/* <Copyright sx={{ mt: 5 }} /> */}
             </Box>
           </Box>
         </Grid>

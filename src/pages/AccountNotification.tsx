@@ -36,10 +36,10 @@ export const AccountNotification = () => {
   });
 
   useEffect(() => {
-    refetchNotification();
+    if (profile) {
+      refetchNotification();
+    }
   }, [page, refetchNotification]);
-
-  console.log(isNotificationLoading, notifications);
 
   return (
     <>

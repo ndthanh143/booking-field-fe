@@ -7,10 +7,13 @@ import { tournamentImages } from '@/assets/images/tournament';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { defaultLocations } from '@/common/datas/location.data';
 import { Link, SearchBox, Slider } from '@/components';
+import { useAuth } from '@/hooks';
 import { useLocale } from '@/locales';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
 
 export const Home = () => {
+  const { profile } = useAuth();
+
   const navigate = useNavigate();
 
   const { formatMessage } = useLocale();
@@ -62,7 +65,17 @@ export const Home = () => {
               xs={6}
               width='100%'
               height={300}
-              onClick={() => navigate('/league/create-tournament')}
+              onClick={() => {
+                if (profile) {
+                  navigate('/league/create-tournament');
+                } else {
+                  navigate('/login', {
+                    state: {
+                      redirect: '/league/create-tournament',
+                    },
+                  });
+                }
+              }}
               sx={{ cursor: 'pointer' }}
             >
               <Box
@@ -92,8 +105,8 @@ export const Home = () => {
           {isLoading || !data
             ? Array(4)
                 .fill(null)
-                .map(() => (
-                  <Grid item xs={12} md={6} lg={3}>
+                .map((_, index) => (
+                  <Grid item xs={12} md={6} lg={3} key={index}>
                     <Box width='100%' height={400} borderRadius={3} overflow='hidden'>
                       <Skeleton variant='rectangular' width='100%' height={200} />
                       <Skeleton variant='rectangular' width='20%' height={20} sx={{ marginY: 2 }} />
