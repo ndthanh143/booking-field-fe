@@ -1,7 +1,6 @@
 import { Box, Tab, Tabs } from '@mui/material';
 import { SyntheticEvent, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
 import { CustomTabPanel, ImagesManagement, InfoManagement, LocationManagement, PitchesManagement } from '@/components';
 import { useVenueByUser } from '@/hooks';
 
@@ -49,7 +48,6 @@ export const VenueManagement = () => {
         <CustomTabPanel value={tabIndex} index={3}>
           <PitchesManagement />
         </CustomTabPanel>
-        <ToastContainer />
       </Box>
     )
   );
