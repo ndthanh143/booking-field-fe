@@ -17,6 +17,8 @@ export const SearchFilter = ({ isOpen, priceRange, onClose }: SearchFilterProps)
 
   const [price, setPrice] = useState(priceRange);
 
+  const [rating, setRating] = useState('1');
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   const handleFilter = () => {
@@ -35,7 +37,7 @@ export const SearchFilter = ({ isOpen, priceRange, onClose }: SearchFilterProps)
       sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
       <Box
-        minWidth={600}
+        minWidth={{ xs: 300, md: 600 }}
         bgcolor='primary.contrastText'
         borderRadius={4}
         component={motion.div}
@@ -70,7 +72,8 @@ export const SearchFilter = ({ isOpen, priceRange, onClose }: SearchFilterProps)
             <RadioGroup
               aria-labelledby='demo-controlled-radio-buttons-group'
               name='controlled-radio-buttons-group'
-              value={1}
+              value={rating}
+              onChange={(e) => setRating(e.target.value)}
             >
               <FormControlLabel value='1' control={<Radio />} label='Tất cả' />
               <FormControlLabel value='2' control={<Radio />} label='4.5 trở lên' />

@@ -25,9 +25,9 @@ export const AccountTournament = () => {
 
   return (
     profile && (
-      <Box marginLeft={4} position='absolute' width='100%'>
-        <Box display='flex' justifyContent='space-between' marginY={4}>
-          <Typography variant='h4' fontWeight={500}>
+      <>
+        <Box display='flex' justifyContent='space-between' marginBottom={4}>
+          <Typography variant='h4' fontSize={{ xs: 20, md: 30 }} fontWeight={500}>
             {formatMessage({ id: 'app.account.menu.tournament.title' })}
           </Typography>
           <Button variant='contained' size='small' onClick={() => navigate('/league/create-tournament')}>
@@ -81,7 +81,7 @@ export const AccountTournament = () => {
             <Typography>{formatMessage({ id: 'app.account.menu.tournament.no-result' })}</Typography>
           </Box>
         )}
-      </Box>
+      </>
     )
   );
 };

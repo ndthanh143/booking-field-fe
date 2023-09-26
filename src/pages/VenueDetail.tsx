@@ -101,7 +101,7 @@ export const VenueDetail = () => {
         </Grid>
 
         <Box position='sticky' marginY={2} top={0} bgcolor='primary.contrastText' zIndex={1}>
-          <Tabs value={tab} onChange={handleChange}>
+          <Tabs value={tab} onChange={handleChange} variant='scrollable'>
             <Tab
               label={formatMessage({ id: 'app.venue.tab.pitch-list' })}
               onClick={() => pitchesRef.current.scrollIntoView({ behavior: 'smooth' })}
@@ -311,20 +311,20 @@ export const VenueDetail = () => {
 
         <Box marginY={4} ref={operatingRef}>
           <Typography variant='h4'> {formatMessage({ id: 'app.venue.work-time.title' })}</Typography>
-          <Box display='flex' justifyContent='space-around' marginY={2}>
-            <Box textAlign='center' bgcolor='secondary.light' padding={4} borderRadius='50%'>
+          <Box display='flex' justifyContent='space-around' marginY={2} gap={2}>
+            <Box textAlign='center' bgcolor='secondary.light' padding={{ xs: 2, md: 4 }} borderRadius='50%'>
               <Typography variant='h6' fontWeight={500}>
                 {formatMessage({ id: 'app.venue.work-time.open' })}
               </Typography>
               <Typography variant='body1'>{convertToAMPM(venue.openAt)}</Typography>
             </Box>
-            <Box textAlign='center' bgcolor='secondary.light' padding={4} borderRadius='50%'>
+            <Box textAlign='center' bgcolor='secondary.light' padding={{ xs: 2, md: 4 }} borderRadius='50%'>
               <Typography variant='h6' fontWeight={500}>
                 {formatMessage({ id: 'app.venue.work-time.close' })}
               </Typography>
               <Typography variant='body1'>{convertToAMPM(venue.closeAt)}</Typography>
             </Box>
-            <Box textAlign='center' bgcolor='secondary.light' padding={4} borderRadius='50%'>
+            <Box textAlign='center' bgcolor='secondary.light' padding={{ xs: 2, md: 4 }} borderRadius='50%'>
               <Typography variant='h6' fontWeight={500}>
                 {formatMessage({ id: 'app.venue.work-time.time' })}
               </Typography>

@@ -262,7 +262,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <IntlProvider locale={locale.split('_')[0]} messages={localeConfig[locale]}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <ToastContainer />
+            <ToastContainer position='bottom-right' autoClose={1000} />
             <NotificationContainer />
             <RouterProvider router={router} />
           </LocalizationProvider>

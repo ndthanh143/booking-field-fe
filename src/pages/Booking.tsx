@@ -1,5 +1,5 @@
-import { CheckCircle, ReportOutlined } from '@mui/icons-material';
-import { Box, Button, Divider, Grid, Typography } from '@mui/material';
+import { ReportOutlined } from '@mui/icons-material';
+import { Alert, Box, Button, Divider, Grid, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
@@ -169,6 +169,7 @@ export const Booking = () => {
                   <Box onClick={() => setSelectedPitch(item)}>
                     <Box
                       width='100%'
+                      minWidth={100}
                       height={100}
                       borderRadius={3}
                       sx={{
@@ -185,7 +186,7 @@ export const Booking = () => {
                       justifyContent='center'
                       alignItems='center'
                     >
-                      <Typography variant='h5' color='primary.contrastText'>
+                      <Typography fontSize={{ xs: 20, md: 24 }} color='primary.contrastText'>
                         {item.name}
                       </Typography>
                     </Box>
@@ -230,23 +231,10 @@ export const Booking = () => {
               ))}
             </Box>
             {selectedTime && (
-              <Box
-                padding={1}
-                marginBottom={2}
-                bgcolor='success.dark'
-                width='fit-content'
-                display='flex'
-                alignItems='center'
-                gap={1}
-              >
-                <CheckCircle sx={{ color: 'secondary.light' }} />
-                <Typography color='success.contrastText'>
-                  {formatMessage({ id: 'app.booking.time-picker.result' })}:
-                </Typography>
-                <Typography color='success.contrastText' fontWeight={500}>
-                  {`${convertDecimalToTime(selectedTime[0])} - ${convertDecimalToTime(selectedTime[1])}`}
-                </Typography>
-              </Box>
+              <Alert severity='success' sx={{ margin: 2 }}>
+                {formatMessage({ id: 'app.booking.time-picker.result' })}
+                {`${convertDecimalToTime(selectedTime[0])} - ${convertDecimalToTime(selectedTime[1])}`}
+              </Alert>
             )}
 
             <Box display='flex' justifyContent='center' marginBottom={4}>
