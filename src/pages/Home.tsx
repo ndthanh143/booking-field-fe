@@ -51,11 +51,11 @@ export const Home = () => {
             ))}
           </Slider>
         </Box>
-        <Box position='absolute' left={0} width='100%' bottom={-40}>
+        <Box position='absolute' left={0} width='100%' bottom={-180}>
           <SearchBox />
         </Box>
       </Box>
-      <Box marginY={10}>
+      <Box marginTop={{ xs: 30, md: 10 }} marginBottom={10}>
         <Typography variant='h5' marginY={2}>
           {formatMessage({ id: 'app.home.tournament.title' })}
         </Typography>
