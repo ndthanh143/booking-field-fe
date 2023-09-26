@@ -72,11 +72,11 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
                 <Avatar
                   sx={{
                     width: {
-                      xs: 30,
+                      xs: 60,
                       md: 80,
                     },
                     height: {
-                      xs: 30,
+                      xs: 60,
                       md: 80,
                     },
                   }}
@@ -88,12 +88,12 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
               textAlign='center'
               paddingY={2}
               fontSize={20}
-              sx={{
-                display: {
-                  xs: 'none',
-                  md: 'block',
-                },
-              }}
+              // sx={{
+              //   display: {
+              //     xs: 'none',
+              //     md: 'block',
+              //   },
+              // }}
             >
               {profile.phone}
             </Typography>
@@ -115,15 +115,7 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
                 <ListItemIcon sx={{ color: 'inherit' }}>
                   <AccountBoxOutlined />
                 </ListItemIcon>
-                <ListItemText
-                  // sx={{
-                  //   display: {
-                  //     xs: 'none',
-                  //     md: 'block',
-                  //   },
-                  // }}
-                  primary={formatMessage({ id: 'app.account.menu.profile' })}
-                />
+                <ListItemText primary={formatMessage({ id: 'app.account.menu.profile' })} />
               </ListItemButton>
               <ListItemButton
                 onClick={() => navigate('/account/my-booking')}
@@ -135,15 +127,7 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
                 <ListItemIcon sx={{ color: 'inherit' }}>
                   <RestoreOutlined />
                 </ListItemIcon>
-                <ListItemText
-                  // sx={{
-                  //   display: {
-                  //     xs: 'none',
-                  //     md: 'block',
-                  //   },
-                  // }}
-                  primary={formatMessage({ id: 'app.account.menu.my-booking' })}
-                />
+                <ListItemText primary={formatMessage({ id: 'app.account.menu.my-booking' })} />
               </ListItemButton>
               <ListItemButton
                 onClick={() => navigate('/account/my-league')}
@@ -155,15 +139,7 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
                 <ListItemIcon sx={{ color: 'inherit' }}>
                   <EmojiEvents />
                 </ListItemIcon>
-                <ListItemText
-                  // sx={{
-                  //   display: {
-                  //     xs: 'none',
-                  //     md: 'block',
-                  //   },
-                  // }}
-                  primary={formatMessage({ id: 'app.account.menu.tournament' })}
-                />
+                <ListItemText primary={formatMessage({ id: 'app.account.menu.tournament' })} />
               </ListItemButton>
               <ListItemButton
                 onClick={() => navigate('/account/notification')}
@@ -175,15 +151,7 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
                 <ListItemIcon sx={{ color: 'inherit' }}>
                   <Notifications />
                 </ListItemIcon>
-                <ListItemText
-                  // sx={{
-                  //   display: {
-                  //     xs: 'none',
-                  //     md: 'block',
-                  //   },
-                  // }}
-                  primary={formatMessage({ id: 'app.account.menu.notification' })}
-                />
+                <ListItemText primary={formatMessage({ id: 'app.account.menu.notification' })} />
               </ListItemButton>
               <ListItemButton
                 onClick={() => navigate('/account/change-password')}
@@ -195,30 +163,14 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
                 <ListItemIcon sx={{ color: 'inherit' }}>
                   <Lock />
                 </ListItemIcon>
-                <ListItemText
-                  // sx={{
-                  //   display: {
-                  //     xs: 'none',
-                  //     md: 'block',
-                  //   },
-                  // }}
-                  primary={formatMessage({ id: 'app.account.menu.change-password' })}
-                />
+                <ListItemText primary={formatMessage({ id: 'app.account.menu.change-password' })} />
               </ListItemButton>
               <Divider sx={{ marginY: 2 }} />
               <ListItemButton onClick={logout} sx={{ paddingX: { xs: 0, md: 1 } }}>
                 <ListItemIcon>
                   <LogoutOutlined />
                 </ListItemIcon>
-                <ListItemText
-                  // sx={{
-                  //   display: {
-                  //     xs: 'none',
-                  //     md: 'block',
-                  //   },
-                  // }}
-                  primary={formatMessage({ id: 'app.account.menu.logout' })}
-                />
+                <ListItemText primary={formatMessage({ id: 'app.account.menu.logout' })} />
               </ListItemButton>
             </List>
           </Grid>
