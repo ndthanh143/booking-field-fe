@@ -1,5 +1,5 @@
 import { Sort, Tune } from '@mui/icons-material';
-import { Box, Button, Grid, Pagination, Typography } from '@mui/material';
+import { Box, Button, Grid, Pagination, Skeleton, Typography } from '@mui/material';
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
@@ -48,7 +48,7 @@ export const Search = () => {
     minPrice,
     maxPrice,
   });
-  const { data: venues, refetch: venueRefetch } = useQuery(venueInstance);
+  const { data: venues, refetch: venueRefetch, isLoading: isVenueLoading } = useQuery(venueInstance);
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
@@ -107,7 +107,31 @@ export const Search = () => {
       </Grid>
       <Grid container borderTop={1} paddingY={2} bgcolor='footer.light' justifyContent='center'>
         <Grid item xs={12} md={12} lg={8} padding={2} alignItems='center'>
-          {venues?.data && venues.data.length > 0 ? (
+          {!venues || isVenueLoading ? (
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={3}>
+                <Skeleton variant='rectangular' height={200} sx={{ borderRadius: 3 }} />
+              </Grid>
+              <Grid item xs={12} md={9}>
+                <Skeleton variant='rectangular' height={30} sx={{ borderRadius: 2 }} />
+                <Box display='flex' gap={1} marginY={2}>
+                  <Skeleton variant='rectangular' height={20} width={60} sx={{ borderRadius: 2 }} />
+                  <Skeleton variant='rectangular' height={20} width={60} sx={{ borderRadius: 2 }} />
+                  <Skeleton variant='rectangular' height={20} width={60} sx={{ borderRadius: 2 }} />
+                </Box>
+                <Skeleton variant='rectangular' height={20} width={60} sx={{ marginY: 2, borderRadius: 2 }} />
+                <Skeleton variant='rectangular' height={20} width={60} sx={{ marginY: 2, borderRadius: 2 }} />
+                <Box display='flex' justifyContent='space-between' marginY={1}>
+                  <Skeleton variant='rectangular' height={20} width={100} sx={{ borderRadius: 2 }} />
+                  <Skeleton variant='rectangular' height={20} width={100} sx={{ borderRadius: 2 }} />
+                </Box>
+                <Box display='flex' justifyContent='space-between'>
+                  <Skeleton variant='rectangular' height={20} width={100} sx={{ borderRadius: 2 }} />
+                  <Skeleton variant='rectangular' height={20} width={100} sx={{ borderRadius: 2 }} />
+                </Box>
+              </Grid>
+            </Grid>
+          ) : venues.data.length > 0 ? (
             <>
               <Typography variant='body2'>Có {venues.data.length} sân bóng phù hợp dành cho bạn</Typography>
               <Box>
@@ -149,7 +173,7 @@ export const Search = () => {
               zoom={10}
             >
               {venues?.data.map((item) => (
-                <Marker position={{ lat: item.location.lat, lng: item.location.lng }} key={item.id} />
+                <Marker position={{ lat: item.location?.lat, lng: item.location?.lng }} key={item.id} />
               ))}
             </GoogleMap>
           )}

@@ -1,4 +1,4 @@
-import { Box, Button, Card, Chip, Typography } from '@mui/material';
+import { Box, Button, Card, Chip, Skeleton, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { commonImages } from '@/assets/images/common';
@@ -16,7 +16,7 @@ export const AccountTournament = () => {
   const { profile } = useAuth();
 
   const tournamentInstance = tournamentKeys.currentUserList();
-  const { data: tournaments } = useQuery(tournamentInstance);
+  const { data: tournaments, isLoading: isLoadingTournament } = useQuery(tournamentInstance);
 
   const humanTournamentTypeName = {
     [TournamentTypeEnum.Knockout]: 'Knock out',
@@ -25,16 +25,22 @@ export const AccountTournament = () => {
 
   return (
     profile && (
-      <Box marginLeft={4} position='absolute' width='100%'>
-        <Box display='flex' justifyContent='space-between' marginY={4}>
-          <Typography variant='h4' fontWeight={500}>
+      <>
+        <Box display='flex' justifyContent='space-between' marginBottom={4}>
+          <Typography variant='h4' fontSize={{ xs: 20, md: 30 }} fontWeight={500}>
             {formatMessage({ id: 'app.account.menu.tournament.title' })}
           </Typography>
           <Button variant='contained' size='small' onClick={() => navigate('/league/create-tournament')}>
             {formatMessage({ id: 'app.account.menu.tournament.button.create' })}
           </Button>
         </Box>
-        {tournaments && tournaments.data.length > 0 ? (
+        {isLoadingTournament || !tournaments ? (
+          Array(3)
+            .fill(null)
+            .map((_, index) => (
+              <Skeleton variant='rectangular' height={100} sx={{ borderRadius: 2, marginY: 2 }} key={index} />
+            ))
+        ) : tournaments.data.length > 0 ? (
           tournaments.data.map((tournament) => (
             <Link href={`/league/${tournament.id}/schedule`} key={tournament.id}>
               <Card variant='outlined' sx={{ padding: 2, marginBottom: 2 }}>
@@ -75,7 +81,7 @@ export const AccountTournament = () => {
             <Typography>{formatMessage({ id: 'app.account.menu.tournament.no-result' })}</Typography>
           </Box>
         )}
-      </Box>
+      </>
     )
   );
 };

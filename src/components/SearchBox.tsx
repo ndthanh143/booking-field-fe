@@ -65,193 +65,200 @@ export const SearchBox = () => {
   const isInView = useInView(ref, { margin: '-150px' });
 
   return (
-    pitchCategories && (
-      <Box
-        component={motion.div}
-        ref={ref}
-        initial={{ opacity: 0, y: -80 }}
-        animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : -50 }}
-        viewport={{ once: true }}
-        transition={{
-          duration: 0.3,
-        }}
-        display='flex'
-        marginX={{ xs: 2, md: 12, lg: 20 }}
-        borderRadius={3}
-        boxShadow={4}
-        bgcolor='primary.contrastText'
-      >
-        <Grid container marginX={{ xs: 2, md: 8 }} marginY={4} borderRadius={3} border={1} borderColor='secondary.main'>
-          <Grid item xs={5}>
-            <Box
-              position='relative'
-              sx={{
-                ':after': {
-                  content: '""',
-                  height: '60%',
-                  width: '1px',
-                  bgcolor: 'secondary.light',
-                  position: 'absolute',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  right: 0,
+    <Box
+      component={motion.div}
+      ref={ref}
+      initial={{ opacity: 0, y: -80 }}
+      animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : -50 }}
+      viewport={{ once: true }}
+      transition={{
+        duration: 0.3,
+      }}
+      display='flex'
+      marginX={{ xs: 2, md: 12, lg: 20 }}
+      borderRadius={3}
+      boxShadow={4}
+      bgcolor='primary.contrastText'
+    >
+      <Grid container marginX={{ xs: 2, md: 8 }} marginY={4} borderRadius={3} border={1} borderColor='secondary.main'>
+        <Grid item xs={12} md={5}>
+          <Box
+            position='relative'
+            sx={{
+              ':after': {
+                content: '""',
+                height: '60%',
+                width: '1px',
+                bgcolor: 'secondary.light',
+                position: 'absolute',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                right: 0,
+              },
+              ':hover': {
+                '.reset-icon': {
+                  ...(searchAdress !== '' && { display: 'block' }),
                 },
-                ':hover': {
-                  '.reset-icon': {
-                    ...(searchAdress !== '' && { display: 'block' }),
-                  },
-                },
-              }}
+              },
+            }}
+          >
+            <Typography variant='caption' position='absolute' left={60} top={10}>
+              {formatMessage({ id: 'app.home.search.place.title' })}
+            </Typography>
+            <RoomOutlined sx={{ position: 'absolute', left: 30, top: 30 }} />
+            <SelectBox
+              value={searchAdress}
+              onChange={(value) => setSearchAdress(value)}
+              placeHolder={formatMessage({ id: 'app.home.search.place.place-holder' })}
             >
-              <Typography variant='caption' position='absolute' left={60} top={10}>
-                {formatMessage({ id: 'app.home.search.place.title' })}
-              </Typography>
-              <RoomOutlined sx={{ position: 'absolute', left: 30, top: 30 }} />
-              <SelectBox
-                value={searchAdress}
-                onChange={(value) => setSearchAdress(value)}
-                placeHolder={formatMessage({ id: 'app.home.search.place.place-holder' })}
-              >
-                {searchAdress === '' ? (
-                  defaultLocations.map((item) => (
-                    <Box
-                      onClick={() => {
-                        setSeletedVenue(null), setSearchAdress(item);
-                      }}
-                      display='flex'
-                      alignItems='center'
-                      padding={1}
-                      sx={{ cursor: 'pointer', ':hover': { bgcolor: '#ccc' } }}
-                      key={item}
-                    >
-                      <RoomOutlinedIcon sx={{ fontSize: 20, opacity: 0.7, marginRight: 1 }} />
-                      {item}
-                    </Box>
-                  ))
-                ) : (
-                  <Box padding={1}>
-                    {provinces && provinces.length > 0 && (
-                      <>
-                        <Typography variant='body2' paddingX={1} paddingY={1} fontWeight={700}>
-                          {formatMessage({ id: 'app.home.search.place.title' })}
-                        </Typography>
-                        {provinces?.map((item) => (
-                          <Box
-                            onClick={() => {
-                              setSearchAdress(item.name);
-                            }}
-                            display='flex'
-                            alignItems='center'
-                            padding={1}
-                            borderRadius={3}
-                            sx={{ cursor: 'pointer', ':hover': { bgcolor: '#ccc' }, ':focus': { bgcolor: '#ccc' } }}
-                            key={item.code}
-                          >
-                            <RoomOutlined sx={{ opacity: 0.7, fontSize: 20, marginRight: 1 }} />
-                            <Typography>{item.name}</Typography>
-                          </Box>
-                        ))}
-                      </>
-                    )}
-                    {venues && venues.data.length > 0 && (
-                      <>
-                        <Typography variant='body2' paddingX={1} paddingY={1} fontWeight={700}>
-                          {formatMessage({ id: 'app.home.search.result.venue' })}
-                        </Typography>
-                        {venues?.data.map((item) => (
-                          <Box
-                            onClick={() => {
-                              setSeletedVenue(item), setSearchAdress(item.name);
-                            }}
-                            display='flex'
-                            alignItems='center'
-                            padding={1}
-                            sx={{ cursor: 'pointer', ':hover': { bgcolor: '#ccc' }, ':focus': { bgcolor: '#ccc' } }}
-                            key={item.id}
-                            borderRadius={3}
-                          >
-                            <SportsSoccer sx={{ opacity: 0.7, fontSize: 20, marginRight: 1 }} />
-                            <Box overflow='hidden'>
-                              <Typography>{item.name}</Typography>
-                              <Typography
-                                variant='caption'
-                                noWrap
-                                overflow='hidden'
-                                textOverflow='ellipsis'
-                                width='50px'
-                                fontStyle='italic'
-                              >
-                                {item.address}
-                              </Typography>
-                            </Box>
-                          </Box>
-                        ))}
-                      </>
-                    )}
-                    {provinces?.length === 0 && venues?.data.length === 0 && (
-                      <Typography textAlign='center'>
-                        {formatMessage({ id: 'app.home.search.result.no-result' })}
-                      </Typography>
-                    )}
-                  </Box>
-                )}
-              </SelectBox>
-              <CancelOutlinedIcon
-                className='reset-icon'
-                sx={{
-                  cursor: 'pointer',
-                  fontSize: 16,
-                  marginLeft: 1,
-                  display: 'none',
-                  position: 'absolute',
-                  right: 10,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                }}
-                onClick={() => setSearchAdress('')}
-              />
-            </Box>
-          </Grid>
-          <Grid item xs={5}>
-            <Box width='100%' position='relative'>
-              <Typography variant='caption' position='absolute' left={60} top={10}>
-                {formatMessage({ id: 'app.home.search.category.title' })}
-              </Typography>
-              <CategoryOutlined sx={{ position: 'absolute', left: 30, top: 30 }} />
-              <SelectBox
-                value={pitchCategory}
-                onChange={(data) => setPitchCategory(data)}
-                placeHolder={formatMessage({ id: 'app.home.search.category.place-holder' })}
-              >
-                {pitchCategories.data.map((item) => (
+              {searchAdress === '' ? (
+                defaultLocations.map((item) => (
                   <Box
                     onClick={() => {
-                      setSearchPitchCategory(item.id.toString());
-                      setPitchCategory(item.name);
+                      setSeletedVenue(null), setSearchAdress(item);
                     }}
                     display='flex'
                     alignItems='center'
                     padding={1}
                     sx={{ cursor: 'pointer', ':hover': { bgcolor: '#ccc' } }}
-                    key={item.id}
+                    key={item}
                   >
                     <RoomOutlinedIcon sx={{ fontSize: 20, opacity: 0.7, marginRight: 1 }} />
-                    {item.name}
+                    {item}
                   </Box>
-                ))}
-              </SelectBox>
-            </Box>
-          </Grid>
-          <Grid item xs={2} display='flex' flex={1} padding={0.5} alignItems='center'>
-            <Button variant='contained' onClick={searchHandler} sx={{ height: '100%', borderRadius: 3 }} fullWidth>
-              <SearchIcon />
-              <Typography display={{ xs: 'none', md: 'none', lg: 'block' }} variant='body2' fontWeight={500}>
-                {formatMessage({ id: 'app.home.search.button' })}
-              </Typography>
-            </Button>
-          </Grid>
+                ))
+              ) : (
+                <Box padding={1}>
+                  {provinces && provinces.length > 0 && (
+                    <>
+                      <Typography variant='body2' paddingX={1} paddingY={1} fontWeight={700}>
+                        {formatMessage({ id: 'app.home.search.place.title' })}
+                      </Typography>
+                      {provinces?.map((item) => (
+                        <Box
+                          onClick={() => {
+                            setSearchAdress(item.name);
+                          }}
+                          display='flex'
+                          alignItems='center'
+                          padding={1}
+                          borderRadius={3}
+                          sx={{ cursor: 'pointer', ':hover': { bgcolor: '#ccc' }, ':focus': { bgcolor: '#ccc' } }}
+                          key={item.code}
+                        >
+                          <RoomOutlined sx={{ opacity: 0.7, fontSize: 20, marginRight: 1 }} />
+                          <Typography>{item.name}</Typography>
+                        </Box>
+                      ))}
+                    </>
+                  )}
+                  {venues && venues.data.length > 0 && (
+                    <>
+                      <Typography variant='body2' paddingX={1} paddingY={1} fontWeight={700}>
+                        {formatMessage({ id: 'app.home.search.result.venue' })}
+                      </Typography>
+                      {venues?.data.map((item) => (
+                        <Box
+                          onClick={() => {
+                            setSeletedVenue(item), setSearchAdress(item.name);
+                          }}
+                          display='flex'
+                          alignItems='center'
+                          padding={1}
+                          sx={{ cursor: 'pointer', ':hover': { bgcolor: '#ccc' }, ':focus': { bgcolor: '#ccc' } }}
+                          key={item.id}
+                          borderRadius={3}
+                        >
+                          <SportsSoccer sx={{ opacity: 0.7, fontSize: 20, marginRight: 1 }} />
+                          <Box overflow='hidden'>
+                            <Typography>{item.name}</Typography>
+                            <Typography
+                              variant='caption'
+                              noWrap
+                              overflow='hidden'
+                              textOverflow='ellipsis'
+                              width='50px'
+                              fontStyle='italic'
+                            >
+                              {item.address}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      ))}
+                    </>
+                  )}
+                  {provinces?.length === 0 && venues?.data.length === 0 && (
+                    <Typography textAlign='center'>
+                      {formatMessage({ id: 'app.home.search.result.no-result' })}
+                    </Typography>
+                  )}
+                </Box>
+              )}
+            </SelectBox>
+            <CancelOutlinedIcon
+              className='reset-icon'
+              sx={{
+                cursor: 'pointer',
+                fontSize: 16,
+                marginLeft: 1,
+                display: 'none',
+                position: 'absolute',
+                right: 10,
+                top: '50%',
+                transform: 'translateY(-50%)',
+              }}
+              onClick={() => setSearchAdress('')}
+            />
+          </Box>
         </Grid>
-      </Box>
-    )
+        <Grid item xs={12} md={5}>
+          <Box width='100%' position='relative'>
+            <Typography variant='caption' position='absolute' left={60} top={10}>
+              {formatMessage({ id: 'app.home.search.category.title' })}
+            </Typography>
+            <CategoryOutlined sx={{ position: 'absolute', left: 30, top: 30 }} />
+            <SelectBox
+              value={pitchCategory}
+              onChange={(data) => setPitchCategory(data)}
+              placeHolder={formatMessage({ id: 'app.home.search.category.place-holder' })}
+            >
+              {pitchCategories?.data.map((item) => (
+                <Box
+                  onClick={() => {
+                    setSearchPitchCategory(item.id.toString());
+                    setPitchCategory(item.name);
+                  }}
+                  display='flex'
+                  alignItems='center'
+                  padding={1}
+                  sx={{ cursor: 'pointer', ':hover': { bgcolor: '#ccc' } }}
+                  key={item.id}
+                >
+                  <RoomOutlinedIcon sx={{ fontSize: 20, opacity: 0.7, marginRight: 1 }} />
+                  {item.name}
+                </Box>
+              ))}
+            </SelectBox>
+          </Box>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          md={2}
+          display='flex'
+          marginTop={{ xs: 1, md: 0 }}
+          flex={1}
+          padding={0.5}
+          alignItems='center'
+        >
+          <Button variant='contained' onClick={searchHandler} sx={{ height: '100%', borderRadius: 3 }} fullWidth>
+            <SearchIcon />
+            <Typography display={{ xs: 'none', md: 'none', lg: 'block' }} variant='body2' fontWeight={500}>
+              {formatMessage({ id: 'app.home.search.button' })}
+            </Typography>
+          </Button>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };

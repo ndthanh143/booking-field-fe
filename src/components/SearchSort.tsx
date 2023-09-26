@@ -28,7 +28,7 @@ export const SearchSort = ({ isOpen, sortParams, onClose }: SearchSortProps) => 
       sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
       <Box
-        minWidth={400}
+        minWidth={{ xs: 300, md: 400 }}
         bgcolor='primary.contrastText'
         borderRadius={4}
         component={motion.div}

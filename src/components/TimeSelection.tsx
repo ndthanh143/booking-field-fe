@@ -48,7 +48,7 @@ export const TimeSelection = ({ isOpen, onClose, onSave, timeRange }: TimeSelect
       sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
       <Box
-        minWidth={600}
+        minWidth={{ xs: 300 }}
         bgcolor='primary.contrastText'
         borderRadius={4}
         textAlign='center'
@@ -77,7 +77,7 @@ export const TimeSelection = ({ isOpen, onClose, onSave, timeRange }: TimeSelect
               step={0.5}
               disableSwap
             />
-            <Box display='flex' justifyContent='space-between'>
+            <Box display='flex' justifyContent='space-between' gap={2}>
               <TextField value={`${convertDecimalToTime(timeSelection[0])}`} label='Giờ bắt đầu' />
               <TextField value={`${convertDecimalToTime(timeSelection[1])}`} label='Giờ kết thúc' />
             </Box>

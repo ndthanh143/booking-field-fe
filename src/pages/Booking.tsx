@@ -1,11 +1,10 @@
-import { CheckCircle, ReportOutlined } from '@mui/icons-material';
-import { Box, Button, Divider, Grid, Typography } from '@mui/material';
+import { ReportOutlined } from '@mui/icons-material';
+import { Alert, Box, Button, Divider, Grid, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { useContext, useEffect, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { SocketContext } from '@/App';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { OrderEnum } from '@/common/enums/order.enum';
 import { Stepper, TimeSelect, StripeContainer } from '@/components';
 import { useAuth } from '@/hooks';
@@ -30,9 +29,9 @@ export const Booking = () => {
 
   const navigate = useNavigate();
 
-  const socket = useContext(SocketContext);
+  const { pathname } = useLocation();
 
-  const { profile } = useAuth();
+  const { profile, socket } = useAuth();
 
   const { slug } = useParams();
 
@@ -61,7 +60,7 @@ export const Booking = () => {
   const { mutate: createBookingMutate } = useMutation({
     mutationFn: (payload: CreateBookingDto) => bookingService.create(payload),
     onSuccess: (data) => {
-      socket.emit('booking', data.data);
+      socket?.emit('booking', data.data);
     },
   });
 
@@ -138,7 +137,11 @@ export const Booking = () => {
   }, [selectedDate, selectedPitch, bookingsRefetch]);
 
   if (!profile) {
-    navigate('/login');
+    navigate('/login', {
+      state: {
+        redirect: pathname,
+      },
+    });
   }
 
   return (
@@ -163,23 +166,29 @@ export const Booking = () => {
                   <Box onClick={() => setSelectedPitch(item)}>
                     <Box
                       width='100%'
+                      minWidth={100}
                       height={100}
                       borderRadius={3}
                       sx={{
                         objectFit: 'cover',
                         cursor: 'pointer',
-                        opacity: item === selectedPitch ? 1 : 0.5,
                         ':hover': {
-                          opacity: 1,
+                          bgcolor: 'primary.main',
+                          color: 'primary.contrastText',
                         },
                         boxShadow: item === selectedPitch ? 10 : 0,
                       }}
-                      bgcolor='primary.light'
+                      border={1}
+                      borderColor='primary.main'
+                      bgcolor={item === selectedPitch ? 'primary.main' : 'inherit'}
                       display='flex'
                       justifyContent='center'
                       alignItems='center'
                     >
-                      <Typography variant='h5' color='primary.contrastText'>
+                      <Typography
+                        fontSize={{ xs: 20, md: 24 }}
+                        color={item === selectedPitch ? 'primary.contrastText' : 'inherit'}
+                      >
                         {item.name}
                       </Typography>
                     </Box>
@@ -224,23 +233,10 @@ export const Booking = () => {
               ))}
             </Box>
             {selectedTime && (
-              <Box
-                padding={1}
-                marginBottom={2}
-                bgcolor='success.dark'
-                width='fit-content'
-                display='flex'
-                alignItems='center'
-                gap={1}
-              >
-                <CheckCircle sx={{ color: 'secondary.light' }} />
-                <Typography color='success.contrastText'>
-                  {formatMessage({ id: 'app.booking.time-picker.result' })}:
-                </Typography>
-                <Typography color='success.contrastText' fontWeight={500}>
-                  {`${convertDecimalToTime(selectedTime[0])} - ${convertDecimalToTime(selectedTime[1])}`}
-                </Typography>
-              </Box>
+              <Alert severity='success' sx={{ margin: 2 }}>
+                {formatMessage({ id: 'app.booking.time-picker.result' })}
+                {`${convertDecimalToTime(selectedTime[0])} - ${convertDecimalToTime(selectedTime[1])}`}
+              </Alert>
             )}
 
             <Box display='flex' justifyContent='center' marginBottom={4}>

@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { ConfirmBox } from '@/components';
 import { useAuth, useBoolean } from '@/hooks';
@@ -21,6 +22,10 @@ import bookingService from '@/services/booking/booking.service';
 import { formatDate, formatDateToTime } from '@/utils';
 
 export const BookingManagement = () => {
+  const navigate = useNavigate();
+
+  const { pathname } = useLocation();
+
   const { profile } = useAuth();
 
   const bookingInstance = bookingKeys.list({ venueId: profile?.venue.id });
@@ -41,6 +46,14 @@ export const BookingManagement = () => {
   });
 
   const handleDeleteBooking = () => selectedBooking && mutateDeleteBooking(selectedBooking.id);
+
+  if (!profile?.username) {
+    navigate('/login', {
+      state: {
+        redirect: pathname,
+      },
+    });
+  }
 
   return (
     profile &&

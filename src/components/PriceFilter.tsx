@@ -44,7 +44,7 @@ export const PriceFilter = ({ priceRange, onChange, minDistance }: PriceFilterPr
         step={10000}
         disableSwap
       />
-      <Box display='flex' justifyContent='space-between'>
+      <Box display='flex' justifyContent='space-between' gap={2}>
         <TextField value={`${priceRange[0]}đ`} label={formatMessage({ id: 'search.tool.filter.price.min' })} />
         <TextField value={`${priceRange[1]}đ`} label={formatMessage({ id: 'search.tool.filter.price.max' })} />
       </Box>
