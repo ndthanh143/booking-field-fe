@@ -95,19 +95,19 @@ export const VenueDetail = () => {
           </Grid>
           <Grid item order={4}>
             <Stack direction='row' divider={<Divider orientation='vertical' flexItem />} spacing={2}>
-              <Box display='flex' alignItems='center' gap={1}>
+              <Box display='flex' alignItems='center' gap={1} flexDirection={{ xs: 'column', md: 'row' }}>
                 <Typography>{formatMessage({ id: 'app.venue.work-time.open' })}:</Typography>
                 <Typography fontWeight={500} variant='body1'>
                   {convertToAMPM(venue.openAt)}
                 </Typography>
               </Box>
-              <Box display='flex' alignItems='center' gap={1}>
+              <Box display='flex' alignItems='center' gap={1} flexDirection={{ xs: 'column', md: 'row' }}>
                 <Typography>{formatMessage({ id: 'app.venue.work-time.close' })}:</Typography>
                 <Typography fontWeight={500} variant='body1'>
                   {convertToAMPM(venue.closeAt)}
                 </Typography>
               </Box>
-              <Box display='flex' alignItems='center' gap={1}>
+              <Box display='flex' alignItems='center' gap={1} flexDirection={{ xs: 'column', md: 'row' }}>
                 <Typography>{formatMessage({ id: 'app.venue.work-time.time' })}:</Typography>
                 <Typography fontWeight={500} variant='body1'>
                   Cả tuần
