@@ -172,18 +172,23 @@ export const Booking = () => {
                       sx={{
                         objectFit: 'cover',
                         cursor: 'pointer',
-                        opacity: item === selectedPitch ? 1 : 0.5,
                         ':hover': {
-                          opacity: 1,
+                          bgcolor: 'primary.main',
+                          color: 'primary.contrastText',
                         },
                         boxShadow: item === selectedPitch ? 10 : 0,
                       }}
-                      bgcolor='primary.light'
+                      border={1}
+                      borderColor='primary.main'
+                      bgcolor={item === selectedPitch ? 'primary.main' : 'inherit'}
                       display='flex'
                       justifyContent='center'
                       alignItems='center'
                     >
-                      <Typography fontSize={{ xs: 20, md: 24 }} color='primary.contrastText'>
+                      <Typography
+                        fontSize={{ xs: 20, md: 24 }}
+                        color={item === selectedPitch ? 'primary.contrastText' : 'inherit'}
+                      >
                         {item.name}
                       </Typography>
                     </Box>
