@@ -81,7 +81,7 @@ export const SearchBox = () => {
       bgcolor='primary.contrastText'
     >
       <Grid container marginX={{ xs: 2, md: 8 }} marginY={4} borderRadius={3} border={1} borderColor='secondary.main'>
-        <Grid item xs={5}>
+        <Grid item xs={12} md={5}>
           <Box
             position='relative'
             sx={{
@@ -211,7 +211,7 @@ export const SearchBox = () => {
             />
           </Box>
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={12} md={5}>
           <Box width='100%' position='relative'>
             <Typography variant='caption' position='absolute' left={60} top={10}>
               {formatMessage({ id: 'app.home.search.category.title' })}
@@ -241,7 +241,16 @@ export const SearchBox = () => {
             </SelectBox>
           </Box>
         </Grid>
-        <Grid item xs={2} display='flex' flex={1} padding={0.5} alignItems='center'>
+        <Grid
+          item
+          xs={12}
+          md={2}
+          display='flex'
+          marginTop={{ xs: 1, md: 0 }}
+          flex={1}
+          padding={0.5}
+          alignItems='center'
+        >
           <Button variant='contained' onClick={searchHandler} sx={{ height: '100%', borderRadius: 3 }} fullWidth>
             <SearchIcon />
             <Typography display={{ xs: 'none', md: 'none', lg: 'block' }} variant='body2' fontWeight={500}>

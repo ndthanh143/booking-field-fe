@@ -43,7 +43,7 @@ export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
         marginY={2}
         {...props}
       >
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={3} minHeight={200}>
           {data.imageList?.length > 0 ? (
             <Box
               component='img'
