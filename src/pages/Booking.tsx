@@ -3,9 +3,8 @@ import { Alert, Box, Button, Divider, Grid, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { SocketContext } from '@/App';
 import { OrderEnum } from '@/common/enums/order.enum';
 import { Stepper, TimeSelect, StripeContainer } from '@/components';
 import { useAuth } from '@/hooks';
@@ -32,9 +31,7 @@ export const Booking = () => {
 
   const { pathname } = useLocation();
 
-  const socket = useContext(SocketContext);
-
-  const { profile } = useAuth();
+  const { profile, socket } = useAuth();
 
   const { slug } = useParams();
 
@@ -63,7 +60,7 @@ export const Booking = () => {
   const { mutate: createBookingMutate } = useMutation({
     mutationFn: (payload: CreateBookingDto) => bookingService.create(payload),
     onSuccess: (data) => {
-      socket.emit('booking', data.data);
+      socket?.emit('booking', data.data);
     },
   });
 
@@ -175,18 +172,23 @@ export const Booking = () => {
                       sx={{
                         objectFit: 'cover',
                         cursor: 'pointer',
-                        opacity: item === selectedPitch ? 1 : 0.5,
                         ':hover': {
-                          opacity: 1,
+                          bgcolor: 'primary.main',
+                          color: 'primary.contrastText',
                         },
                         boxShadow: item === selectedPitch ? 10 : 0,
                       }}
-                      bgcolor='primary.light'
+                      border={1}
+                      borderColor='primary.main'
+                      bgcolor={item === selectedPitch ? 'primary.main' : 'inherit'}
                       display='flex'
                       justifyContent='center'
                       alignItems='center'
                     >
-                      <Typography fontSize={{ xs: 20, md: 24 }} color='primary.contrastText'>
+                      <Typography
+                        fontSize={{ xs: 20, md: 24 }}
+                        color={item === selectedPitch ? 'primary.contrastText' : 'inherit'}
+                      >
                         {item.name}
                       </Typography>
                     </Box>
