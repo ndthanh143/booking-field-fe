@@ -19,7 +19,7 @@ export const BookingComplete = () => {
         }}
         textAlign='center'
       >
-        <Typography variant='h1' color='success.dark'>
+        <Typography variant='h1' fontSize={{ xs: 40, md: 60 }} color='success.dark'>
           {formatMessage({ id: 'app.booking.success.title' })}
         </Typography>
         <Box

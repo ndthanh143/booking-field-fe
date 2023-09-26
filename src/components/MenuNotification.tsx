@@ -87,8 +87,8 @@ export const MenuNotification = ({ variant }: MenuNotificationProps) => {
             {notifications.data.length > 0 ? (
               notifications?.data.map((notification) => (
                 <MenuItem key={notification.id}>
-                  <Box display='flex' gap={2}>
-                    <Box component='img' src='/logo.svg' alt={notification.title} width='20%' height={40} />
+                  <Box display='flex' gap={2} alignItems='center'>
+                    <Box component='img' src='/logo.png' alt={notification.title} width='20%' height='100%' />
                     <Box width='80%' paddingX={2}>
                       <Typography variant='body1' fontWeight={500}>
                         {notification.title}

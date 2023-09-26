@@ -5,13 +5,13 @@ import LocalDrinkIcon from '@mui/icons-material/LocalDrink';
 import PlaceIcon from '@mui/icons-material/Place';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import StarIcon from '@mui/icons-material/Star';
-import { Avatar, Box, Button, Grid, Rating, Tab, Tabs, Typography } from '@mui/material';
+import { Avatar, Box, Button, Divider, Grid, Rating, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import { useQuery } from '@tanstack/react-query';
-import { MutableRefObject, SyntheticEvent, useMemo, useRef, useState } from 'react';
+import { SyntheticEvent, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RATING_PAGE_LIMIT } from '@/common/constants';
-import { ImageLibrary } from '@/components';
+import { ImageLibrary, Seo } from '@/components';
 import { useLocale } from '@/locales';
 import { pitchKeys } from '@/services/pitch/pitch.query';
 import { ratingKeys } from '@/services/rating/rating.query';
@@ -22,11 +22,6 @@ export const VenueDetail = () => {
   const { formatMessage } = useLocale();
 
   const navigate = useNavigate();
-
-  const pitchesRef = useRef() as MutableRefObject<HTMLDivElement>;
-  const ratingsRef = useRef() as MutableRefObject<HTMLDivElement>;
-  const addressRef = useRef() as MutableRefObject<HTMLDivElement>;
-  const operatingRef = useRef() as MutableRefObject<HTMLDivElement>;
 
   const [tab, setTab] = useState(0);
 
@@ -70,6 +65,7 @@ export const VenueDetail = () => {
   return (
     venue && (
       <Box marginY={2}>
+        <Seo title={venue.name} description={venue.description} />
         <Grid container spacing={1}>
           <Grid item xs={12} md={10} order={1}>
             <Typography variant='h3'>{venue.name}</Typography>
@@ -97,29 +93,38 @@ export const VenueDetail = () => {
           <Grid item xs={12} md={12} order={{ xs: 0, md: 5 }} marginY={2}>
             {venue.imageList && venue.imageList.length > 0 && <ImageLibrary imageList={venue.imageList} />}
           </Grid>
+          <Grid item order={4}>
+            <Stack direction='row' divider={<Divider orientation='vertical' flexItem />} spacing={2}>
+              <Box display='flex' alignItems='center' gap={1} flexDirection={{ xs: 'column', md: 'row' }}>
+                <Typography>{formatMessage({ id: 'app.venue.work-time.open' })}:</Typography>
+                <Typography fontWeight={500} variant='body1'>
+                  {convertToAMPM(venue.openAt)}
+                </Typography>
+              </Box>
+              <Box display='flex' alignItems='center' gap={1} flexDirection={{ xs: 'column', md: 'row' }}>
+                <Typography>{formatMessage({ id: 'app.venue.work-time.close' })}:</Typography>
+                <Typography fontWeight={500} variant='body1'>
+                  {convertToAMPM(venue.closeAt)}
+                </Typography>
+              </Box>
+              <Box display='flex' alignItems='center' gap={1} flexDirection={{ xs: 'column', md: 'row' }}>
+                <Typography>{formatMessage({ id: 'app.venue.work-time.time' })}:</Typography>
+                <Typography fontWeight={500} variant='body1'>
+                  Cả tuần
+                </Typography>
+              </Box>
+            </Stack>
+          </Grid>
         </Grid>
 
         <Box position='sticky' marginY={2} top={0} bgcolor='primary.contrastText' zIndex={1}>
-          <Tabs value={tab} onChange={handleChange}>
-            <Tab
-              label={formatMessage({ id: 'app.venue.tab.pitch-list' })}
-              onClick={() => pitchesRef.current.scrollIntoView({ behavior: 'smooth' })}
-            />
-            <Tab
-              label={formatMessage({ id: 'app.venue.tab.rating' })}
-              onClick={() => ratingsRef.current.scrollIntoView({ behavior: 'smooth' })}
-            />
-            <Tab
-              label={formatMessage({ id: 'app.venue.tab.address' })}
-              onClick={() => addressRef.current.scrollIntoView({ behavior: 'smooth' })}
-            />
-            <Tab
-              label={formatMessage({ id: 'app.venue.tab.work-time' })}
-              onClick={() => operatingRef.current.scrollIntoView({ behavior: 'smooth' })}
-            />
+          <Tabs value={tab} onChange={handleChange} variant='scrollable'>
+            <Tab label={formatMessage({ id: 'app.venue.tab.pitch-list' })} LinkComponent='a' href='#pitches' />
+            <Tab label={formatMessage({ id: 'app.venue.tab.rating' })} LinkComponent='a' href='#rating' />
+            <Tab label={formatMessage({ id: 'app.venue.tab.address' })} LinkComponent='a' href='#address' />
           </Tabs>
         </Box>
-        <Box marginY={4} ref={pitchesRef}>
+        <Box marginY={4} id='pitches'>
           <Typography variant='h4'>{formatMessage({ id: 'app.venue.pitches.title' })}</Typography>
           {groupByCategory &&
             groupByCategory.map((item) => (
@@ -210,7 +215,7 @@ export const VenueDetail = () => {
             ))}
         </Box>
 
-        <Box marginY={4} ref={ratingsRef}>
+        <Box marginY={4} id='rating'>
           <Typography variant='h4'> {formatMessage({ id: 'app.venue.ratings.title' })}</Typography>
           {ratings && ratings.data.length > 0 ? (
             <>
@@ -297,7 +302,7 @@ export const VenueDetail = () => {
           )}
         </Box>
 
-        <Box marginY={4} ref={addressRef}>
+        <Box marginY={4} id='address'>
           <Typography variant='h4'> {formatMessage({ id: 'app.venue.address.title' })}</Typography>
           {isLoaded && (
             <Box borderRadius={4} overflow='hidden' marginY={2}>
@@ -306,30 +311,6 @@ export const VenueDetail = () => {
               </GoogleMap>
             </Box>
           )}
-        </Box>
-
-        <Box marginY={4} ref={operatingRef}>
-          <Typography variant='h4'> {formatMessage({ id: 'app.venue.work-time.title' })}</Typography>
-          <Box display='flex' justifyContent='space-around' marginY={2}>
-            <Box textAlign='center' bgcolor='secondary.light' padding={4} borderRadius='50%'>
-              <Typography variant='h6' fontWeight={500}>
-                {formatMessage({ id: 'app.venue.work-time.open' })}
-              </Typography>
-              <Typography variant='body1'>{convertToAMPM(venue.openAt)}</Typography>
-            </Box>
-            <Box textAlign='center' bgcolor='secondary.light' padding={4} borderRadius='50%'>
-              <Typography variant='h6' fontWeight={500}>
-                {formatMessage({ id: 'app.venue.work-time.close' })}
-              </Typography>
-              <Typography variant='body1'>{convertToAMPM(venue.closeAt)}</Typography>
-            </Box>
-            <Box textAlign='center' bgcolor='secondary.light' padding={4} borderRadius='50%'>
-              <Typography variant='h6' fontWeight={500}>
-                {formatMessage({ id: 'app.venue.work-time.time' })}
-              </Typography>
-              <Typography variant='body1'>Cả tuần</Typography>
-            </Box>
-          </Box>
         </Box>
       </Box>
     )

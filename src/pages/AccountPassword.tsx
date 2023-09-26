@@ -40,7 +40,7 @@ export const AccountPassword = () => {
   };
   return (
     <>
-      <Box marginLeft={4} component='form' onSubmit={handleSubmit(onSubmitHandler)}>
+      <Box component='form' onSubmit={handleSubmit(onSubmitHandler)}>
         {isError && <Alert severity='error'>Password is not correct</Alert>}
 
         <Box marginY={2}>

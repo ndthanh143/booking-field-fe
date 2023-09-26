@@ -1,10 +1,14 @@
 import { Box, Tab, Tabs } from '@mui/material';
 import { SyntheticEvent, useState } from 'react';
-import { ToastContainer } from 'react-toastify';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { CustomTabPanel, ImagesManagement, InfoManagement, LocationManagement, PitchesManagement } from '@/components';
 import { useVenueByUser } from '@/hooks';
 
 export const VenueManagement = () => {
+  const { pathname } = useLocation();
+
+  const navigate = useNavigate();
+
   const { profile, data: venue } = useVenueByUser();
 
   const [tabIndex, setTabIndex] = useState(0);
@@ -13,6 +17,13 @@ export const VenueManagement = () => {
     setTabIndex(newValue);
   };
 
+  if (!profile?.username) {
+    navigate('/login', {
+      state: {
+        redirect: pathname,
+      },
+    });
+  }
   return (
     profile &&
     venue && (
@@ -37,7 +48,6 @@ export const VenueManagement = () => {
         <CustomTabPanel value={tabIndex} index={3}>
           <PitchesManagement />
         </CustomTabPanel>
-        <ToastContainer />
       </Box>
     )
   );

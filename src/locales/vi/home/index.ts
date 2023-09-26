@@ -21,6 +21,7 @@ export const vi_home = {
   'app.home.search.result.no-result': 'Không có kết quả nào phù hợp',
   'app.home.search.button': 'Tìm kiếm',
   'app.home.category-list.title': 'Danh mục sân bóng',
+  'app.home.tournament.title': 'Giải đấu',
 
   'app.footer.support.title': 'Hỗ trợ',
   'app.footer.support.item.hotline': 'Hotline',

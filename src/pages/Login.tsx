@@ -4,7 +4,7 @@ import { LoadingButton } from '@mui/lab';
 import { Alert, Avatar, Box, Grid, Paper, TextField, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
 import { Link } from '@/components';
 import { useAuth } from '@/hooks/useAuth';
@@ -18,6 +18,8 @@ const schema = object({
 export const Login = () => {
   const navigate = useNavigate();
 
+  const { state } = useLocation();
+
   const { register, handleSubmit } = useForm<LoginInput>({
     resolver: yupResolver(schema),
   });
@@ -30,7 +32,7 @@ export const Login = () => {
 
   useEffect(() => {
     if (profile) {
-      navigate('/');
+      navigate(state?.redirect || '/');
     }
   }, [profile, navigate]);
 
@@ -67,6 +69,11 @@ export const Login = () => {
               Login with your account
             </Typography>
             <Box component='form' onSubmit={handleSubmit(onSubmitHandler)} noValidate sx={{ mt: 1 }}>
+              {state?.redirect && (
+                <Alert severity='info' sx={{ marginY: 1 }}>
+                  Please login before
+                </Alert>
+              )}
               {loginError && <Alert severity='error'>Wrong username/email or password</Alert>}
               <TextField
                 margin='normal'
@@ -108,7 +115,6 @@ export const Login = () => {
                   </Link>
                 </Grid>
               </Grid>
-              {/* <Copyright sx={{ mt: 5 }} /> */}
             </Box>
           </Box>
         </Grid>

@@ -1,6 +1,7 @@
 import { Box, Divider, Grid, Typography } from '@mui/material';
 import { Copyright } from './Copyright';
 import { Link } from './Link';
+import { downloadImages } from '@/assets/images/download';
 import { PaymentImages } from '@/assets/images/payment';
 import { useLocale } from '@/locales';
 
@@ -168,9 +169,14 @@ export const Footer = () => {
           <Typography variant='body1' fontWeight={500} marginY={2}>
             {formatMessage({ id: 'app.footer.download.title' })}
           </Typography>
+          {downloadImages.map((item, index) => (
+            <Box key={index}>
+              <Box component='img' src={item} height={40} />
+            </Box>
+          ))}
         </Grid>
       </Grid>
-      <Divider sx={{ marginY: 2 }} />
+      <Divider sx={{ marginTop: 2 }} />
       <Copyright />
     </Box>
   );
