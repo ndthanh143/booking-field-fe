@@ -32,7 +32,7 @@ export const Login = () => {
 
   useEffect(() => {
     if (profile) {
-      window.location.href = state?.redirect || '/';
+      navigate(state?.redirect || '/');
     }
   }, [profile, navigate]);
 

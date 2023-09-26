@@ -1,14 +1,12 @@
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import Cookies from 'js-cookie';
 import moment from 'moment';
-import { createContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IntlProvider } from 'react-intl';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import * as io from 'socket.io-client';
-import { NotificationContainer, Seo, TournamentLayout, UserAccountLayout } from './components';
+import { Seo, TournamentLayout, UserAccountLayout } from './components';
 import { MainLayout, SecondaryLayout } from './components/Layout';
 import { VenueManagementLayout } from './components/VenueManagementLayout';
 import { useLocalStorage } from './hooks';
@@ -233,17 +231,6 @@ const router = createBrowserRouter([
   },
 ]);
 
-const accessToken = Cookies.get('access_token');
-
-const socket = io.connect(`${import.meta.env.VITE_SOCKET_API_URL}`, {
-  extraHeaders: {
-    Authorization: `Bearer ${accessToken}`,
-  },
-  withCredentials: true,
-});
-
-export const SocketContext = createContext(socket);
-
 function App() {
   const [queryClient] = useState(() => new QueryClient({}));
 
@@ -258,17 +245,14 @@ function App() {
   });
 
   return (
-    <SocketContext.Provider value={socket}>
-      <QueryClientProvider client={queryClient}>
-        <IntlProvider locale={locale.split('_')[0]} messages={localeConfig[locale]}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <ToastContainer position='bottom-right' autoClose={1000} />
-            <NotificationContainer />
-            <RouterProvider router={router} />
-          </LocalizationProvider>
-        </IntlProvider>
-      </QueryClientProvider>
-    </SocketContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <IntlProvider locale={locale.split('_')[0]} messages={localeConfig[locale]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ToastContainer position='bottom-right' autoClose={1000} />
+          <RouterProvider router={router} />
+        </LocalizationProvider>
+      </IntlProvider>
+    </QueryClientProvider>
   );
 }
 
