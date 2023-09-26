@@ -51,7 +51,7 @@ export const Home = () => {
             ))}
           </Slider>
         </Box>
-        <Box position='absolute' left={0} width='100%' bottom={-180}>
+        <Box position='absolute' left={0} width='100%' bottom={{ xs: -180, md: -40 }}>
           <SearchBox />
         </Box>
       </Box>
