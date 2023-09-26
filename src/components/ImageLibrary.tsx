@@ -20,27 +20,7 @@ export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
 
   return (
     <Grid container borderRadius={3} overflow='hidden' height={{ xs: 300, md: 500 }}>
-      <Grid
-        item
-        xs={12}
-        md={8}
-        sx={{
-          ':after': {
-            content: '""',
-            inset: 0,
-            position: 'absolute',
-            bgcolor: 'rgba(0, 0, 0, 0.6)',
-            display: 'none',
-          },
-          ':hover': {
-            ':after': {
-              display: 'block',
-            },
-          },
-          cursor: 'pointer',
-        }}
-        position='relative'
-      >
+      <Grid item xs={12} md={8} position='relative'>
         <Box
           component='img'
           src={imageList[0].imagePath}
@@ -61,27 +41,7 @@ export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
       >
         <Box width='100%' height='100%' display='flex' flexDirection={{ xs: 'row', md: 'column' }} gap={2}>
           {imageList.slice(1, 4).map((item) => (
-            <Box
-              width='100%'
-              height={100 / 3 + '%'}
-              sx={{
-                ':after': {
-                  content: '""',
-                  inset: 0,
-                  position: 'absolute',
-                  bgcolor: 'rgba(0, 0, 0, 0.6)',
-                  display: 'none',
-                },
-                ':hover': {
-                  ':after': {
-                    display: 'block',
-                  },
-                },
-                cursor: 'pointer',
-              }}
-              position='relative'
-              key={item.imagePath}
-            >
+            <Box width='100%' height={100 / 3 + '%'} position='relative' key={item.imagePath}>
               <Box component='img' width='100%' height='100%' sx={{ objectFit: 'cover' }} src={item.imagePath} />
             </Box>
           ))}

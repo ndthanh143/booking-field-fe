@@ -6,18 +6,7 @@ import {
   Notifications,
   RestoreOutlined,
 } from '@mui/icons-material';
-import {
-  Avatar,
-  Box,
-  Container,
-  Divider,
-  Grid,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-} from '@mui/material';
+import { Avatar, Box, Divider, List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { PropsWithChildren } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks';
@@ -42,12 +31,10 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
 
   return (
     profile && (
-      <Container sx={{ marginY: 8 }}>
-        <Grid container justifyContent='right' position='relative' spacing={4}>
-          <Grid
-            item
-            xs={12}
-            md={5}
+      <Box sx={{ marginY: 8 }}>
+        <Box display='flex' flexDirection={{ xs: 'column', md: 'row' }} gap={4}>
+          <Box
+            flex={{ xs: 1, md: 5 }}
             borderRadius={4}
             border={1}
             borderColor='secondary.light'
@@ -83,18 +70,7 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
                 />
               </Box>
             </Box>
-            <Typography
-              fontWeight={500}
-              textAlign='center'
-              paddingY={2}
-              fontSize={20}
-              // sx={{
-              //   display: {
-              //     xs: 'none',
-              //     md: 'block',
-              //   },
-              // }}
-            >
+            <Typography fontWeight={500} textAlign='center' paddingY={2} fontSize={20}>
               {profile.phone}
             </Typography>
             <List
@@ -173,12 +149,10 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
                 <ListItemText primary={formatMessage({ id: 'app.account.menu.logout' })} />
               </ListItemButton>
             </List>
-          </Grid>
-          <Grid item xs={12} md={7} position='relative'>
-            {children}
-          </Grid>
-        </Grid>
-      </Container>
+          </Box>
+          <Box flex={{ xs: 1, md: 7 }}>{children}</Box>
+        </Box>
+      </Box>
     )
   );
 };
