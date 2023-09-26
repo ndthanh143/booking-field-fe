@@ -46,9 +46,9 @@ export const AccountProfile = () => {
   return (
     profile && (
       <>
-        <Box component='form' onSubmit={handleSubmit(onSubmitHandler)} marginLeft={4}>
-          <Box display='flex' justifyContent='space-between' marginY={4}>
-            <Typography variant='h4' fontWeight={500}>
+        <Box component='form' onSubmit={handleSubmit(onSubmitHandler)}>
+          <Box display='flex' justifyContent='space-between' marginBottom={4}>
+            <Typography variant='h4' fontSize={{ xs: 20, md: 30 }} fontWeight={500}>
               {formatMessage({ id: 'app.account.menu.profile.title' })}
             </Typography>
             {isUpdating ? (

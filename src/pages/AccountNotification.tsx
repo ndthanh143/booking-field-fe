@@ -43,41 +43,39 @@ export const AccountNotification = () => {
 
   return (
     <>
-      <Box marginLeft={4} position='absolute' width='100%'>
-        <Typography variant='h4' fontWeight={500} marginY={4}>
-          {formatMessage({ id: 'app.account.menu.notification.title' })}
-        </Typography>
-        {isNotificationLoading || !notifications ? (
-          Array(3)
-            .fill(null)
-            .map((_, index) => (
-              <Skeleton variant='rectangular' height={100} sx={{ borderRadius: 2, marginY: 2 }} key={index} />
-            ))
-        ) : notifications.data.length > 0 ? (
-          notifications.data.map((notification) => (
-            <Card variant='outlined' sx={{ padding: 2, marginBottom: 2 }} key={notification.id}>
-              <Box paddingY={2}>
-                <Typography fontWeight={500}>{notification.title}</Typography>
-                <Typography>{notification.message}</Typography>
-              </Box>
-            </Card>
+      <Typography variant='h4' fontSize={{ xs: 20, md: 30 }} fontWeight={500} marginBottom={4}>
+        {formatMessage({ id: 'app.account.menu.notification.title' })}
+      </Typography>
+      {isNotificationLoading || !notifications ? (
+        Array(3)
+          .fill(null)
+          .map((_, index) => (
+            <Skeleton variant='rectangular' height={100} sx={{ borderRadius: 2, marginY: 2 }} key={index} />
           ))
-        ) : (
-          <Box marginY={2}>
-            <Box component='img' src={commonImages.noResult.src} alt={commonImages.noResult.name} />
-            <Typography>{formatMessage({ id: 'app.account.menu.notification.no-result' })}</Typography>
-          </Box>
-        )}
+      ) : notifications.data.length > 0 ? (
+        notifications.data.map((notification) => (
+          <Card variant='outlined' sx={{ padding: 2, marginBottom: 2 }} key={notification.id}>
+            <Box paddingY={2}>
+              <Typography fontWeight={500}>{notification.title}</Typography>
+              <Typography>{notification.message}</Typography>
+            </Box>
+          </Card>
+        ))
+      ) : (
+        <Box marginY={2}>
+          <Box component='img' src={commonImages.noResult.src} alt={commonImages.noResult.name} />
+          <Typography>{formatMessage({ id: 'app.account.menu.notification.no-result' })}</Typography>
+        </Box>
+      )}
 
-        {notifications && notifications.pageInfo.pageCount > 1 && (
-          <Pagination
-            sx={{ display: 'flex', justifyContent: 'center', paddingY: 2 }}
-            count={notifications.pageInfo.count}
-            page={page}
-            onChange={(_, value) => setPage(value)}
-          />
-        )}
-      </Box>
+      {notifications && notifications.pageInfo.pageCount > 1 && (
+        <Pagination
+          sx={{ display: 'flex', justifyContent: 'center', paddingY: 2 }}
+          count={notifications.pageInfo.count}
+          page={page}
+          onChange={(_, value) => setPage(value)}
+        />
+      )}
     </>
   );
 };

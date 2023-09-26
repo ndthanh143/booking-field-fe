@@ -69,13 +69,7 @@ export const Slider = ({ children, ...props }: SliderProps) => {
       component={ReactSlider}
       prevArrow={<SliderPrevArrow />}
       nextArrow={<SliderNextArrow />}
-      sx={{
-        '.slick-list': { mx: -1.5 },
-        '.slick-track': {
-          display: 'flex',
-          columnGap: 3,
-        },
-      }}
+      overflow='hidden'
       {...props}
     >
       {children}

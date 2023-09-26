@@ -19,7 +19,7 @@ export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
   const [_, setSwiper] = useState<SwiperType | null>(null);
 
   return (
-    <Grid container borderRadius={3} overflow='hidden' height={500}>
+    <Grid container borderRadius={3} overflow='hidden' height={{ xs: 300, md: 500 }}>
       <Grid
         item
         xs={12}

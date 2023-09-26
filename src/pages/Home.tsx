@@ -36,7 +36,7 @@ export const Home = () => {
         <Box>
           <Slider {...sliderSettings}>
             {bannerImages.map((item, index) => (
-              <Box display='flex' justifyContent='center' key={index} height={500}>
+              <Box display='flex' justifyContent='center' key={index} height={{ xs: 300, md: 500 }}>
                 <Box
                   borderRadius={3}
                   component='img'
@@ -45,6 +45,7 @@ export const Home = () => {
                   overflow='hidden'
                   sx={{ objectFit: 'cover' }}
                   src={item}
+                  alt={item}
                 />
               </Box>
             ))}
@@ -59,12 +60,12 @@ export const Home = () => {
           {formatMessage({ id: 'app.home.tournament.title' })}
         </Typography>
         <Grid container spacing={3}>
-          {tournamentImages.map((item, index) => (
+          {tournamentImages.map((item) => (
             <Grid
               item
               xs={6}
               width='100%'
-              height={300}
+              height={{ xs: 200, md: 300 }}
               onClick={() => {
                 if (profile) {
                   navigate('/league/create-tournament');
@@ -77,11 +78,11 @@ export const Home = () => {
                 }
               }}
               sx={{ cursor: 'pointer' }}
+              key={item}
             >
               <Box
                 component='img'
                 src={item}
-                key={index}
                 width='100%'
                 height='100%'
                 sx={{
@@ -130,6 +131,9 @@ export const Home = () => {
                         },
                         minHeight: 400,
                         borderRadius: 3,
+                        ':hover': {
+                          boxShadow: 10,
+                        },
                       }}
                       key={category.id}
                     >
