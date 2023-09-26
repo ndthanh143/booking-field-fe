@@ -15,8 +15,6 @@ export const useAuth = () => {
 
   const [accessToken, setAccessToken] = useState<string | undefined>(Cookies.get('access_token'));
 
-  console.log(accessToken);
-
   const [socket, setSocket] = useState<io.Socket>();
 
   const queryClient = useQueryClient();
