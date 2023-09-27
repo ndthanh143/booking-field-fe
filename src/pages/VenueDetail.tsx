@@ -5,9 +5,9 @@ import PlaceIcon from '@mui/icons-material/Place';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import StarIcon from '@mui/icons-material/Star';
 import { Box, Button, Divider, Grid, Rating, Stack, Tab, Tabs, Typography } from '@mui/material';
-import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
+import { GoogleMap, MarkerF, useLoadScript } from '@react-google-maps/api';
 import { useQuery } from '@tanstack/react-query';
-import { SyntheticEvent, useMemo, useState } from 'react';
+import { SyntheticEvent, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { RATING_PAGE_LIMIT } from '@/common/constants';
@@ -42,14 +42,6 @@ export const VenueDetail = () => {
 
   const ratingInstance = ratingKeys.list({ venueId: venue?.id, page: 1, limit: RATING_PAGE_LIMIT });
   const { data: ratings } = useQuery({ ...ratingInstance, enabled: !!venue });
-
-  const center = useMemo(
-    () => ({
-      lat: 10.796426,
-      lng: 106.653084,
-    }),
-    [],
-  );
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.GOOGLE_MAPS_API_KEY || '',
@@ -292,8 +284,8 @@ export const VenueDetail = () => {
           <Typography variant='h4'> {formatMessage({ id: 'app.venue.address.title' })}</Typography>
           {isLoaded && (
             <Box borderRadius={4} overflow='hidden' marginY={2}>
-              <GoogleMap mapContainerStyle={{ width: '100%', height: '50vh' }} center={center} zoom={15}>
-                <Marker position={{ lat: venue.location.lat, lng: venue.location.lng }} />
+              <GoogleMap mapContainerStyle={{ width: '100%', height: '50vh' }} center={venue.location} zoom={10}>
+                <MarkerF position={{ lat: venue.location.lat, lng: venue.location.lng }} />
               </GoogleMap>
             </Box>
           )}
