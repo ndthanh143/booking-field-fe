@@ -38,3 +38,4 @@ export * from './MatchDetail';
 export * from './StripeContainer';
 export * from './LoadingContainer';
 export * from './Seo/Seo';
+export * from './VenueInfoMapPopup';
