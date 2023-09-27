@@ -2,13 +2,12 @@ import { Box, Card, Pagination, Skeleton, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { commonImages } from '@/assets/images/common';
-import { DEFAULT_NOTIFICATION_PAGE } from '@/common/constants';
+import { DEFAULT_NOTIFICATION_LIMIT, DEFAULT_NOTIFICATION_PAGE } from '@/common/constants';
 import { OrderEnum } from '@/common/enums/order.enum';
 import { useAuth } from '@/hooks';
 import { useLocale } from '@/locales';
 import { notificationKeys } from '@/services/notification/notification.query';
 
-const DEFAULT_NOTIFICATION_LIMIT = 10;
 export const AccountNotification = () => {
   const { formatMessage } = useLocale();
 
@@ -62,9 +61,11 @@ export const AccountNotification = () => {
           </Card>
         ))
       ) : (
-        <Box marginY={2}>
-          <Box component='img' src={commonImages.noResult.src} alt={commonImages.noResult.name} />
-          <Typography>{formatMessage({ id: 'app.account.menu.notification.no-result' })}</Typography>
+        <Box display='flex' justifyContent='center'>
+          <Box marginY={2} textAlign='center'>
+            <Box component='img' src={commonImages.noResult.src} alt={commonImages.noResult.name} />
+            <Typography>{formatMessage({ id: 'app.account.menu.notification.no-result' })}</Typography>
+          </Box>
         </Box>
       )}
 

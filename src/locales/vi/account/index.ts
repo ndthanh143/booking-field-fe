@@ -31,6 +31,11 @@ export const vi_account = {
   'app.account.menu.notification.title': 'Thông báo',
   'app.account.menu.notification.no-result': 'Bạn chưa có thông báo nào',
 
+  'app.account.menu.favorite': 'Danh sách yêu thích',
+  'app.account.menu.favorite.title': 'Sân bóng yêu thích của bạn',
+  'app.account.menu.favorite.no-result': 'Bạn chưa có sân bóng nào trong mục yêu thích',
+  'app.account.menu.favorite.button.unlike': 'Bỏ thích',
+
   'app.account.menu.change-password': 'Đổi mật khẩu',
   'app.account.menu.change-password.old-password': 'Mật khẩu cũ',
   'app.account.menu.change-password.new-password': 'Mật khẩu mới',

@@ -32,6 +32,11 @@ export const enUS_account = {
   'app.account.menu.notification.title': 'Notifications',
   'app.account.menu.notification.no-result': 'You have no notification',
 
+  'app.account.menu.favorite': 'Favorite',
+  'app.account.menu.favorite.title': 'Your favorite venues',
+  'app.account.menu.favorite.no-result': 'You have no any favorite venue',
+  'app.account.menu.favorite.button.unlike': 'Unlike',
+
   'app.account.menu.change-password': 'Change Password',
   'app.account.menu.change-password.old-password': 'Old Password',
   'app.account.menu.change-password.new-password': 'New Password',

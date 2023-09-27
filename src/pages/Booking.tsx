@@ -145,8 +145,9 @@ export const Booking = () => {
   }
 
   return (
-    pitches && (
-      <Box minHeight='100vh'>
+    pitches &&
+    pitches.data.length > 0 && (
+      <Box>
         <Stepper steps={stepList} activeStep={step} sx={{ marginY: 4 }} />
         {step === 0 && (
           <>
@@ -158,7 +159,7 @@ export const Booking = () => {
               paddingY={2}
               borderRadius={3}
             >
-              {formatMessage({ id: 'app.booking.category' })}: {pitches.data?.[0].pitchCategory.name}
+              {formatMessage({ id: 'app.booking.category' })}: {pitches.data[0].pitchCategory.name}
             </Typography>
             <Grid container border={1} borderRadius={3} borderColor='secondary.light' marginTop={1}>
               {pitches.data.map((item) => (
