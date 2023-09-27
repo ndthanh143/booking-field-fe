@@ -9,6 +9,7 @@ export * from './venueManagement/BookingManagement';
 export * from './AccountProfile';
 export * from './AccountBooking';
 export * from './AccountPassword';
+export * from './AccountFavorite';
 export * from './ForgottenPassword';
 export * from './ResetPassword';
 export * from './VenueDetail';

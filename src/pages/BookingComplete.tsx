@@ -29,8 +29,12 @@ export const BookingComplete = () => {
           sx={{ objectFit: 'cover' }}
           maxHeight={400}
         />
-        <Button variant='contained' sx={{ margin: 'auto', display: 'flex' }} onClick={() => navigate('/')}>
-          {formatMessage({ id: 'app.booking.success.go-to-homepage' })}
+        <Button
+          variant='contained'
+          sx={{ margin: 'auto', display: 'flex' }}
+          onClick={() => navigate('/account/my-booking')}
+        >
+          {formatMessage({ id: 'app.booking.success.go-to-booking' })}
         </Button>
       </Box>
     </Box>

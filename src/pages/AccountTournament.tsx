@@ -76,9 +76,11 @@ export const AccountTournament = () => {
             </Link>
           ))
         ) : (
-          <Box marginY={2}>
-            <Box component='img' src={commonImages.noResult.src} alt={commonImages.noResult.name} />
-            <Typography>{formatMessage({ id: 'app.account.menu.tournament.no-result' })}</Typography>
+          <Box display='flex' justifyContent='center'>
+            <Box marginY={2} textAlign='center'>
+              <Box component='img' src={commonImages.noResult.src} alt={commonImages.noResult.name} />
+              <Typography>{formatMessage({ id: 'app.account.menu.tournament.no-result' })}</Typography>
+            </Box>
           </Box>
         )}
       </>

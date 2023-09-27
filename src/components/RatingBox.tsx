@@ -29,7 +29,7 @@ export const RatingBox = ({ isOpen, onClose, data, onSubmit }: IRatingBoxProps) 
       sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
       <Box
-        minWidth={400}
+        minWidth={{ xs: 300, md: 500 }}
         bgcolor='primary.contrastText'
         borderRadius={4}
         component={motion.div}

@@ -107,17 +107,19 @@ export const AccountBooking = () => {
                     {formatMessage({ id: 'app.account.menu.my-booking.rating' })}
                   </Button>
                 )}
-                <Button variant='text' color='secondary'>
+                {/* <Button variant="text" color="secondary">
                   {formatMessage({ id: 'app.account.menu.my-booking.detail' })}
-                </Button>
+                </Button> */}
               </Box>
             </Box>
           ))}
         </Box>
       ) : (
-        <Box marginY={2}>
-          <Box component='img' src={commonImages.noResult.src} alt={commonImages.noResult.name} />
-          <Typography>{formatMessage({ id: 'app.account.menu.my-booking.no-result' })}</Typography>
+        <Box display='flex' justifyContent='center'>
+          <Box marginY={2} textAlign='center'>
+            <Box component='img' src={commonImages.noResult.src} alt={commonImages.noResult.name} />
+            <Typography>{formatMessage({ id: 'app.account.menu.my-booking.no-result' })}</Typography>
+          </Box>
         </Box>
       )}
       {selectedBooking && (

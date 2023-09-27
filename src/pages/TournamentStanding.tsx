@@ -15,7 +15,15 @@ export const TournamentStanding = () => {
 
   return (
     teams && (
-      <Box paddingY={4} sx={{ overflowX: 'scroll' }}>
+      <Box
+        paddingY={4}
+        sx={{
+          overflowX: 'scroll',
+          '&::-webkit-scrollbar': {
+            width: '0',
+          },
+        }}
+      >
         <Table>
           <TableHead>
             <TableRow>

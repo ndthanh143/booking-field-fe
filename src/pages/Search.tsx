@@ -67,8 +67,8 @@ export const Search = () => {
   }, [searchParams, venueRefetch, page]);
 
   return (
-    <Box height='100vh'>
-      <Grid container display='flex' justifyContent='space-between' marginY={2}>
+    <>
+      <Grid container display='flex' justifyContent='space-between' marginBottom={2}>
         <Grid
           item
           xs={12}
@@ -165,7 +165,7 @@ export const Search = () => {
             </Box>
           )}
         </Grid>
-        <Grid item md={false} lg={4} height='100vh' position='sticky' top={10}>
+        <Grid item md={false} lg={4} height={700} position='sticky' top={10}>
           {isLoaded && (
             <GoogleMap
               mapContainerStyle={{ width: '100%', height: '100%', borderRadius: 10 }}
@@ -182,6 +182,6 @@ export const Search = () => {
 
       <SearchSort isOpen={isOpenSortModal} sortParams={sortParams} onClose={closeSortModal} />
       <SearchFilter isOpen={isOpenFilterModal} priceRange={[minPrice, maxPrice]} onClose={closeFilterModal} />
-    </Box>
+    </>
   );
 };
