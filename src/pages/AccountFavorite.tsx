@@ -75,7 +75,7 @@ export const AccountFavorite = () => {
                     {venue.district}
                   </Box>
                 </Box>
-                {venue.ratings && <Rating name='rating' value={averageRate(venue.ratings)} />}
+                {venue.ratings && <Rating name='rating' value={Number(averageRate(venue.ratings))} />}
                 <Button variant='text' onClick={() => handleUnlike(venue)}>
                   {formatMessage({ id: 'app.account.menu.favorite.button.unlike' })}
                 </Button>
