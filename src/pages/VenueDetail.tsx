@@ -29,6 +29,7 @@ import {
   groupBy,
 } from '@/utils';
 
+const defaultLocation = { lat: 10.161512, lng: 106.23212311 };
 export const VenueDetail = () => {
   const { formatMessage } = useLocale();
 
@@ -331,8 +332,12 @@ export const VenueDetail = () => {
           <Typography variant='h4'> {formatMessage({ id: 'app.venue.address.title' })}</Typography>
           {isLoaded && (
             <Box borderRadius={4} overflow='hidden' marginY={2}>
-              <GoogleMap mapContainerStyle={{ width: '100%', height: '50vh' }} center={venue.location} zoom={10}>
-                <MarkerF position={{ lat: venue.location.lat, lng: venue.location.lng }} />
+              <GoogleMap
+                mapContainerStyle={{ width: '100%', height: '50vh' }}
+                center={venue.location || defaultLocation}
+                zoom={10}
+              >
+                {venue.location && <MarkerF position={{ lat: venue.location.lat, lng: venue.location.lng }} />}
               </GoogleMap>
             </Box>
           )}
