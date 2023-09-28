@@ -17,6 +17,7 @@ import { venueKeys } from '@/services/venue/venue.query';
 
 const STALE_TIME = 5 * 1000;
 const PAGE_LIMIT = 10;
+const defaultCenter = { lat: 106.02532, lng: 10.023321 };
 export const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -191,24 +192,31 @@ export const Search = () => {
               onLoad={handleOnLoad}
               mapContainerStyle={{ width: '100%', height: '100%', borderRadius: 10 }}
               zoom={14}
-              center={venues?.data?.[0]?.location}
+              center={venues?.data?.[0]?.location || defaultCenter}
             >
               {venues &&
-                venues.data.map((item) => (
-                  <OverlayViewF key={item.id} position={item.location} mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}>
-                    <Box
-                      bgcolor={activeMarker === item ? 'primary.main' : 'primary.contrastText'}
-                      sx={{ color: activeMarker === item ? 'primary.contrastText' : 'inherit', cursor: 'pointer' }}
-                      p={1}
-                      borderRadius={2}
-                      fontSize={12}
-                      fontWeight={500}
-                      onClick={() => handleActiveMarker(item)}
-                    >
-                      {(item.price / 1000).toFixed(0)}K
-                    </Box>
-                  </OverlayViewF>
-                ))}
+                venues.data.map(
+                  (item) =>
+                    item.location && (
+                      <OverlayViewF
+                        key={item.id}
+                        position={item.location}
+                        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                      >
+                        <Box
+                          bgcolor={activeMarker === item ? 'primary.main' : 'primary.contrastText'}
+                          sx={{ color: activeMarker === item ? 'primary.contrastText' : 'inherit', cursor: 'pointer' }}
+                          p={1}
+                          borderRadius={2}
+                          fontSize={12}
+                          fontWeight={500}
+                          onClick={() => handleActiveMarker(item)}
+                        >
+                          {(item.price / 1000).toFixed(0)}K
+                        </Box>
+                      </OverlayViewF>
+                    ),
+                )}
             </GoogleMap>
           )}
           {activeMarker && (
