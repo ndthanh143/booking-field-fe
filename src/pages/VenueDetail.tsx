@@ -4,32 +4,43 @@ import LocalDrinkIcon from '@mui/icons-material/LocalDrink';
 import PlaceIcon from '@mui/icons-material/Place';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import StarIcon from '@mui/icons-material/Star';
-import { Box, Button, Divider, Grid, Rating, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Button, Divider, Grid, LinearProgress, Rating, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { GoogleMap, MarkerF, useLoadScript } from '@react-google-maps/api';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { SyntheticEvent, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { RATING_PAGE_LIMIT } from '@/common/constants';
 import { ImageLibrary, Seo } from '@/components';
-import { useLocalStorage } from '@/hooks';
+import { useAuth } from '@/hooks';
 import { useLocale } from '@/locales';
 import { pitchKeys } from '@/services/pitch/pitch.query';
 import { ratingKeys } from '@/services/rating/rating.query';
-import { Venue } from '@/services/venue/venue.dto';
+import { UpdateUserPayload } from '@/services/user/user.dto';
+import userService from '@/services/user/user.service';
 import { venueKeys } from '@/services/venue/venue.query';
-import { averageRate, convertCurrency, convertToAMPM, formatDate, groupBy } from '@/utils';
+import {
+  averageQualityRate,
+  averageRate,
+  averageServiceRate,
+  convertCurrency,
+  convertToAMPM,
+  formatDate,
+  groupBy,
+} from '@/utils';
 
 export const VenueDetail = () => {
   const { formatMessage } = useLocale();
 
+  const { profile, refetch: refetchAuth } = useAuth();
+
   const navigate = useNavigate();
+
+  const { pathname } = useLocation();
 
   const [tab, setTab] = useState(0);
 
   const { slug } = useParams();
-
-  const { storedValue, setValue } = useLocalStorage<Venue[]>('favourites', []);
 
   const venueInstance = venueKeys.detail(slug);
   const { data: venue } = useQuery({
@@ -51,15 +62,23 @@ export const VenueDetail = () => {
     setTab(newValue);
   };
 
+  const { mutate: mutateUpdateUser } = useMutation({
+    mutationFn: ({ id, data }: UpdateUserPayload) => userService.updateUserInfo(id, data),
+    onSuccess: () => {
+      toast.success('Update your favorites successfully');
+      refetchAuth();
+    },
+  });
+
   const handleFavourite = () => {
-    if (venue) {
-      if (storedValue.find((item) => item.id === venue.id)) {
-        const filterFavorite = storedValue.filter((item) => item.id !== venue.id);
-        setValue(filterFavorite);
-        toast.info('Removed venue to your favorite list');
+    if (!profile) {
+      navigate('/login', { state: { redirect: pathname } });
+    } else {
+      if (profile.favorites?.find((item) => item.id === venue?.id)) {
+        const filterFavorite = profile.favorites.filter((item) => item.id !== venue?.id);
+        mutateUpdateUser({ id: profile.id, data: { favorites: filterFavorite } });
       } else {
-        venue && setValue([...storedValue, venue]);
-        toast.success('Added venue to your favorite list');
+        venue && mutateUpdateUser({ id: profile.id, data: { favorites: [...(profile.favorites || []), venue] } });
       }
     }
   };
@@ -85,7 +104,7 @@ export const VenueDetail = () => {
             onClick={handleFavourite}
             sx={{ cursor: 'pointer' }}
           >
-            {storedValue.find((item) => item.id === venue.id) ? (
+            {profile?.favorites?.find((item) => item.id === venue.id) ? (
               <Favorite color='primary' sx={{ marginRight: 1 }} />
             ) : (
               <FavoriteBorderIcon
@@ -105,7 +124,7 @@ export const VenueDetail = () => {
           </Grid>
           <Grid item xs={12} md={2} order={4} display='flex' justifyContent={{ xs: 'start', md: 'end' }}>
             <StarIcon sx={{ marginRight: 1, color: 'primary.main' }} />
-            <Typography variant='body1'>{venue.ratings ? averageRate(venue.ratings) : 0}/5</Typography>
+            <Typography variant='body1'>{venue.ratings && averageRate(venue.ratings)}/5</Typography>
           </Grid>
           <Grid item xs={12} md={12} order={{ xs: 0, md: 5 }} marginY={2}>
             {venue.imageList && venue.imageList.length > 0 && <ImageLibrary imageList={venue.imageList} />}
@@ -235,8 +254,8 @@ export const VenueDetail = () => {
         <Box marginY={4} id='rating'>
           <Typography variant='h4'> {formatMessage({ id: 'app.venue.ratings.title' })}</Typography>
           {ratings && ratings.data.length > 0 ? (
-            <Box display='flex' gap={2}>
-              <Box flex={5}>
+            <Box display='flex' flexDirection={{ xs: 'column', md: 'row' }} gap={6}>
+              <Box flex={{ xs: 1, md: 5 }}>
                 <Box display='flex' alignItems='center' gap={2}>
                   <Typography variant='h1' fontWeight={500}>
                     {averageRate(ratings.data)}
@@ -244,7 +263,7 @@ export const VenueDetail = () => {
                   <Box>
                     <Rating
                       name='rating'
-                      value={averageRate(ratings.data)}
+                      value={Number(averageRate(ratings.data))}
                       readOnly
                       sx={{ color: 'primary.main' }}
                       size='large'
@@ -254,8 +273,30 @@ export const VenueDetail = () => {
                     </Typography>
                   </Box>
                 </Box>
+                <Box marginY={2}>
+                  <Box display='flex' justifyContent='space-between'>
+                    <Typography>{formatMessage({ id: 'app.venue.ratings.quality' })}</Typography>
+                    <Typography fontWeight={500}>{averageQualityRate(ratings.data)}</Typography>
+                  </Box>
+                  <LinearProgress
+                    variant='determinate'
+                    value={(Number(averageQualityRate(ratings.data)) / 5) * 100}
+                    sx={{ height: 8, borderRadius: 2 }}
+                  />
+                </Box>
+                <Box marginY={2}>
+                  <Box display='flex' justifyContent='space-between'>
+                    <Typography>{formatMessage({ id: 'app.venue.ratings.services' })}</Typography>
+                    <Typography fontWeight={500}>{averageServiceRate(ratings.data)}</Typography>
+                  </Box>
+                  <LinearProgress
+                    variant='determinate'
+                    value={(Number(averageServiceRate(ratings.data)) / 5) * 100}
+                    sx={{ height: 8, borderRadius: 2 }}
+                  />
+                </Box>
               </Box>
-              <Box flex={7}>
+              <Box flex={{ xs: 1, md: 7 }}>
                 {ratings.data.map((rating) => (
                   <Box pb={4} key={rating.id}>
                     <Box display='flex' justifyContent='space-between' alignItems='center'>
@@ -266,7 +307,13 @@ export const VenueDetail = () => {
                         {formatDate(rating.createdAt)}
                       </Typography>
                     </Box>
-                    <Rating name='rating' value={rating.rate} readOnly sx={{ color: 'primary.main' }} size='medium' />
+                    <Rating
+                      name='rating'
+                      value={(rating.serviceRate + rating.qualityRate) / 2}
+                      readOnly
+                      sx={{ color: 'primary.main' }}
+                      size='medium'
+                    />
                     <Typography fontWeight={500} fontStyle='italic'>
                       {`${rating.booking.pitch.pitchCategory.name} - ${rating.booking.pitch.name}`}
                     </Typography>

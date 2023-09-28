@@ -52,6 +52,7 @@ export const TournamentMatch = () => {
       toast.success('Update schedule successfully');
       queryClient.invalidateQueries(tournamentInstance.queryKey);
       setSelectedMatch(null);
+      closeUpdateSchedule();
     },
   });
 

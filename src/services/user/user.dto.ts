@@ -10,6 +10,7 @@ export type User = {
   email: string;
   phone: string;
   venue: Venue;
+  favorites?: Venue[];
 } & BaseData;
 
 export type SignInPayload = {
@@ -27,9 +28,10 @@ export type UpdateUserPayload = {
 };
 
 export type UpdateUserData = {
-  firstName: string;
-  lastName: string;
-  phone: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  favorites?: Venue[];
 };
 
 export type ChangePasswordPayload = {

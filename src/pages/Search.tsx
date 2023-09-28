@@ -176,7 +176,7 @@ export const Search = () => {
         </Grid>
         <Grid
           item
-          md={false}
+          md={12}
           lg={4}
           height={700}
           position='sticky'
@@ -190,23 +190,25 @@ export const Search = () => {
             <GoogleMap
               onLoad={handleOnLoad}
               mapContainerStyle={{ width: '100%', height: '100%', borderRadius: 10 }}
-              zoom={12}
+              zoom={14}
+              center={venues?.data?.[0]?.location}
             >
-              {venues?.data.map((item) => (
-                <OverlayViewF position={item.location} mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}>
-                  <Box
-                    bgcolor={activeMarker === item ? 'primary.main' : 'primary.contrastText'}
-                    sx={{ color: activeMarker === item ? 'primary.contrastText' : 'inherit', cursor: 'pointer' }}
-                    p={1}
-                    borderRadius={2}
-                    fontSize={12}
-                    fontWeight={500}
-                    onClick={() => handleActiveMarker(item)}
-                  >
-                    {(item.price / 1000).toFixed(0)}K
-                  </Box>
-                </OverlayViewF>
-              ))}
+              {venues &&
+                venues.data.map((item) => (
+                  <OverlayViewF key={item.id} position={item.location} mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}>
+                    <Box
+                      bgcolor={activeMarker === item ? 'primary.main' : 'primary.contrastText'}
+                      sx={{ color: activeMarker === item ? 'primary.contrastText' : 'inherit', cursor: 'pointer' }}
+                      p={1}
+                      borderRadius={2}
+                      fontSize={12}
+                      fontWeight={500}
+                      onClick={() => handleActiveMarker(item)}
+                    >
+                      {(item.price / 1000).toFixed(0)}K
+                    </Box>
+                  </OverlayViewF>
+                ))}
             </GoogleMap>
           )}
           {activeMarker && (
@@ -239,7 +241,10 @@ export const Search = () => {
                     borderTopRightRadius: 8,
                   }}
                   top={-24}
-                  boxShadow={10}
+                  borderTop={1}
+                  borderLeft={1}
+                  borderRight={1}
+                  borderColor='secondary.light'
                   onClick={() => setActiveMarker(null)}
                 >
                   <ArrowDropDown />

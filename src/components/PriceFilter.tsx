@@ -34,7 +34,6 @@ export const PriceFilter = ({ priceRange, onChange, min, max, step, minDistance 
   };
 
   const valueText = (value: number) => {
-    console.log(value);
     return `${convertCurrency(value)}`;
   };
 

@@ -14,4 +14,8 @@ export const enUS_search = {
   'search.result.result.item.rating': 'Rates',
   'search.result.no-result.title': 'No venue has been found',
   'search.result.no-result.sub-title': 'Sorry, we dont find any venue suitable. Please try other place or category',
+
+  'search.map.info.overview': 'Overview',
+  'search.map.info.review': 'Reviews',
+  'search.map.info.about': 'About',
 };

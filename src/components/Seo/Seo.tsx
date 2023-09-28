@@ -1,11 +1,10 @@
-import { PropsWithChildren } from 'react';
 import { Helmet } from 'react-helmet';
 
 export type SeoProps = {
   title: string;
   description: string;
 };
-export const Seo = ({ title, description, children }: PropsWithChildren<SeoProps>) => {
+export const Seo = ({ title, description }: SeoProps) => {
   return (
     <div className='application'>
       <Helmet>
@@ -18,7 +17,6 @@ export const Seo = ({ title, description, children }: PropsWithChildren<SeoProps
         <meta name='og:description' content={description} />
         <meta name='twitter:description' content={description} />
       </Helmet>
-      <body>{children}</body>
     </div>
   );
 };

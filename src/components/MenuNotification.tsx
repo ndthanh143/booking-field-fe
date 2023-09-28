@@ -102,19 +102,17 @@ export const MenuNotification = ({ variant }: MenuNotificationProps) => {
                 </MenuItem>
               ))
             ) : (
-              <Box display='flex' justifyContent='center' paddingY={4}>
-                <Box>
-                  <Box
-                    component='img'
-                    src={commonImages.noResult.src}
-                    alt={commonImages.noResult.name}
-                    width={100}
-                    height={100}
-                  />
-                  <Typography variant='body2' paddingY={1}>
-                    Chưa có thông báo nào
-                  </Typography>
-                </Box>
+              <Box display='flex' justifyContent='center' paddingY={4} alignItems='center' flexDirection='column'>
+                <Box
+                  component='img'
+                  src={commonImages.noResult.src}
+                  alt={commonImages.noResult.name}
+                  width={100}
+                  height={100}
+                />
+                <Typography variant='body2' paddingTop={1}>
+                  Chưa có thông báo nào
+                </Typography>
               </Box>
             )}
           </Box>
@@ -130,7 +128,10 @@ export const MenuNotification = ({ variant }: MenuNotificationProps) => {
                 color: 'secondary.dark',
               },
             }}
-            onClick={() => navigate('/account/notification')}
+            onClick={() => {
+              closeNotification();
+              navigate('/account/notification');
+            }}
           >
             {formatMessage({
               id: 'app.home.header.notification.view-all',

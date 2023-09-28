@@ -10,10 +10,10 @@ import { notificationKeys } from '@/services/notification/notification.query';
 import { userKeys } from '@/services/user/user.query';
 
 export const useAuth = () => {
-  const userInstance = userKeys.profile();
-  const { data: profile, isLoading, refetch } = useQuery(userInstance);
-
   const [accessToken, setAccessToken] = useState<string | undefined>(Cookies.get('access_token'));
+
+  const userInstance = userKeys.profile();
+  const { data: profile, isLoading, refetch } = useQuery({ ...userInstance, staleTime: Infinity });
 
   const [socket, setSocket] = useState<io.Socket>();
 
@@ -39,8 +39,8 @@ export const useAuth = () => {
   function logout() {
     authService.logout();
     socket?.disconnect();
-    toast.success('Logout successfully');
     refetch();
+    toast.success('Logout successfully');
   }
 
   useEffect(() => {
@@ -59,14 +59,16 @@ export const useAuth = () => {
   }, [socket]);
 
   useEffect(() => {
-    const newSocket = io.connect(`${import.meta.env.VITE_SOCKET_API_URL}`, {
-      extraHeaders: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      withCredentials: true,
-    });
+    if (accessToken) {
+      const newSocket = io.connect(`${import.meta.env.VITE_SOCKET_API_URL}`, {
+        extraHeaders: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      });
 
-    setSocket(newSocket);
+      setSocket(newSocket);
+    }
   }, [accessToken]);
 
   return { profile, login, logout, isLoading, loginLoading, loginError, refetch, socket };

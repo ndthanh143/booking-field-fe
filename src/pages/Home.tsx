@@ -78,11 +78,12 @@ export const Home = () => {
                 }
               }}
               sx={{ cursor: 'pointer' }}
-              key={item}
+              key={item.label}
+              position='relative'
             >
               <Box
                 component='img'
-                src={item}
+                src={item.src}
                 width='100%'
                 height='100%'
                 sx={{
@@ -94,6 +95,19 @@ export const Home = () => {
                 }}
                 borderRadius={3}
               />
+              <Typography
+                variant='h3'
+                color='primary.contrastText'
+                position='absolute'
+                top='50%'
+                left='50%'
+                sx={{
+                  transform: 'translate(-50%, -50%)',
+                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.4), -2px -2px 4px rgba(0, 0, 0, 0.4)',
+                }}
+              >
+                {formatMessage({ id: `app.tournament.create-tournament.type.${[item.label]}` as any })}
+              </Typography>
             </Grid>
           ))}
         </Grid>

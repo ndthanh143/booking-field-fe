@@ -66,8 +66,6 @@ export const CreateTournament = () => {
   const [selectedVenue, setSelectedVenue] = useState<Venue | null>(null);
   const [searchAddress, setSearchAddress] = useState('');
 
-  console.log(selectedVenue);
-
   const pitchCategoryInstance = pitchCategoryKeys.list({ venueId: Number(selectedVenue?.id) });
   const { data: pitchCategories } = useQuery({
     ...pitchCategoryInstance,

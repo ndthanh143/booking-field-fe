@@ -108,6 +108,7 @@ export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
             >
               {imageList.map((item) => (
                 <Box
+                  key={item.imagePath}
                   component='img'
                   src={item.imagePath}
                   width='100%'
