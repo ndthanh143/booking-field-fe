@@ -107,7 +107,7 @@ export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
               <Box display='flex' alignItems='center' marginY={1}>
                 <Box display='flex' alignItems='center'>
                   <StarIcon sx={{ color: 'primary.main', marginRight: 1 }} />
-                  <Typography>{data.averageRate}</Typography>
+                  <Typography>{((data.averageQualityRate + data.averageServiceRate) / 2).toFixed(1)}</Typography>
                 </Box>
                 <Typography marginX={1}>
                   ({data.totalReview} {formatMessage({ id: 'search.result.result.item.rating' })})
