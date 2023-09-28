@@ -29,8 +29,8 @@ export const VenueInfoMapPopup = ({ data }: VenueInfoMapPopupProps) => {
         <Typography>{data.description}</Typography>
         {data.totalReview > 0 && (
           <Box display='flex' gap={1} alignItems='center'>
-            <Typography>{data.averageRate}</Typography>
-            <Rating value={data.averageRate} readOnly size='small' />
+            <Typography>{((data.averageQualityRate + data.averageServiceRate) / 2).toFixed(1)}</Typography>
+            <Rating value={(data.averageQualityRate + data.averageServiceRate) / 2} readOnly size='small' />
             <Typography>({data.totalReview})</Typography>
           </Box>
         )}

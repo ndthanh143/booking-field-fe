@@ -34,8 +34,11 @@ export const Login = () => {
   return (
     <Box
       sx={{
-        my: 8,
-        mx: 4,
+        m: {
+          sm: 2,
+          md: 4,
+          lg: 8,
+        },
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -47,7 +50,7 @@ export const Login = () => {
       <Typography component='h1' variant='h5'>
         Login with your account
       </Typography>
-      <Box component='form' onSubmit={handleSubmit(onSubmitHandler)} noValidate sx={{ mt: 1 }}>
+      <Box component='form' onSubmit={handleSubmit(onSubmitHandler)} noValidate sx={{ mt: 1 }} width='100%'>
         {state?.redirect && (
           <Alert severity='info' sx={{ marginY: 1 }}>
             Please login before

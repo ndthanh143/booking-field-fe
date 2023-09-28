@@ -1,4 +1,3 @@
-import { Settings } from '@mui/icons-material';
 import {
   Backdrop,
   Badge,
@@ -8,9 +7,6 @@ import {
   Divider,
   FormControl,
   Grid,
-  IconButton,
-  Menu,
-  MenuItem,
   TextField,
   Tooltip,
 } from '@mui/material';
@@ -20,7 +16,6 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { UploadImage } from '@/components';
-import { useMenu } from '@/hooks';
 import { useLocale } from '@/locales';
 import mediaService from '@/services/media/media.service';
 import { Team } from '@/services/team/team.dto';
@@ -43,7 +38,12 @@ export const TournamentTeamManagement = () => {
 
   const defaultValues = useMemo(() => ({ teams: tournament?.data.teams }), [tournament]);
 
-  const { register, control, handleSubmit } = useForm<BulkUpdateTeams>({ defaultValues });
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { isDirty },
+  } = useForm<BulkUpdateTeams>({ defaultValues });
   useFieldArray({ control, name: 'teams' });
 
   const { mutate: updateTeamsInfoMutate, isLoading } = useMutation({
@@ -67,7 +67,7 @@ export const TournamentTeamManagement = () => {
     },
   });
 
-  const { anchorEl, isOpen, onClose, onOpen } = useMenu();
+  // const { anchorEl, isOpen, onClose, onOpen } = useMenu();
 
   const onSubmitHandler = async (data: BulkUpdateTeams) => updateTeamsInfoMutate(data);
 
@@ -113,7 +113,7 @@ export const TournamentTeamManagement = () => {
                     </Grid>
                   </Grid>
                 </Tooltip>
-                <Grid item xs={12} md={9} display='flex' flexDirection='column' gap={1}>
+                <Grid item xs={12} md={10} display='flex' flexDirection='column' gap={1}>
                   <TextField
                     placeholder={formatMessage({ id: 'app.tournament.team.name' })}
                     fullWidth
@@ -133,15 +133,15 @@ export const TournamentTeamManagement = () => {
                     {...register(`teams.${index}.contactName`)}
                   />
                 </Grid>
-                <Grid item xs={12} md={1} display='flex' alignItems='center' justifyContent='center'>
-                  <Tooltip title='Tùy chỉnh'>
-                    <IconButton color='primary' onClick={onOpen}>
-                      <Settings fontSize='large' />
+                {/* <Grid item xs={12} md={1} display="flex" alignItems="center" justifyContent="center">
+                  <Tooltip title="Tùy chỉnh">
+                    <IconButton color="primary" onClick={onOpen}>
+                      <Settings fontSize="large" />
                     </IconButton>
                   </Tooltip>
 
                   <Menu
-                    id='long-menu'
+                    id="long-menu"
                     MenuListProps={{
                       'aria-labelledby': 'long-button',
                     }}
@@ -152,7 +152,7 @@ export const TournamentTeamManagement = () => {
                     <MenuItem onClick={onClose}>{formatMessage({ id: 'app.tournament.team.action.info' })}</MenuItem>
                     <MenuItem onClick={onClose}>{formatMessage({ id: 'app.tournament.team.action.delete' })}</MenuItem>
                   </Menu>
-                </Grid>
+                </Grid> */}
               </Grid>
               <Divider />
             </Box>
@@ -167,6 +167,7 @@ export const TournamentTeamManagement = () => {
                   md: 'fit-content',
                 },
               }}
+              disabled={!isDirty}
             >
               {formatMessage({ id: 'app.tournament.team.button.submit' })}
             </Button>

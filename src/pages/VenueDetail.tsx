@@ -124,7 +124,7 @@ export const VenueDetail = () => {
           </Grid>
           <Grid item xs={12} md={2} order={4} display='flex' justifyContent={{ xs: 'start', md: 'end' }}>
             <StarIcon sx={{ marginRight: 1, color: 'primary.main' }} />
-            <Typography variant='body1'>{venue.ratings && averageRate(venue.ratings)}/5</Typography>
+            <Typography variant='body1'>{ratings && averageRate(ratings.data)}/5</Typography>
           </Grid>
           <Grid item xs={12} md={12} order={{ xs: 0, md: 5 }} marginY={2}>
             {venue.imageList && venue.imageList.length > 0 && <ImageLibrary imageList={venue.imageList} />}
