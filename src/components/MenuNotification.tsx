@@ -128,7 +128,10 @@ export const MenuNotification = ({ variant }: MenuNotificationProps) => {
                 color: 'secondary.dark',
               },
             }}
-            onClick={() => navigate('/account/notification')}
+            onClick={() => {
+              closeNotification();
+              navigate('/account/notification');
+            }}
           >
             {formatMessage({
               id: 'app.home.header.notification.view-all',
