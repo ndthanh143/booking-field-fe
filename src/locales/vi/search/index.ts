@@ -15,4 +15,8 @@ export const vi_search = {
   'search.result.result.item.rating': 'Đánh giá',
   'search.result.no-result.sub-title':
     'Rất tiếc, chúng tôi không tìm thấy sân bóng nào phù hợp. Bạn vui lòng thử lại với địa điểm hoặc loại sân khác.',
+
+  'search.map.info.overview': 'Tổng quan',
+  'search.map.info.review': 'Đánh giá',
+  'search.map.info.about': 'Thông tin',
 };

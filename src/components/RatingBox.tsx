@@ -17,7 +17,9 @@ export interface IRatingBoxProps {
 export const RatingBox = ({ isOpen, onClose, data, onSubmit }: IRatingBoxProps) => {
   const { formatMessage } = useLocale();
 
-  const [rating, setRating] = useState<number | null>();
+  const [serviceRate, setServiceRate] = useState<number | null>(null);
+  const [qualityRate, setQualityRate] = useState<number | null>(null);
+
   const [content, setContent] = useState<string>('');
 
   return (
@@ -69,9 +71,15 @@ export const RatingBox = ({ isOpen, onClose, data, onSubmit }: IRatingBoxProps) 
               <Typography variant='caption'>{data.pitch.venue.address}</Typography>
             </Box>
           </Box>
-          <Box display='flex' justifyContent='center' marginY={2}>
-            <Rating value={rating} onChange={(_, value) => setRating(value)} size='large' />
+          <Box justifyContent='center' marginY={2} display='flex' alignItems='center' gap={2}>
+            <Typography>Services:</Typography>
+            <Rating value={serviceRate} onChange={(_, value) => setServiceRate(value)} size='large' />
           </Box>
+          <Box justifyContent='center' marginY={2} display='flex' alignItems='center' gap={2}>
+            <Typography>Quality:</Typography>
+            <Rating value={qualityRate} onChange={(_, value) => setQualityRate(value)} size='large' />
+          </Box>
+
           <TextArea
             aria-label='minimum height'
             minRows={3}
@@ -82,8 +90,10 @@ export const RatingBox = ({ isOpen, onClose, data, onSubmit }: IRatingBoxProps) 
           <Button
             variant='contained'
             sx={{ width: '100%' }}
-            onClick={() => rating && onSubmit({ booking: data.id, rate: rating, content })}
-            disabled={!rating}
+            onClick={() =>
+              serviceRate && qualityRate && onSubmit({ booking: data.id, serviceRate, qualityRate, content })
+            }
+            disabled={!(serviceRate && qualityRate)}
           >
             {formatMessage({ id: 'app.account.menu.my-booking.rating.box.submit' })}
           </Button>

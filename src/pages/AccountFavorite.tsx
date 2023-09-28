@@ -1,24 +1,36 @@
 import { Image, LocationOn } from '@mui/icons-material';
 import { Box, Button, Grid, Rating, Typography } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { commonImages } from '@/assets/images/common';
-import { useLocalStorage } from '@/hooks';
+import { useAuth } from '@/hooks';
 import { useLocale } from '@/locales';
+import { UpdateUserPayload } from '@/services/user/user.dto';
+import userService from '@/services/user/user.service';
 import { Venue } from '@/services/venue/venue.dto';
 import { averageRate } from '@/utils';
 
 export const AccountFavorite = () => {
   const navigate = useNavigate();
 
+  const { profile, refetch } = useAuth();
+
   const { formatMessage } = useLocale();
 
-  const { storedValue, setValue } = useLocalStorage<Venue[]>('favourites', []);
+  const { mutate } = useMutation({
+    mutationFn: ({ id, data }: UpdateUserPayload) => userService.updateUserInfo(id, data),
+    onSuccess: () => {
+      toast.success('Update your favorites successfully');
+      refetch();
+    },
+  });
 
   const handleUnlike = (venue: Venue) => {
-    const filterFavorite = storedValue.filter((item) => item.id !== venue.id);
-    setValue(filterFavorite);
-    toast.success('Remove favorite venue successfully');
+    if (profile) {
+      const filteredFavorites = profile.favorites?.filter((item) => item.id !== venue.id);
+      mutate({ id: profile.id, data: { favorites: filteredFavorites } });
+    }
   };
 
   return (
@@ -26,9 +38,9 @@ export const AccountFavorite = () => {
       <Typography variant='h4' fontSize={{ xs: 20, md: 30 }} fontWeight={500} marginBottom={4}>
         {formatMessage({ id: 'app.account.menu.favorite.title' })}
       </Typography>
-      {storedValue.length > 0 ? (
+      {profile && profile.favorites && profile.favorites.length > 0 ? (
         <Grid container spacing={4}>
-          {storedValue.map((venue) => (
+          {profile?.favorites?.map((venue) => (
             <Grid item xs={12} md={6} key={venue.id}>
               <Box onClick={() => navigate(`/venue/${venue.slug}`)} sx={{ cursor: 'pointer' }}>
                 {venue.imageList?.length > 0 ? (

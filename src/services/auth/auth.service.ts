@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie';
 import { User } from '../user/user.dto';
 import { LoginInput, AuthResponse, sendEmailForgotPasswordPayload, ResetPasswordPayload } from './auth.dto';
+import { BaseResponse } from '@/common/dtos/base.dto';
 import axiosInstance from '@/utils/axiosConfig';
 
 const authService = {
@@ -8,20 +9,21 @@ const authService = {
     const { data } = await axiosInstance.post<AuthResponse>('/auth/login', payload);
 
     Cookies.set('access_token', data.data.accessToken);
-    Cookies.set('user', JSON.stringify(data.data.user));
 
     return data;
   },
   logout: () => {
     Cookies.remove('access_token');
-    Cookies.remove('user');
   },
-  getCurrentUser: (): User | null => {
-    const user = Cookies.get('user');
-    if (user) {
-      return JSON.parse(user);
+  getCurrentUser: async () => {
+    const accessToken = Cookies.get('access_token');
+    if (accessToken) {
+      const { data } = await axiosInstance.get<BaseResponse<User>>('/users/me');
+
+      return data.data;
+    } else {
+      return null;
     }
-    return null;
   },
   sendEmailForgotPassword: async ({ email }: sendEmailForgotPasswordPayload) => {
     const { data } = await axiosInstance.post(`/auth/forgot-password/${email}`);
