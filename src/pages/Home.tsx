@@ -90,6 +90,7 @@ export const Home = () => {
                   objectFit: 'cover',
                   ':hover': {
                     transform: 'scale(1.1)',
+                    zIndex: 1,
                   },
                   transition: '0.2s ease all',
                 }}
