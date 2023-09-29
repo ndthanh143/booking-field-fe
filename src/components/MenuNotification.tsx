@@ -45,7 +45,9 @@ export const MenuNotification = ({ variant }: MenuNotificationProps) => {
   });
 
   useEffect(() => {
-    notificationRefetch();
+    if (!profile) {
+      notificationRefetch();
+    }
   }, [profile, notificationRefetch]);
 
   return profile && notifications ? (
