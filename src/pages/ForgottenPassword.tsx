@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { NoEncryption, Send } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import { Avatar, Box, Button, TextField, Typography } from '@mui/material';
+import { Alert, Avatar, Box, Button, TextField, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -52,15 +52,9 @@ export const ForgottenPassword = () => {
       </Typography>
       <Box component='form' onSubmit={handleSubmit(onSubmitHandler)} noValidate sx={{ mt: 1 }} width='80%'>
         {isSuccess && (
-          <Typography
-            textAlign='center'
-            marginBottom={2}
-            padding={1}
-            bgcolor='success.dark'
-            color='success.contrastText'
-          >
+          <Alert severity='success' sx={{ marginBottom: 2 }}>
             Please check your email to receive reset password link
-          </Typography>
+          </Alert>
         )}
         <TextField placeholder='Please fill in your email address' type='email' fullWidth {...register('email')} />
         {isError && (
