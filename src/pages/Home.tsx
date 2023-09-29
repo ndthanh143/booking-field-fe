@@ -77,7 +77,14 @@ export const Home = () => {
                   });
                 }
               }}
-              sx={{ cursor: 'pointer' }}
+              sx={{
+                cursor: 'pointer',
+                ':hover': {
+                  zIndex: 1,
+                  transform: 'scale(1.1)',
+                },
+                transition: '0.2s ease all',
+              }}
               key={item.label}
               position='relative'
             >
@@ -88,11 +95,6 @@ export const Home = () => {
                 height='100%'
                 sx={{
                   objectFit: 'cover',
-                  ':hover': {
-                    transform: 'scale(1.1)',
-                    zIndex: 1,
-                  },
-                  transition: '0.2s ease all',
                 }}
                 borderRadius={3}
               />
