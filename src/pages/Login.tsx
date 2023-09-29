@@ -37,7 +37,7 @@ export const Login = () => {
     <Box
       sx={{
         m: {
-          sm: 2,
+          xs: 2,
           md: 4,
           lg: 8,
         },
