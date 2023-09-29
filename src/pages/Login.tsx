@@ -3,7 +3,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { LoadingButton } from '@mui/lab';
 import { Alert, Avatar, Box, Grid, TextField, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
 import { Link } from '@/components';
 import { useAuth } from '@/hooks/useAuth';
@@ -16,6 +16,8 @@ const schema = object({
 
 export const Login = () => {
   const { state } = useLocation();
+
+  const navigate = useNavigate();
 
   const {
     register,
@@ -44,7 +46,7 @@ export const Login = () => {
         alignItems: 'center',
       }}
     >
-      <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+      <Avatar sx={{ m: 1, bgcolor: 'primary.main', cursor: 'pointer' }} onClick={() => navigate('/')}>
         <LockOutlinedIcon />
       </Avatar>
       <Typography component='h1' variant='h5'>
