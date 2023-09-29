@@ -22,7 +22,7 @@ export const AccountProfile = () => {
 
   const { profile, refetch } = useAuth();
 
-  const { register, handleSubmit } = useForm<UpdateUserData>({
+  const { register, handleSubmit } = useForm({
     resolver: yupResolver(schema),
   });
 

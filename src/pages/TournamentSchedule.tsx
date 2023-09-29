@@ -119,16 +119,20 @@ export const TournamentSchedule = () => {
                     color='primary.contrastText'
                     paddingY={1}
                     marginX={2}
-                    minWidth={100}
+                    minWidth={{ xs: 70, md: 100 }}
+                    display='flex'
+                    justifyContent='center'
+                    alignItems='center'
                     textAlign='center'
+                    paddingX={1}
                   >
                     {match.hostGoals && match.guestGoals ? (
-                      <Typography fontSize={20} fontWeight={500}>
+                      <Typography fontSize={{ xs: 16, md: 20 }} fontWeight={500}>
                         {match.hostGoals} - {match.guestGoals}
                       </Typography>
                     ) : match.time ? (
                       <Box>
-                        <Typography display='block' fontWeight={700} fontSize={20}>
+                        <Typography display='block' fontWeight={700} fontSize={{ xs: 16, md: 20 }}>
                           {formatDateToTime(match.time)}
                         </Typography>
                         <Typography display='block' fontWeight={500}>

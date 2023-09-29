@@ -70,7 +70,6 @@ export const CreateTournament = () => {
   const { data: pitchCategories } = useQuery({
     ...pitchCategoryInstance,
     enabled: Boolean(selectedVenue),
-    staleTime: Infinity,
   });
 
   const debounceSearchAddress = useDebounce(searchAddress);
@@ -337,7 +336,7 @@ export const CreateTournament = () => {
             <Typography variant='caption'>
               {formatMessage({ id: 'app.tournament.create-tournament.pitch.type.sub-title' })}
             </Typography>
-            {pitchCategories && (
+            {pitchCategories && pitchCategories.data.length > 0 && (
               <Select defaultValue={pitchCategories.data[0].id} {...register('pitchCategory')} fullWidth>
                 {pitchCategories.data.map((item) => (
                   <MenuItem value={item.id} key={item.id}>

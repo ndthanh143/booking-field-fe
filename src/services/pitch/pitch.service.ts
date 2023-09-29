@@ -35,7 +35,7 @@ const pitchService = {
   getOne: async (id: number) => {
     const { data } = await axiosInstance.get<PitchResponse>(`/pitches/${id}`);
 
-    return data;
+    return data.data;
   },
 
   getPitchesByVenueDetail: async (venueId: number) => {

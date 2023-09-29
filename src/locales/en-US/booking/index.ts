@@ -24,5 +24,5 @@ export const enUS_booking = {
     'By placing an order, you agree to Playfinder Terms and Conditions, Privacy Policy, and the venue Terms of Use.',
 
   'app.booking.success.title': 'Booking successfuly',
-  'app.booking.success.go-to-homepage': 'Back to Home Page',
+  'app.booking.success.go-to-booking': 'View your booking',
 };

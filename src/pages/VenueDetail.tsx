@@ -1,27 +1,43 @@
+import { Favorite } from '@mui/icons-material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import LocalDrinkIcon from '@mui/icons-material/LocalDrink';
 import PlaceIcon from '@mui/icons-material/Place';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import StarIcon from '@mui/icons-material/Star';
-import { Avatar, Box, Button, Divider, Grid, Rating, Stack, Tab, Tabs, Typography } from '@mui/material';
-import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
-import { useQuery } from '@tanstack/react-query';
-import { SyntheticEvent, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Box, Button, Divider, Grid, LinearProgress, Rating, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { GoogleMap, MarkerF, useLoadScript } from '@react-google-maps/api';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { SyntheticEvent, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { RATING_PAGE_LIMIT } from '@/common/constants';
 import { ImageLibrary, Seo } from '@/components';
+import { useAuth } from '@/hooks';
 import { useLocale } from '@/locales';
 import { pitchKeys } from '@/services/pitch/pitch.query';
 import { ratingKeys } from '@/services/rating/rating.query';
+import { UpdateUserPayload } from '@/services/user/user.dto';
+import userService from '@/services/user/user.service';
 import { venueKeys } from '@/services/venue/venue.query';
-import { convertCurrency, convertToAMPM, formatDate, groupBy } from '@/utils';
+import {
+  averageQualityRate,
+  averageRate,
+  averageServiceRate,
+  convertCurrency,
+  convertToAMPM,
+  formatDate,
+  groupBy,
+} from '@/utils';
 
+const defaultLocation = { lat: 10.161512, lng: 106.23212311 };
 export const VenueDetail = () => {
   const { formatMessage } = useLocale();
 
+  const { profile, refetch: refetchAuth } = useAuth();
+
   const navigate = useNavigate();
+
+  const { pathname } = useLocation();
 
   const [tab, setTab] = useState(0);
 
@@ -39,14 +55,6 @@ export const VenueDetail = () => {
   const ratingInstance = ratingKeys.list({ venueId: venue?.id, page: 1, limit: RATING_PAGE_LIMIT });
   const { data: ratings } = useQuery({ ...ratingInstance, enabled: !!venue });
 
-  const center = useMemo(
-    () => ({
-      lat: 10.796426,
-      lng: 106.653084,
-    }),
-    [],
-  );
-
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.GOOGLE_MAPS_API_KEY || '',
   });
@@ -55,10 +63,26 @@ export const VenueDetail = () => {
     setTab(newValue);
   };
 
-  const rateAverage =
-    ratings && ratings.data.length > 0
-      ? (ratings.data.reduce((acc, cur) => acc + Number(cur.rate), 0) / ratings.data.length).toFixed(1)
-      : 0;
+  const { mutate: mutateUpdateUser } = useMutation({
+    mutationFn: ({ id, data }: UpdateUserPayload) => userService.updateUserInfo(id, data),
+    onSuccess: () => {
+      toast.success('Update your favorites successfully');
+      refetchAuth();
+    },
+  });
+
+  const handleFavourite = () => {
+    if (!profile) {
+      navigate('/login', { state: { redirect: pathname } });
+    } else {
+      if (profile.favorites?.find((item) => item.id === venue?.id)) {
+        const filterFavorite = profile.favorites.filter((item) => item.id !== venue?.id);
+        mutateUpdateUser({ id: profile.id, data: { favorites: filterFavorite } });
+      } else {
+        venue && mutateUpdateUser({ id: profile.id, data: { favorites: [...(profile.favorites || []), venue] } });
+      }
+    }
+  };
 
   const groupByCategory = pitches && groupBy(pitches.data, (item) => item.pitchCategory.name);
 
@@ -78,8 +102,21 @@ export const VenueDetail = () => {
             display='flex'
             alignItems='center'
             justifyContent={{ xs: 'start', md: 'end' }}
+            onClick={handleFavourite}
+            sx={{ cursor: 'pointer' }}
           >
-            <FavoriteBorderIcon sx={{ marginRight: 1 }} />
+            {profile?.favorites?.find((item) => item.id === venue.id) ? (
+              <Favorite color='primary' sx={{ marginRight: 1 }} />
+            ) : (
+              <FavoriteBorderIcon
+                sx={{
+                  marginRight: 1,
+                  ':hover': {
+                    color: 'primary.main',
+                  },
+                }}
+              />
+            )}
             <Typography variant='body1'>{formatMessage({ id: 'app.venue.favorite' })}</Typography>
           </Grid>
           <Grid item xs={12} md={10} order={3} display='flex'>
@@ -88,7 +125,7 @@ export const VenueDetail = () => {
           </Grid>
           <Grid item xs={12} md={2} order={4} display='flex' justifyContent={{ xs: 'start', md: 'end' }}>
             <StarIcon sx={{ marginRight: 1, color: 'primary.main' }} />
-            <Typography variant='body1'>{rateAverage}/5</Typography>
+            <Typography variant='body1'>{ratings && averageRate(ratings.data)}/5</Typography>
           </Grid>
           <Grid item xs={12} md={12} order={{ xs: 0, md: 5 }} marginY={2}>
             {venue.imageList && venue.imageList.length > 0 && <ImageLibrary imageList={venue.imageList} />}
@@ -218,85 +255,74 @@ export const VenueDetail = () => {
         <Box marginY={4} id='rating'>
           <Typography variant='h4'> {formatMessage({ id: 'app.venue.ratings.title' })}</Typography>
           {ratings && ratings.data.length > 0 ? (
-            <>
-              <Box display='flex' alignItems='center' marginY={2}>
-                <Box display='flex' alignItems='center'>
-                  <StarIcon sx={{ fontSize: 44, color: 'primary.main' }} />
-                  <Typography variant='h3' fontWeight={500}>
-                    {rateAverage}
+            <Box display='flex' flexDirection={{ xs: 'column', md: 'row' }} gap={6}>
+              <Box flex={{ xs: 1, md: 5 }}>
+                <Box display='flex' alignItems='center' gap={2}>
+                  <Typography variant='h1' fontWeight={500}>
+                    {averageRate(ratings.data)}
                   </Typography>
+                  <Box>
+                    <Rating
+                      name='rating'
+                      value={Number(averageRate(ratings.data))}
+                      readOnly
+                      sx={{ color: 'primary.main' }}
+                      size='large'
+                    />
+                    <Typography color='secondary' sx={{ opacity: 0.8 }}>
+                      Base on {ratings.data.length} ratings
+                    </Typography>
+                  </Box>
                 </Box>
-                <Typography fontWeight={500} variant='h6'>
-                  /5
-                </Typography>
-
-                <Box display='flex' alignItems='center' marginX={2}>
-                  <FiberManualRecordIcon sx={{ fontSize: 8 }} />
-                  <Typography variant='h5' marginX={1}>
-                    {ratings.pageInfo.count} {formatMessage({ id: 'app.venue.ratings.title' })}
-                  </Typography>
+                <Box marginY={2}>
+                  <Box display='flex' justifyContent='space-between'>
+                    <Typography>{formatMessage({ id: 'app.venue.ratings.quality' })}</Typography>
+                    <Typography fontWeight={500}>{averageQualityRate(ratings.data)}</Typography>
+                  </Box>
+                  <LinearProgress
+                    variant='determinate'
+                    value={(Number(averageQualityRate(ratings.data)) / 5) * 100}
+                    sx={{ height: 8, borderRadius: 2 }}
+                  />
+                </Box>
+                <Box marginY={2}>
+                  <Box display='flex' justifyContent='space-between'>
+                    <Typography>{formatMessage({ id: 'app.venue.ratings.services' })}</Typography>
+                    <Typography fontWeight={500}>{averageServiceRate(ratings.data)}</Typography>
+                  </Box>
+                  <LinearProgress
+                    variant='determinate'
+                    value={(Number(averageServiceRate(ratings.data)) / 5) * 100}
+                    sx={{ height: 8, borderRadius: 2 }}
+                  />
                 </Box>
               </Box>
-              <Grid container spacing={6}>
+              <Box flex={{ xs: 1, md: 7 }}>
                 {ratings.data.map((rating) => (
-                  <Grid item xs={12} md={6} key={rating.id}>
+                  <Box pb={4} key={rating.id}>
                     <Box display='flex' justifyContent='space-between' alignItems='center'>
-                      <Box display='flex' alignItems='center'>
-                        <Avatar sx={{ bgcolor: 'primary.main', marginRight: 2, width: 56, height: 56 }}>
-                          {rating.booking.user.lastName.charAt(0)}
-                        </Avatar>
-                        <Box>
-                          <Typography variant='body1' sx={{ opacity: 0.6 }}>
-                            {formatDate(rating.createdAt)}
-                          </Typography>
-                          <Box display='flex'>
-                            <Typography variant='body1'>Khách hàng:</Typography>
-                            <Typography variant='body1' fontWeight={500} marginX={1}>
-                              {`${rating.booking.user.lastName} ${rating.booking.user.firstName}`}
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </Box>
-                      <Box>
-                        <Box display='flex' alignItems='center'>
-                          <Typography variant='body1' marginX={1}>
-                            Loại:
-                          </Typography>
-                          <Typography fontWeight={500}>{rating.booking.pitch.pitchCategory.name}</Typography>
-                        </Box>
-                        <Box display='flex' alignItems='center'>
-                          <Typography variant='body1' marginX={1}>
-                            {formatMessage({ id: 'app.venue.ratings.title' })}
-                          </Typography>
-                          <Rating
-                            name='simple-controlled'
-                            value={rating.rate}
-                            readOnly
-                            sx={{ color: 'primary.main' }}
-                          />
-                        </Box>
-                      </Box>
+                      <Typography
+                        fontWeight={500}
+                      >{`${rating.booking.user.lastName} ${rating.booking.user.firstName}`}</Typography>
+                      <Typography variant='body2' sx={{ opacity: 0.8 }}>
+                        {formatDate(rating.createdAt)}
+                      </Typography>
                     </Box>
-                    <Typography marginY={1}>{rating.content}</Typography>
-                  </Grid>
+                    <Rating
+                      name='rating'
+                      value={(rating.serviceRate + rating.qualityRate) / 2}
+                      readOnly
+                      sx={{ color: 'primary.main' }}
+                      size='medium'
+                    />
+                    <Typography fontWeight={500} fontStyle='italic'>
+                      {`${rating.booking.pitch.pitchCategory.name} - ${rating.booking.pitch.name}`}
+                    </Typography>
+                    <Typography>{rating.content}</Typography>
+                  </Box>
                 ))}
-                <Grid
-                  item
-                  display='flex'
-                  alignItems='center'
-                  sx={{
-                    cursor: 'pointer',
-                    ':hover': {
-                      color: 'primary.light',
-                    },
-                  }}
-                  xs={12}
-                >
-                  <Typography sx={{ textDecoration: 1 }}>Hiển thị thêm</Typography>
-                  <KeyboardArrowRightIcon />
-                </Grid>
-              </Grid>
-            </>
+              </Box>
+            </Box>
           ) : (
             <Box marginY={2}> {formatMessage({ id: 'app.venue.ratings.no-result' })}</Box>
           )}
@@ -306,8 +332,12 @@ export const VenueDetail = () => {
           <Typography variant='h4'> {formatMessage({ id: 'app.venue.address.title' })}</Typography>
           {isLoaded && (
             <Box borderRadius={4} overflow='hidden' marginY={2}>
-              <GoogleMap mapContainerStyle={{ width: '100%', height: '50vh' }} center={center} zoom={15}>
-                <Marker position={{ lat: venue.location.lat, lng: venue.location.lng }} />
+              <GoogleMap
+                mapContainerStyle={{ width: '100%', height: '50vh' }}
+                center={venue.location || defaultLocation}
+                zoom={10}
+              >
+                {venue.location && <MarkerF position={{ lat: venue.location.lat, lng: venue.location.lng }} />}
               </GoogleMap>
             </Box>
           )}

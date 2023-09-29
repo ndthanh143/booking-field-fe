@@ -16,7 +16,7 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import MuiDrawer from '@mui/material/Drawer';
 import { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { MenuNotification, MenuActions } from '.';
+import { MenuNotification, MenuActions } from '../components';
 import { useAuth } from '@/hooks';
 
 const drawerWidth = 240;

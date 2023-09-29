@@ -16,6 +16,8 @@ export const vi_venue_detail = {
   'app.venue.pitches.item.book': 'Đặt sân',
 
   'app.venue.ratings.title': 'Đánh giá',
+  'app.venue.ratings.services': 'Dịch vụ',
+  'app.venue.ratings.quality': 'Chất lượng',
   'app.venue.ratings.no-result': 'Chưa có đánh giá nào',
 
   'app.venue.address.title': 'Địa chỉ',

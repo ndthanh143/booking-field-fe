@@ -45,7 +45,9 @@ export const MenuNotification = ({ variant }: MenuNotificationProps) => {
   });
 
   useEffect(() => {
-    notificationRefetch();
+    if (!profile) {
+      notificationRefetch();
+    }
   }, [profile, notificationRefetch]);
 
   return profile && notifications ? (
@@ -86,7 +88,13 @@ export const MenuNotification = ({ variant }: MenuNotificationProps) => {
           >
             {notifications.data.length > 0 ? (
               notifications?.data.map((notification) => (
-                <MenuItem key={notification.id}>
+                <MenuItem
+                  key={notification.id}
+                  onClick={() => {
+                    closeNotification();
+                    navigate('/account/notification');
+                  }}
+                >
                   <Box display='flex' gap={2} alignItems='center'>
                     <Box component='img' src='/logo.png' alt={notification.title} width='20%' height='100%' />
                     <Box width='80%' paddingX={2}>
@@ -102,19 +110,17 @@ export const MenuNotification = ({ variant }: MenuNotificationProps) => {
                 </MenuItem>
               ))
             ) : (
-              <Box display='flex' justifyContent='center' paddingY={4}>
-                <Box>
-                  <Box
-                    component='img'
-                    src={commonImages.noResult.src}
-                    alt={commonImages.noResult.name}
-                    width={100}
-                    height={100}
-                  />
-                  <Typography variant='body2' paddingY={1}>
-                    Chưa có thông báo nào
-                  </Typography>
-                </Box>
+              <Box display='flex' justifyContent='center' paddingY={4} alignItems='center' flexDirection='column'>
+                <Box
+                  component='img'
+                  src={commonImages.noResult.src}
+                  alt={commonImages.noResult.name}
+                  width={100}
+                  height={100}
+                />
+                <Typography variant='body2' paddingTop={1}>
+                  Chưa có thông báo nào
+                </Typography>
               </Box>
             )}
           </Box>
@@ -130,7 +136,10 @@ export const MenuNotification = ({ variant }: MenuNotificationProps) => {
                 color: 'secondary.dark',
               },
             }}
-            onClick={() => navigate('/account/notification')}
+            onClick={() => {
+              closeNotification();
+              navigate('/account/notification');
+            }}
           >
             {formatMessage({
               id: 'app.home.header.notification.view-all',

@@ -1,9 +1,5 @@
-import { Close } from '@mui/icons-material';
-import { Box, Fab, Grid, IconButton, Modal } from '@mui/material';
-import { useState } from 'react';
-import { Navigation, Thumbs } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Swiper as SwiperType } from 'swiper/types';
+import { Box, Fab, Grid, Modal } from '@mui/material';
+import { Slider } from './Slider';
 import { useBoolean } from '@/hooks';
 import { useLocale } from '@/locales';
 import { VenueImage } from '@/services/venue/venue.dto';
@@ -16,7 +12,6 @@ export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
   const { formatMessage } = useLocale();
 
   const { value, setTrue, setFalse } = useBoolean(false);
-  const [_, setSwiper] = useState<SwiperType | null>(null);
 
   return (
     <Grid container borderRadius={3} overflow='hidden' height={{ xs: 300, md: 500 }}>
@@ -77,57 +72,53 @@ export const ImageLibrary = ({ imageList }: ImageLibraryProps) => {
           bgcolor='primary.contrastText'
           borderRadius={3}
         >
-          <Box maxHeight={500} overflow='hidden' borderRadius={3} position='relative'>
-            <Swiper spaceBetween={50} slidesPerView={1} centeredSlides={true} modules={[Navigation, Thumbs]}>
-              {imageList.map((item) => (
-                <SwiperSlide key={item.imagePath}>
-                  <Box
-                    component='img'
-                    src={item.imagePath}
-                    width='100%'
-                    height={{ xs: 300, md: 500 }}
-                    sx={{ objectFit: 'cover' }}
-                    border={1}
-                    borderColor='secondary.light'
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-            <IconButton
+          <Box borderRadius={3} position='relative'>
+            <Slider
               sx={{
-                top: 0,
-                right: 0,
-                zIndex: 10,
-                position: 'absolute',
-                bgcolor: 'primary.contrastText',
-                color: '#000',
+                '.slick-dots': {
+                  position: 'relative',
+                  display: 'flex',
+                  gap: 2,
+                  width: '100%',
+                  height: 60,
+                  justifyContent: 'space-between',
+                  li: {
+                    height: '100%',
+                    width: 80,
+                  },
+                  '.slick-active': {
+                    border: 2,
+                    borderColor: 'primary.main',
+                  },
+                },
               }}
-              onClick={setFalse}
-            >
-              <Close color='inherit' />
-            </IconButton>
-          </Box>
-          <Box maxHeight={50} overflow='hidden' marginTop={4}>
-            <Swiper
-              spaceBetween={10}
-              slidesPerView={7}
-              modules={[Navigation, Thumbs]}
-              onSwiper={(swiper) => setSwiper(swiper)}
-            >
-              {imageList.map((item) => (
-                <SwiperSlide key={item.imagePath}>
+              customPaging={(i) => {
+                return (
                   <Box
                     component='img'
-                    src={item.imagePath}
                     width='100%'
-                    minHeight={70}
-                    border={1}
-                    borderColor='secondary.light'
-                    sx={{ cursor: 'pointer', objectFit: 'cover' }}
+                    height='100%'
+                    src={imageList[i].imagePath}
+                    sx={{ objectFit: 'cover' }}
                   />
-                </SwiperSlide>
+                );
+              }}
+              dots={true}
+              dotsClass='slick-dots slick-thumb'
+            >
+              {imageList.map((item) => (
+                <Box
+                  key={item.imagePath}
+                  component='img'
+                  src={item.imagePath}
+                  width='100%'
+                  height={{ xs: 300, md: 500 }}
+                  sx={{ objectFit: 'cover' }}
+                  border={1}
+                  borderColor='secondary.light'
+                />
               ))}
-            </Swiper>
+            </Slider>
           </Box>
         </Box>
       </Modal>

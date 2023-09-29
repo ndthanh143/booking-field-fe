@@ -1,13 +1,17 @@
 import { Box, Slider, TextField } from '@mui/material';
 import { useLocale } from '@/locales';
+import { convertCurrency } from '@/utils';
 
 export interface PriceFilterProps {
   priceRange: number[];
   onChange: (data: number[]) => void;
   minDistance: number;
+  min: number;
+  max: number;
+  step: number;
 }
 
-export const PriceFilter = ({ priceRange, onChange, minDistance }: PriceFilterProps) => {
+export const PriceFilter = ({ priceRange, onChange, min, max, step, minDistance }: PriceFilterProps) => {
   const { formatMessage } = useLocale();
 
   const handlePriceRangeChange = (_: Event, newValue: number | number[], activeThumb: number) => {
@@ -17,7 +21,8 @@ export const PriceFilter = ({ priceRange, onChange, minDistance }: PriceFilterPr
 
     if (newValue[1] - newValue[0] < minDistance) {
       if (activeThumb === 0) {
-        const clamped = Math.min(newValue[0], 100 - minDistance);
+        const clamped = Math.min(newValue[0], max - minDistance);
+
         onChange([clamped, clamped + minDistance]);
       } else {
         const clamped = Math.max(newValue[1], minDistance);
@@ -29,7 +34,7 @@ export const PriceFilter = ({ priceRange, onChange, minDistance }: PriceFilterPr
   };
 
   const valueText = (value: number) => {
-    return `${value}đ`;
+    return `${convertCurrency(value)}`;
   };
 
   return (
@@ -39,14 +44,27 @@ export const PriceFilter = ({ priceRange, onChange, minDistance }: PriceFilterPr
         onChange={handlePriceRangeChange}
         valueLabelDisplay='auto'
         getAriaValueText={valueText}
-        max={1000000}
-        min={0}
-        step={10000}
+        valueLabelFormat={valueText}
+        max={max}
+        min={min}
+        step={step}
         disableSwap
       />
       <Box display='flex' justifyContent='space-between' gap={2}>
-        <TextField value={`${priceRange[0]}đ`} label={formatMessage({ id: 'search.tool.filter.price.min' })} />
-        <TextField value={`${priceRange[1]}đ`} label={formatMessage({ id: 'search.tool.filter.price.max' })} />
+        <TextField
+          InputProps={{
+            readOnly: true,
+          }}
+          value={`${convertCurrency(priceRange[0])}`}
+          label={formatMessage({ id: 'search.tool.filter.price.min' })}
+        />
+        <TextField
+          InputProps={{
+            readOnly: true,
+          }}
+          value={`${convertCurrency(priceRange[1])}`}
+          label={formatMessage({ id: 'search.tool.filter.price.max' })}
+        />
       </Box>
     </>
   );

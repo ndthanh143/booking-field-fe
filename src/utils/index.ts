@@ -11,3 +11,4 @@ export * from './formatDate';
 export * from './getMonthsAgo';
 export * from './groupBy';
 export * from './convertRoundName';
+export * from './averageRate';

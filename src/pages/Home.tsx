@@ -77,23 +77,41 @@ export const Home = () => {
                   });
                 }
               }}
-              sx={{ cursor: 'pointer' }}
-              key={item}
+              sx={{
+                cursor: 'pointer',
+                ':hover': {
+                  zIndex: 1,
+                  transform: 'scale(1.1)',
+                },
+                transition: '0.2s ease all',
+              }}
+              key={item.label}
+              position='relative'
             >
               <Box
                 component='img'
-                src={item}
+                src={item.src}
                 width='100%'
                 height='100%'
                 sx={{
                   objectFit: 'cover',
-                  ':hover': {
-                    transform: 'scale(1.1)',
-                  },
-                  transition: '0.2s ease all',
                 }}
                 borderRadius={3}
               />
+              <Typography
+                fontSize={{ xs: 24, md: 40 }}
+                textAlign='center'
+                color='primary.contrastText'
+                position='absolute'
+                top='50%'
+                left='50%'
+                sx={{
+                  transform: 'translate(-50%, -50%)',
+                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.6), -2px -2px 4px rgba(0, 0, 0, 0.6)',
+                }}
+              >
+                {formatMessage({ id: `app.tournament.create-tournament.type.${[item.label]}` as any })}
+              </Typography>
             </Grid>
           ))}
         </Grid>

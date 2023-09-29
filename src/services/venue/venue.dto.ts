@@ -59,6 +59,8 @@ export type Price = {
 export type SearchVenueData = Venue & {
   price: number;
   averageRate: number;
+  averageServiceRate: number;
+  averageQualityRate: number;
   totalReview: number;
 };
 

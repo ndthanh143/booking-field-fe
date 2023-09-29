@@ -6,14 +6,16 @@ export type RatingResponse = BaseResponse<Rating>;
 
 export type Rating = {
   content: string;
-  rate: number;
+  serviceRate: number;
+  qualityRate: number;
   booking: Booking;
 } & BaseData;
 
 export type CreateRatingPayload = {
   booking: number;
   content: string;
-  rate: number;
+  serviceRate: number;
+  qualityRate: number;
 };
 
 export type GetRatingsQuery = {

@@ -1,10 +1,10 @@
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { Box } from '@mui/material';
+import { Box, BoxProps } from '@mui/material';
 import { CSSProperties, PropsWithChildren } from 'react';
-import ReactSlider from 'react-slick';
+import ReactSlider, { Settings } from 'react-slick';
 
-export type SliderProps = PropsWithChildren;
+export type SliderProps = PropsWithChildren<Settings> & BoxProps;
 
 export interface ArrowProps {
   className?: string;

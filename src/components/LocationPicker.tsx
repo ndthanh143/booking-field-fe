@@ -1,6 +1,6 @@
 import { Box, Button, Input, Typography } from '@mui/material';
-import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
-import { useCallback, useMemo, useState } from 'react';
+import { GoogleMap, MarkerF, useLoadScript } from '@react-google-maps/api';
+import { useCallback, useState } from 'react';
 import { LocationMap } from '@/services/venue/venue.dto';
 
 const DefaultZoom = 5;
@@ -14,7 +14,6 @@ export const LocationPicker = ({ location, onChange }: LocationPickerProps) => {
   const [zoom, setZoom] = useState(DefaultZoom);
 
   function handleResetLocation() {
-    // setDefaultLocation({ ...DefaultLocation });
     setZoom(DefaultZoom);
   }
 
@@ -24,17 +23,12 @@ export const LocationPicker = ({ location, onChange }: LocationPickerProps) => {
 
   const [_, setMap] = useState<google.maps.Map | null>(null);
 
-  const center = useMemo(() => location, [location]);
+  const onLoad = useCallback((map: google.maps.Map) => {
+    const bounds = new window.google.maps.LatLngBounds(location);
+    map.fitBounds(bounds);
 
-  const onLoad = useCallback(
-    (map: google.maps.Map) => {
-      const bounds = new window.google.maps.LatLngBounds(center);
-      map.fitBounds(bounds);
-
-      setMap(map);
-    },
-    [center],
-  );
+    setMap(map);
+  }, []);
 
   const onUnmount = useCallback(() => {
     setMap(null);
@@ -66,13 +60,13 @@ export const LocationPicker = ({ location, onChange }: LocationPickerProps) => {
             height: 400,
             borderRadius: 10,
           }}
-          center={center}
+          center={location}
           zoom={5}
           onLoad={onLoad}
           onUnmount={onUnmount}
           onClick={(e) => e.latLng && onChange({ lat: e.latLng.lat(), lng: e.latLng.lng() })}
         >
-          <Marker position={location} />
+          <MarkerF position={location} />
         </GoogleMap>
       )}
     </Box>

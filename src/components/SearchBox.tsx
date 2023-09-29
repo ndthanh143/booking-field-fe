@@ -32,7 +32,6 @@ export const SearchBox = () => {
 
   const debounceSearchAddress = useDebounce(searchAdress);
   const venueInstance = venueKeys.list({ location: debounceSearchAddress });
-
   const { data: venues } = useQuery({
     ...venueInstance,
     enabled: !!debounceSearchAddress,
