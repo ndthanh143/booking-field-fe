@@ -71,11 +71,11 @@ export const RatingBox = ({ isOpen, onClose, data, onSubmit }: IRatingBoxProps) 
               <Typography variant='caption'>{data.pitch.venue.address}</Typography>
             </Box>
           </Box>
-          <Box justifyContent='center' marginY={2} display='flex' alignItems='center' gap={2}>
+          <Box justifyContent='center' marginY={3} display='flex' alignItems='center' flexDirection='column'>
             <Typography>Services:</Typography>
             <Rating value={serviceRate} onChange={(_, value) => setServiceRate(value)} size='large' />
           </Box>
-          <Box justifyContent='center' marginY={2} display='flex' alignItems='center' gap={2}>
+          <Box justifyContent='center' marginY={3} display='flex' alignItems='center' flexDirection='column'>
             <Typography>Quality:</Typography>
             <Rating value={qualityRate} onChange={(_, value) => setQualityRate(value)} size='large' />
           </Box>
