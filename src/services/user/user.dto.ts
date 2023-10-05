@@ -11,6 +11,7 @@ export type User = {
   phone: string;
   venue: Venue;
   favorites?: Venue[];
+  role: RoleEnum;
 } & BaseData;
 
 export type SignInPayload = {
@@ -21,6 +22,12 @@ export type SignInPayload = {
   phone: string;
   password: string;
 };
+
+export enum RoleEnum {
+  Admin = 'admin',
+  User = 'user',
+  Owner = 'owner',
+}
 
 export type UpdateUserPayload = {
   id: number;

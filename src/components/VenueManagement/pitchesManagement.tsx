@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react';
 import { AddNewPitchBox } from '../AddNewPitchBox';
 import { ConfirmBox } from '../ConfirmBox';
 import { UpdatePitchBox } from '../UpdatePitchBox';
-import { useBoolean, useVenueByUser } from '@/hooks';
+import { useBoolean, useVenueByCurrentUser } from '@/hooks';
 import { usePitchMutation } from '@/hooks/usePitchMutation';
 import { CreatePitchDto, Pitch, UpdatePitchDto } from '@/services/pitch/pitch.dto';
 
 export const PitchesManagement = () => {
-  const { data: venue, refetch: venueRefetch } = useVenueByUser();
+  const { data: venue, refetch: venueRefetch } = useVenueByCurrentUser();
 
   const {
     createPitchMutation,

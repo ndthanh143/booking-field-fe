@@ -12,3 +12,4 @@ export * from './getMonthsAgo';
 export * from './groupBy';
 export * from './convertRoundName';
 export * from './averageRate';
+export * from './convertDistance';

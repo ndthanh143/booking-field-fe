@@ -153,7 +153,6 @@ export const VenueDetail = () => {
             </Stack>
           </Grid>
         </Grid>
-
         <Box position='sticky' marginY={2} top={0} bgcolor='primary.contrastText' zIndex={1}>
           <Tabs value={tab} onChange={handleChange} variant='scrollable'>
             <Tab label={formatMessage({ id: 'app.venue.tab.pitch-list' })} LinkComponent='a' href='#pitches' />

@@ -1,18 +1,18 @@
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Box, BoxProps } from '@mui/material';
-import { CSSProperties, PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 import ReactSlider, { Settings } from 'react-slick';
 
 export type SliderProps = PropsWithChildren<Settings> & BoxProps;
 
 export interface ArrowProps {
   className?: string;
-  style?: CSSProperties;
   onClick?: () => void;
 }
 
-const SliderPrevArrow = ({ onClick }: ArrowProps) => {
+const SliderPrevArrow = ({ onClick, className }: ArrowProps) => {
+  const isDisabled = className?.includes('slick-disabled');
   return (
     <Box
       onClick={onClick}
@@ -24,7 +24,7 @@ const SliderPrevArrow = ({ onClick }: ArrowProps) => {
         zIndex: 1,
         background: 'rgba(255, 255, 255, 0.5)',
         padding: 1.5,
-        display: 'flex',
+        ...(isDisabled ? { display: 'none' } : { display: 'flex' }),
         cursor: 'pointer',
         borderRadius: '50%',
         ':hover': {
@@ -38,10 +38,13 @@ const SliderPrevArrow = ({ onClick }: ArrowProps) => {
   );
 };
 
-const SliderNextArrow = ({ onClick }: ArrowProps) => {
+const SliderNextArrow = ({ onClick, className }: ArrowProps) => {
+  const isDisabled = className?.includes('slick-disabled');
+
   return (
     <Box
       onClick={onClick}
+      className={(className?.includes('slick-disabled') && 'slick-disabled') || ''}
       sx={{
         position: 'absolute',
         top: '50%',
@@ -50,11 +53,14 @@ const SliderNextArrow = ({ onClick }: ArrowProps) => {
         zIndex: 1,
         background: 'rgba(255, 255, 255, 0.5)',
         padding: 1.5,
-        display: 'flex',
+        ...(isDisabled ? { display: 'none' } : { display: 'flex' }),
         cursor: 'pointer',
         borderRadius: '50%',
         ':hover': {
           opacity: 0.8,
+        },
+        '.slick-disabled': {
+          display: 'none',
         },
       }}
     >

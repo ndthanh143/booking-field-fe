@@ -15,9 +15,7 @@ export const Header = () => {
 
   const { formatMessage } = useLocale();
 
-  const locale = (localStorage.getItem('locale') as Locale) || 'vi';
-
-  const { storedValue: currentLocale, setValue: setCurrentLocale } = useLocalStorage('locale', locale);
+  const { storedValue: currentLocale, setValue: setCurrentLocale } = useLocalStorage<Locale>('locale', 'vi');
 
   const {
     anchorEl: anchorCategoryMenu,
@@ -174,15 +172,14 @@ export const Header = () => {
               </Menu>
               <Button
                 variant='outlined'
-                href={import.meta.env.BUSINESS_FORM_URL}
                 color='secondary'
-                target='_blank'
                 sx={{
                   display: {
                     xs: 'none',
                     md: 'block',
                   },
                 }}
+                onClick={() => navigate('/register-venue')}
               >
                 {formatMessage({
                   id: 'app.home.header.for-business',

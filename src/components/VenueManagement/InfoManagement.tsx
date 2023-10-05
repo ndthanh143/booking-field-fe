@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { object, string } from 'yup';
-import { useBoolean, useVenueByUser, useVenueMutation } from '@/hooks';
+import { useBoolean, useVenueByCurrentUser, useVenueMutation } from '@/hooks';
 import { locationKeys } from '@/services/location/location.query';
 import { UpdateVenueData } from '@/services/venue/venue.dto';
 
@@ -27,10 +27,9 @@ export const InfoManagement = () => {
 
   const { updateVenueMutation, isUpdating } = useVenueMutation();
 
-  const { data: venue } = useVenueByUser();
+  const { data: venue } = useVenueByCurrentUser();
 
-  const locationInstace = locationKeys.list({});
-
+  const locationInstace = locationKeys.list();
   const { data: provinces } = useQuery(locationInstace);
 
   const onSubmitHandler = (data: UpdateVenueData) => {

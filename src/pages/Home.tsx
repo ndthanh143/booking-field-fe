@@ -1,16 +1,20 @@
 import { Box, Card, CardContent, CardMedia, Grid, Skeleton, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Settings } from 'react-slick';
 import { bannerImages } from '@/assets/images/banner';
 import { tournamentImages } from '@/assets/images/tournament';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { defaultLocations } from '@/common/datas/location.data';
-import { Link, SearchBox, Slider } from '@/components';
+import { Link, SearchBox, Slider, SliderProps } from '@/components';
+import { VenueCard } from '@/components/VenueCard';
 import { useAuth } from '@/hooks';
 import { useLocale } from '@/locales';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
+import { LocationMap } from '@/services/venue/venue.dto';
+import { venueKeys } from '@/services/venue/venue.query';
 
+const maxDistance = 6000;
 export const Home = () => {
   const { profile } = useAuth();
 
@@ -21,13 +25,86 @@ export const Home = () => {
   const pitchCategoryInstance = pitchCategoryKeys.list();
   const { data, isLoading } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
-  const sliderSettings: Settings = {
+  const [currentPosition, setCurrentPosition] = useState<LocationMap>();
+
+  useMemo(
+    () =>
+      navigator.geolocation.getCurrentPosition((position) =>
+        setCurrentPosition({ lat: position.coords.latitude, lng: position.coords.longitude }),
+      ),
+    [],
+  );
+
+  const venueInstance = venueKeys.search({ page: 1, limit: 10, isProminant: true });
+  const { data: venues } = useQuery(venueInstance);
+
+  const venueNearByInstance = venueKeys.search({
+    currentLat: currentPosition?.lat,
+    currentLng: currentPosition?.lng,
+    maxDistance,
+    page: 1,
+    limit: 20,
+  });
+  const { data: nearByVenues } = useQuery({
+    ...venueNearByInstance,
+    enabled: Boolean(currentPosition),
+    staleTime: Infinity,
+  });
+
+  const sliderSettings: SliderProps = {
     dots: false,
     autoplay: true,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
     swipeToSlide: true,
+  };
+
+  const sliderVenueSettings: SliderProps = {
+    dots: false,
+    autoplay: false,
+    infinite: false,
+    slidesToShow: 4,
+    speed: 500,
+    initialSlide: 1,
+    responsive: [
+      {
+        breakpoint: 1280,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+    swipeToSlide: true,
+    sx: {
+      '.slick-slide': {
+        px: 1.5,
+      },
+      '.slick-list': {
+        mx: -1.5,
+      },
+      '.slick-track': {
+        margin: 0,
+      },
+    },
   };
 
   return (
@@ -169,6 +246,33 @@ export const Home = () => {
                 </Grid>
               ))}
         </Grid>
+      </Box>
+      <Box marginY={10}>
+        <Typography variant='h5' my={2}>
+          {formatMessage({ id: 'app.home.prominant.title' })}
+        </Typography>
+        <Slider {...sliderVenueSettings}>
+          {venues?.data.map((venue) => <VenueCard data={venue} key={venue.id} />)}
+        </Slider>
+      </Box>
+      <Box marginY={10}>
+        <Typography variant='h5' my={2}>
+          {formatMessage({ id: 'app.home.nearby.title' })}
+        </Typography>
+        <Slider {...sliderVenueSettings}>
+          {nearByVenues?.data.map((venue) => <VenueCard data={venue} key={venue.id} />)}
+        </Slider>
+        {!currentPosition && (
+          <Box textAlign='center'>
+            <Box
+              component='img'
+              src='https://static.vecteezy.com/system/resources/thumbnails/001/265/747/small/blue-pin-in-showing-location-on-white-map.jpg'
+              alt='maps'
+              sx={{ objectFit: 'cover', height: 100 }}
+            />
+            <Typography my={1}>Open location permisstion to get venues near you</Typography>
+          </Box>
+        )}
       </Box>
     </>
   );

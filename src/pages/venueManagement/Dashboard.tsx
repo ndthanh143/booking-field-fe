@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Line, Pie } from 'react-chartjs-2';
 import CountUp from 'react-countup';
 import { TimePeriodFilter } from '@/common/enums/filter-chart.enum';
-import { useVenueByUser } from '@/hooks';
+import { useVenueByCurrentUser } from '@/hooks';
 import { GetAnalystBookingIncomeDto } from '@/services/booking/booking.dto';
 import { bookingKeys } from '@/services/booking/booking.query';
 import bookingService from '@/services/booking/booking.service';
@@ -24,7 +24,7 @@ export const FilterChartOptions = [
 
 const currentDate = new Date();
 export const Dashboard = () => {
-  const { data: venue } = useVenueByUser();
+  const { data: venue } = useVenueByCurrentUser();
 
   const bookingInstance = bookingKeys.list({ venueId: venue?.id });
   const { data: bookings } = useQuery({

@@ -80,6 +80,14 @@ export const VenueManagementLayout = () => {
     setOpen(!open);
   };
 
+  if (!profile?.id) {
+    navigate('/login', {
+      state: {
+        redirect: pathname,
+      },
+    });
+  }
+
   return (
     profile && (
       <>

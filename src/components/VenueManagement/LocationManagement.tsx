@@ -2,11 +2,11 @@ import { Backdrop, Box, Button, CircularProgress } from '@mui/material';
 import { useState } from 'react';
 import { MapPlace } from '..';
 import { LocationPicker } from '../LocationPicker';
-import { useVenueByUser, useVenueMutation } from '@/hooks';
+import { useVenueByCurrentUser, useVenueMutation } from '@/hooks';
 import { LocationMap } from '@/services/venue/venue.dto';
 
 export const LocationManagement = () => {
-  const { data: venue } = useVenueByUser();
+  const { data: venue } = useVenueByCurrentUser();
 
   const { updateVenueMutation, isUpdating } = useVenueMutation();
   const [selectedLatLng, setSelectedLatLng] = useState<LocationMap>(venue?.location || { lat: 10, lng: 106 });

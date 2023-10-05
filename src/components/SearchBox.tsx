@@ -31,7 +31,7 @@ export const SearchBox = () => {
   const { data: pitchCategories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
   const debounceSearchAddress = useDebounce(searchAdress);
-  const venueInstance = venueKeys.list({ location: debounceSearchAddress });
+  const venueInstance = venueKeys.search({ location: debounceSearchAddress });
   const { data: venues } = useQuery({
     ...venueInstance,
     enabled: !!debounceSearchAddress,
@@ -151,7 +151,7 @@ export const SearchBox = () => {
                       ))}
                     </>
                   )}
-                  {venues && venues.data.length > 0 && (
+                  {venues && venues.data && venues.data.length > 0 && (
                     <>
                       <Typography variant='body2' paddingX={1} paddingY={1} fontWeight={700}>
                         {formatMessage({ id: 'app.home.search.result.venue' })}
@@ -186,7 +186,7 @@ export const SearchBox = () => {
                       ))}
                     </>
                   )}
-                  {provinces?.length === 0 && venues?.data.length === 0 && (
+                  {provinces?.length === 0 && venues?.data && venues?.data.length === 0 && (
                     <Typography textAlign='center'>
                       {formatMessage({ id: 'app.home.search.result.no-result' })}
                     </Typography>

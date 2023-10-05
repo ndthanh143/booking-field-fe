@@ -1,6 +1,7 @@
 import { Box, Button, Input, Typography } from '@mui/material';
 import { GoogleMap, MarkerF, useLoadScript } from '@react-google-maps/api';
 import { useCallback, useState } from 'react';
+import { useLocale } from '@/locales';
 import { LocationMap } from '@/services/venue/venue.dto';
 
 const DefaultZoom = 5;
@@ -11,6 +12,8 @@ export interface LocationPickerProps {
 }
 
 export const LocationPicker = ({ location, onChange }: LocationPickerProps) => {
+  const { formatMessage } = useLocale();
+
   const [zoom, setZoom] = useState(DefaultZoom);
 
   function handleResetLocation() {
@@ -37,19 +40,19 @@ export const LocationPicker = ({ location, onChange }: LocationPickerProps) => {
   return (
     <Box component='div'>
       <Box display='flex' gap={4} marginY={2}>
-        <Button variant='outlined' color='secondary' onClick={handleResetLocation}>
+        <Button variant='outlined' color='secondary' onClick={handleResetLocation} size='small'>
           Reset Location
         </Button>
         <Box>
-          <Typography>Latitute:</Typography>
+          <Typography>{formatMessage({ id: 'app.map.latitute' })}:</Typography>
           <Input type='text' value={location.lat} disabled />
         </Box>
         <Box>
-          <Typography>Longitute:</Typography>
+          <Typography>{formatMessage({ id: 'app.map.longitute' })}:</Typography>
           <Input type='text' value={location.lng} disabled />
         </Box>
         <Box>
-          <Typography>Zoom:</Typography>
+          <Typography>{formatMessage({ id: 'app.map.zoom' })}:</Typography>
           <Input type='text' value={zoom} disabled />
         </Box>
       </Box>

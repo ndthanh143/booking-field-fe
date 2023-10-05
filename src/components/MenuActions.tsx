@@ -7,9 +7,12 @@ import {
   EmojiEvents,
 } from '@mui/icons-material';
 import { Avatar, Box, Button, IconButton, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useAuth, useMenu } from '@/hooks';
 import { useLocale } from '@/locales';
+import { RoleEnum } from '@/services/user/user.dto';
+import { venueKeys } from '@/services/venue/venue.query';
 
 export type MenuActionsProps = {
   variant: 'primary' | 'secondary';
@@ -21,6 +24,12 @@ export const MenuActions = ({ variant }: MenuActionsProps) => {
   const { formatMessage } = useLocale();
 
   const { profile, logout } = useAuth();
+
+  const venueInstance = venueKeys.currentUser();
+  const { data: venue } = useQuery({
+    ...venueInstance,
+    enabled: Boolean(profile?.role === RoleEnum.Owner),
+  });
 
   const { anchorEl: anchorMenu, isOpen: isOpenMenu, onClose: closeMenu, onOpen: openMenu } = useMenu();
 
@@ -63,7 +72,7 @@ export const MenuActions = ({ variant }: MenuActionsProps) => {
         }}
       >
         {profile ? (
-          <>
+          <Box>
             <MenuItem
               sx={{ borderBottom: 1, borderColor: '#ccc', padding: 2 }}
               onClick={() => {
@@ -101,7 +110,7 @@ export const MenuActions = ({ variant }: MenuActionsProps) => {
                 id: 'app.home.header.account.create-tournament',
               })}
             </MenuItem>
-            {profile.venue && (
+            {venue && (
               <MenuItem
                 sx={{ paddingY: 1.5, fontWeight: 700 }}
                 onClick={() => {
@@ -130,9 +139,9 @@ export const MenuActions = ({ variant }: MenuActionsProps) => {
                 id: 'app.home.header.account.sign-out',
               })}
             </MenuItem>
-          </>
+          </Box>
         ) : (
-          <>
+          <Box>
             <MenuItem
               onClick={() => {
                 closeMenu();
@@ -156,7 +165,7 @@ export const MenuActions = ({ variant }: MenuActionsProps) => {
                 id: 'app.home.header.account.sign-up',
               })}
             </MenuItem>
-          </>
+          </Box>
         )}
       </Menu>
     </>
