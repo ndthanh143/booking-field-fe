@@ -1,4 +1,5 @@
 import {
+  CreateVenuePayload,
   SearchVenueQuery,
   SearchVenueResponse,
   UpdateVenuePayload,
@@ -10,12 +11,8 @@ import axiosInstance from '@/utils/axiosConfig';
 
 const venueService = {
   getAll: async (query: VenueQuery) => {
-    const { location } = query;
-
     const { data } = await axiosInstance.get<VenuesResponse>('/venues', {
-      params: {
-        location,
-      },
+      params: query,
     });
 
     return data;
@@ -25,19 +22,22 @@ const venueService = {
 
     return data.data;
   },
+  getByCurrentUser: async () => {
+    const { data } = await axiosInstance.get<VenueResponse>(`/venues/me`);
+
+    return data.data;
+  },
   search: async (query: SearchVenueQuery) => {
     const { data } = await axiosInstance.get<SearchVenueResponse>('/venues/search', {
-      params: {
-        ...query,
-      },
+      params: query,
     });
 
     return data;
   },
-  getByUser: async (userId: number) => {
-    const { data } = await axiosInstance.get<VenueResponse>(`/venues/user/${userId}`);
+  create: async (payload: CreateVenuePayload) => {
+    const { data } = await axiosInstance.post<VenueResponse>(`/venues`, payload);
 
-    return data.data;
+    return data;
   },
   update: async ({ id, data: updateVenueData }: UpdateVenuePayload) => {
     const { data } = await axiosInstance.put<VenueResponse>(`/venues/${id}`, updateVenueData);

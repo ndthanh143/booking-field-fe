@@ -3,6 +3,6 @@ export * from './useBoolean';
 export * from './useMenu';
 export * from './usePaymentForm';
 export * from './useVenueMutation';
-export * from './useVenueByUser';
+export * from './useVenueByCurrentUser';
 export * from './useDebounce';
 export * from './useLocalStorage';

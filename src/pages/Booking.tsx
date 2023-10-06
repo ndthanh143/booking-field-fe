@@ -235,8 +235,10 @@ export const Booking = () => {
             </Box>
             {selectedTime && (
               <Alert severity='success' sx={{ margin: 2 }}>
-                {formatMessage({ id: 'app.booking.time-picker.result' })}
-                {`${convertDecimalToTime(selectedTime[0])} - ${convertDecimalToTime(selectedTime[1])}`}
+                {}
+                {`${formatMessage({ id: 'app.booking.time-picker.result' })} ${convertDecimalToTime(
+                  selectedTime[0],
+                )} - ${convertDecimalToTime(selectedTime[1])}`}
               </Alert>
             )}
 

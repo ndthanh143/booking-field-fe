@@ -1,9 +1,9 @@
-import { Image } from '@mui/icons-material';
 import PlaceIcon from '@mui/icons-material/Place';
 import StarIcon from '@mui/icons-material/Star';
 import { Box, Chip, Grid, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
+import { DefaultImage } from './DefaultImage';
 import { Link } from './Link';
 import { useLocale } from '@/locales';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
@@ -44,29 +44,20 @@ export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
         {...props}
       >
         <Grid item xs={12} md={3} minHeight={200}>
-          {data.imageList?.length > 0 ? (
-            <Box
-              component='img'
-              height='100%'
-              width='100%'
-              sx={{ objectFit: 'cover' }}
-              borderRadius={3}
-              src={data.imageList?.[0].imagePath}
-              alt={data.name}
-            />
-          ) : (
-            <Box
-              height='100%'
-              width='100%'
-              display='flex'
-              justifyContent='center'
-              alignItems='center'
-              bgcolor='secondary.light'
-              borderRadius={3}
-            >
-              <Image fontSize='large' />
-            </Box>
-          )}
+          <Box borderRadius={3} height='100%' width='100%' overflow='hidden'>
+            {data.imageList?.length > 0 ? (
+              <Box
+                component='img'
+                height='100%'
+                width='100%'
+                sx={{ objectFit: 'cover' }}
+                src={data.imageList?.[0].imagePath}
+                alt={data.name}
+              />
+            ) : (
+              <DefaultImage />
+            )}
+          </Box>
         </Grid>
         <Grid
           item

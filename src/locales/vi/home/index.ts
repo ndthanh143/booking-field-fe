@@ -22,6 +22,9 @@ export const vi_home = {
   'app.home.search.button': 'Tìm kiếm',
   'app.home.category-list.title': 'Danh mục sân bóng',
   'app.home.tournament.title': 'Tạo giải đấu',
+  'app.home.prominant.title': 'Sân bóng nổi bật',
+  'app.home.nearby.title': 'Sân bóng gần đây',
+  'app.home.nearby.result.card.distance': 'Cách đây {distance}',
 
   'app.footer.support.title': 'Hỗ trợ',
   'app.footer.support.item.hotline': 'Hotline',

@@ -1,21 +1,17 @@
-import { Box, Button, Input, Typography } from '@mui/material';
+import { Box, Input, Typography } from '@mui/material';
 import { GoogleMap, MarkerF, useLoadScript } from '@react-google-maps/api';
 import { useCallback, useState } from 'react';
+import { useLocale } from '@/locales';
 import { LocationMap } from '@/services/venue/venue.dto';
 
-const DefaultZoom = 5;
-
+const DEFAULT_ZOOM = 10;
 export interface LocationPickerProps {
   location: LocationMap;
   onChange: (value: LocationMap) => void;
 }
 
 export const LocationPicker = ({ location, onChange }: LocationPickerProps) => {
-  const [zoom, setZoom] = useState(DefaultZoom);
-
-  function handleResetLocation() {
-    setZoom(DefaultZoom);
-  }
+  const { formatMessage } = useLocale();
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
@@ -37,20 +33,13 @@ export const LocationPicker = ({ location, onChange }: LocationPickerProps) => {
   return (
     <Box component='div'>
       <Box display='flex' gap={4} marginY={2}>
-        <Button variant='outlined' color='secondary' onClick={handleResetLocation}>
-          Reset Location
-        </Button>
         <Box>
-          <Typography>Latitute:</Typography>
+          <Typography>{formatMessage({ id: 'app.map.latitute' })}:</Typography>
           <Input type='text' value={location.lat} disabled />
         </Box>
         <Box>
-          <Typography>Longitute:</Typography>
+          <Typography>{formatMessage({ id: 'app.map.longitute' })}:</Typography>
           <Input type='text' value={location.lng} disabled />
-        </Box>
-        <Box>
-          <Typography>Zoom:</Typography>
-          <Input type='text' value={zoom} disabled />
         </Box>
       </Box>
       {isLoaded && (
@@ -61,7 +50,7 @@ export const LocationPicker = ({ location, onChange }: LocationPickerProps) => {
             borderRadius: 10,
           }}
           center={location}
-          zoom={5}
+          zoom={DEFAULT_ZOOM}
           onLoad={onLoad}
           onUnmount={onUnmount}
           onClick={(e) => e.latLng && onChange({ lat: e.latLng.lat(), lng: e.latLng.lng() })}

@@ -7,24 +7,20 @@ import { useEffect, useMemo, useState } from 'react';
 import { Line, Pie } from 'react-chartjs-2';
 import CountUp from 'react-countup';
 import { TimePeriodFilter } from '@/common/enums/filter-chart.enum';
-import { useVenueByUser } from '@/hooks';
+import { useVenueByCurrentUser } from '@/hooks';
+import { useLocale } from '@/locales';
 import { GetAnalystBookingIncomeDto } from '@/services/booking/booking.dto';
 import { bookingKeys } from '@/services/booking/booking.query';
 import bookingService from '@/services/booking/booking.service';
 import { convertCurrency, getMonthsAgo } from '@/utils';
 
 ChartJS.register(CategoryScale);
-
-export const FilterChartOptions = [
-  { label: '1 tháng gần nhất', value: TimePeriodFilter.Month },
-  { label: '3 tháng gần nhất', value: TimePeriodFilter.Quarter },
-  { label: '6 tháng gần nhất', value: TimePeriodFilter.HalfYear },
-  { label: '1 năm gần nhất', value: TimePeriodFilter.Year },
-];
-
 const currentDate = new Date();
+
 export const Dashboard = () => {
-  const { data: venue } = useVenueByUser();
+  const { formatMessage } = useLocale();
+
+  const { data: venue } = useVenueByCurrentUser();
 
   const bookingInstance = bookingKeys.list({ venueId: venue?.id });
   const { data: bookings } = useQuery({
@@ -39,6 +35,25 @@ export const Dashboard = () => {
   const { data: categoryData, mutate: getBookingCategoryMutation } = useMutation({
     mutationFn: (payload: GetAnalystBookingIncomeDto) => bookingService.getAnalystBookingCategory(payload),
   });
+
+  const FilterChartOptions = [
+    {
+      label: `${formatMessage({ id: 'app.dashboard.monthly-income.option' }, { month: 1 })}`,
+      value: TimePeriodFilter.Month,
+    },
+    {
+      label: `${formatMessage({ id: 'app.dashboard.monthly-income.option' }, { month: 3 })}`,
+      value: TimePeriodFilter.Quarter,
+    },
+    {
+      label: `${formatMessage({ id: 'app.dashboard.monthly-income.option' }, { month: 6 })}`,
+      value: TimePeriodFilter.HalfYear,
+    },
+    {
+      label: `${formatMessage({ id: 'app.dashboard.monthly-income.option' }, { month: 12 })}`,
+      value: TimePeriodFilter.Year,
+    },
+  ];
 
   const [year, setYear] = useState<number>(currentDate.getFullYear());
   const [selectedIncome, setSelectedIncome] = useState<TimePeriodFilter>(FilterChartOptions[0].value);
@@ -56,7 +71,7 @@ export const Dashboard = () => {
     labels: filteData?.map((item) => `${item.day}`),
     datasets: [
       {
-        label: 'Thu nhập thường ngày',
+        label: formatMessage({ id: 'app.dashboard.monthly-income.chart.title' }),
         data: filteData?.map((item) => item.total) || [],
         fill: false,
         borderColor: 'rgb(75, 192, 192)',
@@ -77,7 +92,7 @@ export const Dashboard = () => {
     labels: categoryData?.map((item) => item.category) || [],
     datasets: [
       {
-        label: 'Số lần đặt sân',
+        label: formatMessage({ id: 'app.dashboard.monthly-income.title' }),
         data: categoryData?.map((item) => item.total) || [],
         backgroundColor: [
           'rgba(255, 205, 86, 0.8)',
@@ -109,9 +124,9 @@ export const Dashboard = () => {
           <CardContent>
             <CreditCard />
             <Box>
-              <CountUp end={bookings?.data.reduce((acc, cur) => acc + cur.totalPrice, 0) || 0} duration={1} />đ{' '}
+              <CountUp end={bookings?.data.reduce((acc, cur) => acc + cur.totalPrice, 0) || 0} duration={1} />đ
             </Box>
-            <Typography variant='body2'>Tổng thu nhập</Typography>
+            <Typography variant='body2'>{formatMessage({ id: 'app.dashboard.totalIncome' })}</Typography>
           </CardContent>
         </Card>
       </Grid>
@@ -125,16 +140,16 @@ export const Dashboard = () => {
             <Typography>
               <CountUp end={bookings?.data.length || 0} duration={1} />
             </Typography>
-            <Typography variant='body2'>Số lượng đơn đặt sân</Typography>
+            <Typography variant='body2'>{formatMessage({ id: 'app.dashboard.totalBooking' })}</Typography>
           </CardContent>
         </Card>
       </Grid>
       <Grid item xs={12} md={8} minHeight={{ md: 300, lg: '75vh' }}>
         <Card variant='outlined' sx={{ height: '100%' }}>
           <CardContent>
-            <Typography fontWeight={500}>Thu nhập hàng tháng</Typography>
+            <Typography fontWeight={500}>{formatMessage({ id: 'app.dashboard.monthly-income.title' })}</Typography>
             <Typography variant='caption' fontStyle='italic' fontWeight={200}>
-              Tổng thu nhập theo từng tháng
+              {formatMessage({ id: 'app.dashboard.monthly-income.sub-title' })}
             </Typography>
             <Box display='flex' gap={2}>
               <Select
@@ -166,7 +181,9 @@ export const Dashboard = () => {
               </Select>
             </Box>
             <Typography paddingTop={2}>
-              Tổng: {convertCurrency(filteData?.reduce((acc, cur) => acc + cur.total, 0) || 0)}
+              {`${formatMessage({ id: 'app.dashboard.monthly-income.total' })}: ${convertCurrency(
+                filteData?.reduce((acc, cur) => acc + cur.total, 0) || 0,
+              )}`}
             </Typography>
             <Line data={lineData} options={lineOptions} />
           </CardContent>
@@ -176,7 +193,7 @@ export const Dashboard = () => {
         <Card variant='outlined' sx={{ height: '100%' }}>
           <CardContent>
             <Typography textAlign='center' fontWeight={500} paddingBottom={4}>
-              Thống kê số lượng sân được sử dụng
+              {formatMessage({ id: 'app.dashboard.booking.title' })}
             </Typography>
             <Pie data={pieData} options={pieOptions} />
           </CardContent>

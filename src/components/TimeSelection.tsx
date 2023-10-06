@@ -10,10 +10,9 @@ export interface TimeSelectionProps {
   timeRange: number[];
 }
 
+const minDistance = 1;
+const step = 0.5;
 export const TimeSelection = ({ isOpen, onClose, onSave, timeRange }: TimeSelectionProps) => {
-  const minDistance = 1;
-  const step = 0.5;
-
   const [timeSelection, setTimeSelection] = useState<number[]>(timeRange);
 
   const valueLabelFormat = (value: number) => `${convertDecimalToTime(value)}`;

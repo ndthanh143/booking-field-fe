@@ -2,6 +2,7 @@ import { AccessTime, LocationOn } from '@mui/icons-material';
 import { Box, Divider, Rating, Tab, Tabs, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { DefaultImage } from './DefaultImage';
 import { commonImages } from '@/assets/images/common';
 import { useLocale } from '@/locales';
 import { ratingKeys } from '@/services/rating/rating.query';
@@ -21,7 +22,20 @@ export const VenueInfoMapPopup = ({ data }: VenueInfoMapPopupProps) => {
 
   return (
     <Box borderColor='secondary.light'>
-      <Box component='img' src={data.imageList[0].imagePath} width='100%' height={200} />
+      <Box height={200} borderRadius={3}>
+        {data.imageList?.length > 0 ? (
+          <Box
+            component='img'
+            height='100%'
+            width='100%'
+            sx={{ objectFit: 'cover' }}
+            src={data.imageList?.[0].imagePath}
+            alt={data.name}
+          />
+        ) : (
+          <DefaultImage />
+        )}
+      </Box>
       <Box paddingX={2} mt={2}>
         <Typography fontWeight={500} fontSize={20}>
           {data.name}

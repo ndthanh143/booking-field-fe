@@ -1,9 +1,10 @@
-import { Image, LocationOn } from '@mui/icons-material';
+import { LocationOn } from '@mui/icons-material';
 import { Box, Button, Grid, Rating, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { commonImages } from '@/assets/images/common';
+import { DefaultImage } from '@/components/DefaultImage';
 import { useAuth } from '@/hooks';
 import { useLocale } from '@/locales';
 import { UpdateUserPayload } from '@/services/user/user.dto';
@@ -42,32 +43,31 @@ export const AccountFavorite = () => {
         <Grid container spacing={4}>
           {profile?.favorites?.map((venue) => (
             <Grid item xs={12} md={6} key={venue.id}>
-              <Box onClick={() => navigate(`/venue/${venue.slug}`)} sx={{ cursor: 'pointer' }}>
+              <Box
+                onClick={() => navigate(`/venue/${venue.slug}`)}
+                sx={{ cursor: 'pointer' }}
+                height={200}
+                width='100%'
+                borderRadius={3}
+                overflow='hidden'
+              >
                 {venue.imageList?.length > 0 ? (
                   <Box
                     component='img'
-                    height={250}
+                    height='100%'
                     width='100%'
                     sx={{ objectFit: 'cover' }}
-                    borderRadius={3}
                     src={venue.imageList?.[0].imagePath}
                     alt={venue.name}
                   />
                 ) : (
-                  <Box
-                    height='100%'
-                    width='100%'
-                    display='flex'
-                    justifyContent='center'
-                    alignItems='center'
-                    bgcolor='secondary.light'
-                    borderRadius={3}
-                  >
-                    <Image fontSize='large' />
-                  </Box>
+                  <DefaultImage />
                 )}
               </Box>
 
+              <Typography variant='h5' mt={1}>
+                {venue.name}
+              </Typography>
               <Box display='flex' justifyContent='space-between'>
                 <Box display='flex' alignItems='center' gap={1}>
                   <Box display='flex' alignItems='center' gap={1}>

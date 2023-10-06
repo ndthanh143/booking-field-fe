@@ -25,8 +25,8 @@ export const ImageUpload = ({ onChange }: ImageUploadProps) => {
       }}
     >
       <Box textAlign='center'>
-        <CloudUpload />
-        <Typography>Thêm mới</Typography>
+        <CloudUpload fontSize='large' />
+        <Typography>Upload</Typography>
       </Box>
       <input
         hidden

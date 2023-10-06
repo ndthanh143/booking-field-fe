@@ -4,15 +4,15 @@ import { GoogleMap, useLoadScript, OverlayViewF, OverlayView } from '@react-goog
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useSearchParams } from 'react-router-dom';
 import { commonImages } from '@/assets/images/common';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { OrderEnum } from '@/common/enums/order.enum';
 import { SearchFilter, SearchResultCard, SearchSort, VenueInfoMapPopup } from '@/components';
 import { useBoolean } from '@/hooks';
-import { useLocale } from '@/locales';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
-import { SearchVenueData } from '@/services/venue/venue.dto';
+import { LocationMap, SearchVenueData } from '@/services/venue/venue.dto';
 import { venueKeys } from '@/services/venue/venue.query';
 
 const STALE_TIME = 5 * 1000;
@@ -20,8 +20,9 @@ const PAGE_LIMIT = 10;
 const defaultCenter = { lat: 106.02532, lng: 10.023321 };
 export const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [currentPosition, setCurrentPosition] = useState<LocationMap>();
 
-  const { formatMessage } = useLocale();
+  const { formatMessage } = useIntl();
 
   const categoryParams = searchParams.get('pitchCategory') || '1';
   const locationParams = searchParams.get('location') || 'Hồ Chí Minh';
@@ -37,8 +38,19 @@ export const Search = () => {
   const pitchCategoryInstace = pitchCategoryKeys.list();
   const { data: pitchCategories } = useQuery({ ...pitchCategoryInstace, staleTime: STALE_TIME });
 
+  locationParams === 'nearBy' &&
+    navigator.geolocation.getCurrentPosition((position) =>
+      setCurrentPosition({ lat: position.coords.latitude, lng: position.coords.longitude }),
+    );
+
   const venueInstance = venueKeys.search({
-    location: locationParams,
+    ...(locationParams === 'nearBy'
+      ? {
+          currentLat: currentPosition?.lat,
+          currentLng: currentPosition?.lng,
+          maxDistance: 10000,
+        }
+      : { location: locationParams }),
     page,
     limit: PAGE_LIMIT,
     sorts: [
@@ -143,7 +155,9 @@ export const Search = () => {
             </Grid>
           ) : venues.data.length > 0 ? (
             <>
-              <Typography variant='body2'>Có {venues.data.length} sân bóng phù hợp dành cho bạn</Typography>
+              <Typography variant='body2'>
+                {formatMessage({ id: 'search.result.result.title' }, { total: venues.pageInfo.count })}
+              </Typography>
               <Box>
                 {venues.data.map((item) => (
                   <SearchResultCard data={item} key={item.id} />

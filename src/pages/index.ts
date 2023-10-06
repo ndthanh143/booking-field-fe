@@ -21,3 +21,4 @@ export * from './TournamentTeamManagement';
 export * from './TournamentStanding';
 export * from './TournamentMatch';
 export * from './AccountTournament';
+export * from './RegisterVenue';
