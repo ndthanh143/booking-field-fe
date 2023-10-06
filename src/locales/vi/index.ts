@@ -6,6 +6,7 @@ import { vi_register_venue } from './register-venue';
 import { vi_search } from './search';
 import { vi_tournament } from './tournament';
 import { vi_venue_detail } from './venue-detail';
+import { vi_venue_management } from './venue-management';
 
 const vi = {
   ...vi_common,
@@ -16,6 +17,7 @@ const vi = {
   ...vi_booking,
   ...vi_account,
   ...vi_register_venue,
+  ...vi_venue_management,
 };
 
 export default vi;

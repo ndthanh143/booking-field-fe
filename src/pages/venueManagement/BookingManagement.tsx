@@ -14,6 +14,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { commonImages } from '@/assets/images/common';
 import { ConfirmBox } from '@/components';
 import { useAuth, useBoolean } from '@/hooks';
 import { Booking } from '@/services/booking/booking.dto';
@@ -99,7 +100,10 @@ export const BookingManagement = () => {
             </TableBody>
           </Table>
         ) : (
-          <Typography>Sân của bạn chưa có ai đặt !!</Typography>
+          <Box display='flex' flexDirection='column' alignItems='center' gap={2}>
+            <Box component='img' src={commonImages.noResult.src} alt={commonImages.noResult.name} />
+            <Typography>Your venues have no booking yet!</Typography>
+          </Box>
         )}
         {data.pageInfo.pageCount > 1 && (
           <Pagination

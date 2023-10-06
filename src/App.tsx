@@ -7,6 +7,7 @@ import { IntlProvider } from 'react-intl';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { TournamentLayout, UserAccountLayout } from './components';
+import NotFound from './components/NotFound';
 import { useLocalStorage } from './hooks';
 import { VenueManagementLayout, Layout, AuthLayout } from './layouts';
 import { Locale, localeConfig } from './locales';
@@ -229,6 +230,10 @@ const router = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ]);
 

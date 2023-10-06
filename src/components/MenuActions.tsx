@@ -14,11 +14,7 @@ import { useLocale } from '@/locales';
 import { RoleEnum } from '@/services/user/user.dto';
 import { venueKeys } from '@/services/venue/venue.query';
 
-export type MenuActionsProps = {
-  variant: 'primary' | 'secondary';
-};
-
-export const MenuActions = ({ variant }: MenuActionsProps) => {
+export const MenuActions = () => {
   const navigate = useNavigate();
 
   const { formatMessage } = useLocale();
@@ -40,8 +36,8 @@ export const MenuActions = ({ variant }: MenuActionsProps) => {
           <IconButton onClick={openMenu}>
             <Avatar
               sx={{
-                bgcolor: variant === 'primary' ? 'primary.main' : 'secondary.light',
-                color: variant === 'primary' ? 'primary.contrastText' : 'secondary.dark',
+                bgcolor: 'primary.main',
+                color: 'primary.contrastText',
               }}
             >
               {profile.lastName.charAt(0)}

@@ -8,13 +8,17 @@ export const AuthLayout = () => {
 
   const { state } = useLocation();
 
-  const { profile, isLoading } = useAuth();
+  const { profile, isLoading, isFetched } = useAuth();
 
   useEffect(() => {
     if (profile) {
       navigate(state?.redirect || '/');
     }
   }, [profile, navigate]);
+
+  if (!isFetched || profile) {
+    return null;
+  }
 
   return (
     !isLoading && (

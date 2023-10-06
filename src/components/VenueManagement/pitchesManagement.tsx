@@ -6,9 +6,12 @@ import { ConfirmBox } from '../ConfirmBox';
 import { UpdatePitchBox } from '../UpdatePitchBox';
 import { useBoolean, useVenueByCurrentUser } from '@/hooks';
 import { usePitchMutation } from '@/hooks/usePitchMutation';
+import { useLocale } from '@/locales';
 import { CreatePitchDto, Pitch, UpdatePitchDto } from '@/services/pitch/pitch.dto';
 
 export const PitchesManagement = () => {
+  const { formatMessage } = useLocale();
+
   const { data: venue, refetch: venueRefetch } = useVenueByCurrentUser();
 
   const {
@@ -72,7 +75,7 @@ export const PitchesManagement = () => {
   return (
     <>
       <Button variant='contained' onClick={openAddPitchBox}>
-        Thêm mới
+        {formatMessage({ id: 'app.common.button.add' })}
       </Button>
       {venue && (
         <>
@@ -80,10 +83,10 @@ export const PitchesManagement = () => {
             <Table size='small' sx={{ marginY: 2 }}>
               <TableHead>
                 <TableRow>
-                  <TableCell>Tên sân</TableCell>
-                  <TableCell>Giá</TableCell>
-                  <TableCell>Loại</TableCell>
-                  <TableCell>Thao tác</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Price</TableCell>
+                  <TableCell>Category</TableCell>
+                  <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

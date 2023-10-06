@@ -14,7 +14,7 @@ export const useAuth = () => {
   const [accessToken, setAccessToken] = useState<string | undefined>(Cookies.get('access_token'));
 
   const userInstance = userKeys.profile();
-  const { data: profile, isLoading, refetch } = useQuery({ ...userInstance, staleTime: Infinity });
+  const { data: profile, isLoading, refetch, isFetched } = useQuery({ ...userInstance, staleTime: Infinity });
 
   const [socket, setSocket] = useState<io.Socket>();
 
@@ -81,5 +81,5 @@ export const useAuth = () => {
     }
   }, [accessToken]);
 
-  return { profile, login, logout, isLoading, loginLoading, loginError, refetch, socket };
+  return { profile, login, logout, isLoading, loginLoading, loginError, refetch, isFetched, socket };
 };

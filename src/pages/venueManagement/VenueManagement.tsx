@@ -9,8 +9,11 @@ import {
   PitchesManagement,
 } from '@/components';
 import { useVenueByCurrentUser } from '@/hooks';
+import { useLocale } from '@/locales';
 
 export const VenueManagement = () => {
+  const { formatMessage } = useLocale();
+
   const { data: venue, isLoading: isVenueLoading } = useVenueByCurrentUser();
 
   const [tabIndex, setTabIndex] = useState(0);
@@ -26,11 +29,11 @@ export const VenueManagement = () => {
   return (
     <Box>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={tabIndex} onChange={handleChangeTab} aria-label='basic tabs example'>
-          <Tab label='Thông tin' />
-          <Tab label='Hình ảnh' />
-          <Tab label='Địa chỉ' />
-          <Tab label='Sân bóng' />
+        <Tabs value={tabIndex} onChange={handleChangeTab} aria-label='basic tabs example' variant='scrollable'>
+          <Tab label={formatMessage({ id: 'app.your-venue.tabs.info' })} />
+          <Tab label={formatMessage({ id: 'app.your-venue.tabs.images' })} />
+          <Tab label={formatMessage({ id: 'app.your-venue.tabs.address' })} />
+          <Tab label={formatMessage({ id: 'app.your-venue.tabs.pitch' })} />
         </Tabs>
       </Box>
       <CustomTabPanel value={tabIndex} index={0}>

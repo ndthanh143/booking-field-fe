@@ -3,7 +3,6 @@ export * from './convertCurrency';
 export * from './convertDecimalToTime';
 export * from './convertToAMPM';
 export * from './convertToDate';
-export * from './createTournament';
 export * from './dateToTimeFloat';
 export * from './defineQuery';
 export * from './findBookingFreeTime';

@@ -3,9 +3,12 @@ import { useState } from 'react';
 import { MapPlace } from '..';
 import { LocationPicker } from '../LocationPicker';
 import { useVenueByCurrentUser, useVenueMutation } from '@/hooks';
+import { useLocale } from '@/locales';
 import { LocationMap } from '@/services/venue/venue.dto';
 
 export const LocationManagement = () => {
+  const { formatMessage } = useLocale();
+
   const { data: venue } = useVenueByCurrentUser();
 
   const { updateVenueMutation, isUpdating } = useVenueMutation();
@@ -32,7 +35,7 @@ export const LocationManagement = () => {
         <Box display='flex' justifyContent='space-between' gap={2}>
           <MapPlace onChange={(locationValue) => locationValue && setSelectedLatLng(locationValue)} />
           <Button variant='contained' size='small' onClick={handleSaveLocation} disabled={!selectedLatLng}>
-            Lưu địa chỉ
+            {formatMessage({ id: 'app.your-venue.tabs.address.save' })}
           </Button>
         </Box>
         <LocationPicker location={selectedLatLng} onChange={(value) => setSelectedLatLng(value)} />

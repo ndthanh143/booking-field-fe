@@ -11,7 +11,8 @@ import { SyntheticEvent, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { RATING_PAGE_LIMIT } from '@/common/constants';
-import { ImageLibrary, Seo } from '@/components';
+import { ImageLibrary, LoadingContainer, Seo } from '@/components';
+import NotFound from '@/components/NotFound';
 import { useAuth } from '@/hooks';
 import { useLocale } from '@/locales';
 import { pitchKeys } from '@/services/pitch/pitch.query';
@@ -44,7 +45,11 @@ export const VenueDetail = () => {
   const { slug } = useParams();
 
   const venueInstance = venueKeys.detail(slug);
-  const { data: venue } = useQuery({
+  const {
+    data: venue,
+    isLoading: isLoadingVenue,
+    isFetched,
+  } = useQuery({
     ...venueInstance,
     enabled: !!slug,
   });
@@ -86,6 +91,14 @@ export const VenueDetail = () => {
 
   const groupByCategory = pitches && groupBy(pitches.data, (item) => item.pitchCategory.name);
 
+  if (!venue && isLoadingVenue) {
+    return <LoadingContainer />;
+  }
+
+  if (!venue && isFetched) {
+    return <NotFound />;
+  }
+
   return (
     venue && (
       <Box marginY={2}>
@@ -123,13 +136,23 @@ export const VenueDetail = () => {
             <PlaceIcon sx={{ marginRight: 1, color: 'primary.main' }} />
             <Typography variant='body1'>{`${venue.address}, ${venue.district}, ${venue.province}`}</Typography>
           </Grid>
-          <Grid item xs={12} md={2} order={4} display='flex' justifyContent={{ xs: 'start', md: 'end' }}>
+          <Grid
+            item
+            xs={12}
+            md={2}
+            order={4}
+            display='flex'
+            justifyContent={{ xs: 'start', md: 'end' }}
+            alignItems='center'
+          >
             <StarIcon sx={{ marginRight: 1, color: 'primary.main' }} />
             <Typography variant='body1'>{ratings && averageRate(ratings.data)}/5</Typography>
           </Grid>
-          <Grid item xs={12} md={12} order={{ xs: 0, md: 5 }} marginY={2}>
-            {venue.imageList && venue.imageList.length > 0 && <ImageLibrary imageList={venue.imageList} />}
-          </Grid>
+          {venue.imageList && venue.imageList.length > 0 && (
+            <Grid item xs={12} md={12} order={{ xs: 0, md: 5 }} marginY={2}>
+              <ImageLibrary imageList={venue.imageList} />
+            </Grid>
+          )}
           <Grid item order={4}>
             <Stack direction='row' divider={<Divider orientation='vertical' flexItem />} spacing={2}>
               <Box display='flex' alignItems='center' gap={1} flexDirection={{ xs: 'column', md: 'row' }}>
@@ -152,7 +175,11 @@ export const VenueDetail = () => {
               </Box>
             </Stack>
           </Grid>
+          <Grid item xs={12} order={5}>
+            {venue.description}
+          </Grid>
         </Grid>
+
         <Box position='sticky' marginY={2} top={0} bgcolor='primary.contrastText' zIndex={1}>
           <Tabs value={tab} onChange={handleChange} variant='scrollable'>
             <Tab label={formatMessage({ id: 'app.venue.tab.pitch-list' })} LinkComponent='a' href='#pitches' />
