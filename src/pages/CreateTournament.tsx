@@ -64,7 +64,7 @@ export const CreateTournament = () => {
   const [files, setFiles] = useState<FileList | null>(null);
   const [type, setType] = useState<TournamentTypeEnum>();
   const [selectedVenue, setSelectedVenue] = useState<Venue | null>(null);
-  const [searchAddress, setSearchAddress] = useState('');
+  const [searchKeyword, setSearchKeyword] = useState('');
 
   const pitchCategoryInstance = pitchCategoryKeys.list({ venueId: Number(selectedVenue?.id) });
   const { data: pitchCategories } = useQuery({
@@ -72,12 +72,12 @@ export const CreateTournament = () => {
     enabled: Boolean(selectedVenue),
   });
 
-  const debounceSearchAddress = useDebounce(searchAddress);
-  const venueInstance = venueKeys.list({ location: debounceSearchAddress });
+  const debounceSearchKeyword = useDebounce(searchKeyword);
+  const venueInstance = venueKeys.search({ location: debounceSearchKeyword });
 
   const { data: venues } = useQuery({
     ...venueInstance,
-    enabled: !!debounceSearchAddress,
+    enabled: !!debounceSearchKeyword,
   });
 
   const { mutate: mutateCreateTournament, isLoading } = useMutation({
@@ -218,7 +218,7 @@ export const CreateTournament = () => {
               <Autocomplete
                 id='country-select-demo'
                 options={venues?.data || []}
-                onInputChange={(_, value) => setSearchAddress(value)}
+                onInputChange={(_, value) => setSearchKeyword(value)}
                 onChange={(_, value) => {
                   setValue('venue', Number(value?.id));
                   setSelectedVenue(value);
