@@ -59,8 +59,6 @@ export const SearchBox = () => {
     }
   };
 
-  console.log(isLoadingProvinces, isLoadingVenues);
-
   useEffect(() => {
     if (debounceSearchAddress) {
       refetchLocation();
