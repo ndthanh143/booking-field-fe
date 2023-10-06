@@ -7,20 +7,25 @@ import {
   EmojiEvents,
 } from '@mui/icons-material';
 import { Avatar, Box, Button, IconButton, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useAuth, useMenu } from '@/hooks';
 import { useLocale } from '@/locales';
+import { RoleEnum } from '@/services/user/user.dto';
+import { venueKeys } from '@/services/venue/venue.query';
 
-export type MenuActionsProps = {
-  variant: 'primary' | 'secondary';
-};
-
-export const MenuActions = ({ variant }: MenuActionsProps) => {
+export const MenuActions = () => {
   const navigate = useNavigate();
 
   const { formatMessage } = useLocale();
 
   const { profile, logout } = useAuth();
+
+  const venueInstance = venueKeys.currentUser();
+  const { data: venue } = useQuery({
+    ...venueInstance,
+    enabled: Boolean(profile?.role === RoleEnum.Owner),
+  });
 
   const { anchorEl: anchorMenu, isOpen: isOpenMenu, onClose: closeMenu, onOpen: openMenu } = useMenu();
 
@@ -31,8 +36,8 @@ export const MenuActions = ({ variant }: MenuActionsProps) => {
           <IconButton onClick={openMenu}>
             <Avatar
               sx={{
-                bgcolor: variant === 'primary' ? 'primary.main' : 'secondary.light',
-                color: variant === 'primary' ? 'primary.contrastText' : 'secondary.dark',
+                bgcolor: 'primary.main',
+                color: 'primary.contrastText',
               }}
             >
               {profile.lastName.charAt(0)}
@@ -66,7 +71,10 @@ export const MenuActions = ({ variant }: MenuActionsProps) => {
           <Box>
             <MenuItem
               sx={{ borderBottom: 1, borderColor: '#ccc', padding: 2 }}
-              onClick={() => navigate('/account/profile')}
+              onClick={() => {
+                closeMenu();
+                navigate('/account/profile');
+              }}
             >
               <Avatar />
               <Box marginLeft={2}>
@@ -74,20 +82,38 @@ export const MenuActions = ({ variant }: MenuActionsProps) => {
                 <Typography>{formatMessage({ id: 'app.home.header.account.view-profile' })}</Typography>
               </Box>
             </MenuItem>
-            <MenuItem sx={{ paddingY: 1.5 }} onClick={() => navigate('/account/my-booking')}>
+            <MenuItem
+              sx={{ paddingY: 1.5 }}
+              onClick={() => {
+                closeMenu();
+                navigate('/account/my-booking');
+              }}
+            >
               <HistoryOutlined sx={{ marginRight: 2 }} />
               {formatMessage({
                 id: 'app.home.header.account.my-booking',
               })}
             </MenuItem>
-            <MenuItem sx={{ paddingY: 1.5 }} onClick={() => navigate('/league/create-tournament')}>
+            <MenuItem
+              sx={{ paddingY: 1.5 }}
+              onClick={() => {
+                closeMenu();
+                navigate('/league/create-tournament');
+              }}
+            >
               <EmojiEvents sx={{ marginRight: 2 }} />
               {formatMessage({
                 id: 'app.home.header.account.create-tournament',
               })}
             </MenuItem>
-            {profile.venue && (
-              <MenuItem sx={{ paddingY: 1.5, fontWeight: 700 }} onClick={() => navigate('/venue-management/dashboard')}>
+            {venue && (
+              <MenuItem
+                sx={{ paddingY: 1.5, fontWeight: 700 }}
+                onClick={() => {
+                  closeMenu();
+                  navigate('/venue-management/dashboard');
+                }}
+              >
                 <HouseOutlined sx={{ marginRight: 2 }} />
                 {formatMessage({
                   id: 'app.home.header.account.venue-management',
@@ -98,7 +124,10 @@ export const MenuActions = ({ variant }: MenuActionsProps) => {
               sx={{ paddingY: 1.5 }}
               onClick={() => {
                 closeMenu();
-                logout();
+                {
+                  closeMenu();
+                  logout();
+                }
               }}
             >
               <LogoutOutlined sx={{ marginRight: 2 }} />
@@ -109,12 +138,25 @@ export const MenuActions = ({ variant }: MenuActionsProps) => {
           </Box>
         ) : (
           <Box>
-            <MenuItem onClick={() => navigate('/login')} sx={{ paddingY: 1.5 }} disableRipple>
+            <MenuItem
+              onClick={() => {
+                closeMenu();
+                navigate('/login');
+              }}
+              sx={{ paddingY: 1.5 }}
+              disableRipple
+            >
               {formatMessage({
                 id: 'app.home.header.account.sign-in',
               })}
             </MenuItem>
-            <MenuItem onClick={() => navigate('/register')} sx={{ paddingY: 1.5 }}>
+            <MenuItem
+              onClick={() => {
+                closeMenu();
+                navigate('/register');
+              }}
+              sx={{ paddingY: 1.5 }}
+            >
               {formatMessage({
                 id: 'app.home.header.account.sign-up',
               })}

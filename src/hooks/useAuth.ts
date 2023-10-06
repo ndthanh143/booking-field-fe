@@ -9,11 +9,12 @@ import authService from '@/services/auth/auth.service';
 import { notificationKeys } from '@/services/notification/notification.query';
 import { userKeys } from '@/services/user/user.query';
 
+const NODE_ENV = import.meta.env.NODE_ENV;
 export const useAuth = () => {
-  const userInstance = userKeys.profile();
-  const { data: profile, isLoading, refetch } = useQuery(userInstance);
-
   const [accessToken, setAccessToken] = useState<string | undefined>(Cookies.get('access_token'));
+
+  const userInstance = userKeys.profile();
+  const { data: profile, isLoading, refetch, isFetched } = useQuery({ ...userInstance, staleTime: Infinity });
 
   const [socket, setSocket] = useState<io.Socket>();
 
@@ -39,12 +40,12 @@ export const useAuth = () => {
   function logout() {
     authService.logout();
     socket?.disconnect();
-    toast.success('Logout successfully');
     refetch();
+    toast.success('Logout successfully');
   }
 
   useEffect(() => {
-    const socketEv = socket?.on('booking', (message) => {
+    socket?.on('booking', (message) => {
       Push.create('Thông báo đặt sân', {
         body: message,
         icon: '/logo.png',
@@ -53,21 +54,32 @@ export const useAuth = () => {
       queryClient.invalidateQueries(notificationKeys.lists());
     });
 
+    socket?.on('update_venue_status', (message) => {
+      Push.create('Thông báo từ quản trị viên', {
+        body: message,
+        icon: '/logo.png',
+        timeout: 4000,
+      });
+      queryClient.invalidateQueries(notificationKeys.lists());
+    });
+
     return () => {
-      socketEv?.off();
+      socket?.off();
     };
   }, [socket]);
 
   useEffect(() => {
-    const newSocket = io.connect(`${import.meta.env.VITE_SOCKET_API_URL}`, {
-      extraHeaders: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      withCredentials: true,
-    });
+    if (accessToken) {
+      const newSocket = io.connect(`${import.meta.env.VITE_SOCKET_API_URL}`, {
+        extraHeaders: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        ...(NODE_ENV === 'production' && { withCredentials: true }),
+      });
 
-    setSocket(newSocket);
+      setSocket(newSocket);
+    }
   }, [accessToken]);
 
-  return { profile, login, logout, isLoading, loginLoading, loginError, refetch, socket };
+  return { profile, login, logout, isLoading, loginLoading, loginError, refetch, isFetched, socket };
 };

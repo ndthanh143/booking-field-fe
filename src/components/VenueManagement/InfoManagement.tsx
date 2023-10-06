@@ -4,7 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { object, string } from 'yup';
-import { useBoolean, useVenueByUser, useVenueMutation } from '@/hooks';
+import { useBoolean, useVenueByCurrentUser, useVenueMutation } from '@/hooks';
+import { useLocale } from '@/locales';
 import { locationKeys } from '@/services/location/location.query';
 import { UpdateVenueData } from '@/services/venue/venue.dto';
 
@@ -18,6 +19,8 @@ const schema = object({
   district: string(),
 });
 export const InfoManagement = () => {
+  const { formatMessage } = useLocale();
+
   const { value: isFixingMode, setFalse: closeFixingMode, setTrue: openFixingMode } = useBoolean(false);
 
   const { register, handleSubmit, reset } = useForm({ resolver: yupResolver(schema) });
@@ -27,10 +30,9 @@ export const InfoManagement = () => {
 
   const { updateVenueMutation, isUpdating } = useVenueMutation();
 
-  const { data: venue } = useVenueByUser();
+  const { data: venue } = useVenueByCurrentUser();
 
-  const locationInstace = locationKeys.list({});
-
+  const locationInstace = locationKeys.list();
   const { data: provinces } = useQuery(locationInstace);
 
   const onSubmitHandler = (data: UpdateVenueData) => {
@@ -57,7 +59,7 @@ export const InfoManagement = () => {
       <Box component='form' onSubmit={handleSubmit(onSubmitHandler)}>
         <Grid container display='flex'>
           <Grid item marginY={2} xs={6}>
-            <Typography variant='body2'>Tên sân</Typography>
+            <Typography variant='body2'>{formatMessage({ id: 'app.register-venue.venue.name' })}</Typography>
             <TextField
               disabled={!isFixingMode}
               variant='outlined'
@@ -67,7 +69,7 @@ export const InfoManagement = () => {
             />
           </Grid>
           <Grid item marginY={2} xs={12}>
-            <Typography variant='body2'>Mô tả</Typography>
+            <Typography variant='body2'>{formatMessage({ id: 'app.register-venue.venue.description' })}</Typography>
             <TextField
               disabled={!isFixingMode}
               variant='outlined'
@@ -78,7 +80,7 @@ export const InfoManagement = () => {
           </Grid>
           <Grid item marginY={2} xs={12} display='flex' gap={4}>
             <Box>
-              <Typography variant='body2'>Giờ mở cửa</Typography>
+              <Typography variant='body2'>{formatMessage({ id: 'app.register-venue.venue.open' })}</Typography>
               <TextField
                 disabled={!isFixingMode}
                 variant='outlined'
@@ -87,7 +89,7 @@ export const InfoManagement = () => {
               />
             </Box>
             <Box>
-              <Typography variant='body2'>Giờ đóng cửa</Typography>
+              <Typography variant='body2'>{formatMessage({ id: 'app.register-venue.venue.close' })}</Typography>
               <TextField
                 disabled={!isFixingMode}
                 variant='outlined'
@@ -98,7 +100,7 @@ export const InfoManagement = () => {
           </Grid>
 
           <Grid item marginY={2} xs={12}>
-            <Typography variant='body2'>Địa chỉ</Typography>
+            <Typography variant='body2'>{formatMessage({ id: 'app.register-venue.venue.address' })}</Typography>
             <TextField
               disabled={!isFixingMode}
               variant='outlined'
@@ -109,7 +111,7 @@ export const InfoManagement = () => {
           </Grid>
           <Grid item marginY={2} xs={12} display='flex' gap={4}>
             <Box sx={{ flex: 1 }}>
-              <Typography variant='body2'>Tỉnh / thành phố</Typography>
+              <Typography variant='body2'>{formatMessage({ id: 'app.register-venue.venue.province' })}</Typography>
               <Autocomplete
                 disabled={!isFixingMode}
                 disablePortal
@@ -120,7 +122,7 @@ export const InfoManagement = () => {
               />
             </Box>
             <Box sx={{ flex: 1 }}>
-              <Typography variant='body2'>Quận / huyện</Typography>
+              <Typography variant='body2'>{formatMessage({ id: 'app.register-venue.venue.district' })}</Typography>
               <Autocomplete
                 disabled={!isFixingMode}
                 disablePortal
@@ -134,15 +136,15 @@ export const InfoManagement = () => {
             {isFixingMode ? (
               <Box>
                 <Button variant='contained' type='submit'>
-                  Lưu thay đổi
+                  {formatMessage({ id: 'app.common.button.save' })}
                 </Button>
                 <Button variant='text' color='secondary' onClick={handleCancel}>
-                  Hủy
+                  {formatMessage({ id: 'app.common.button.cancel' })}
                 </Button>
               </Box>
             ) : (
               <Button variant='outlined' onClick={openFixingMode}>
-                Chỉnh sửa
+                {formatMessage({ id: 'app.common.button.edit' })}
               </Button>
             )}
           </Box>

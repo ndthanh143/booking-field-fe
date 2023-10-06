@@ -8,6 +8,7 @@ import { motion, useInView } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SelectBox } from './SelectBox';
+import { LoadingContainer } from '.';
 import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
 import { defaultLocations } from '@/common/datas/location.data';
 import { useDebounce } from '@/hooks';
@@ -31,15 +32,18 @@ export const SearchBox = () => {
   const { data: pitchCategories } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
   const debounceSearchAddress = useDebounce(searchAdress);
-  const venueInstance = venueKeys.list({ location: debounceSearchAddress });
-
-  const { data: venues } = useQuery({
+  const venueInstance = venueKeys.search({ location: debounceSearchAddress });
+  const {
+    data: venues,
+    refetch: refetchVenue,
+    isLoading: isLoadingVenues,
+  } = useQuery({
     ...venueInstance,
     enabled: !!debounceSearchAddress,
   });
 
   const locationInstance = locationKeys.list({ type: 'p', keyword: debounceSearchAddress });
-  const { data: provinces, refetch: locationRefetch } = useQuery(locationInstance);
+  const { data: provinces, refetch: refetchLocation, isLoading: isLoadingProvinces } = useQuery(locationInstance);
 
   const searchHandler = () => {
     if (seletedVenue) {
@@ -55,11 +59,14 @@ export const SearchBox = () => {
     }
   };
 
+  console.log(isLoadingProvinces, isLoadingVenues);
+
   useEffect(() => {
     if (debounceSearchAddress) {
-      locationRefetch();
+      refetchLocation();
+      refetchVenue();
     }
-  }, [debounceSearchAddress, locationRefetch]);
+  }, [debounceSearchAddress, refetchLocation]);
 
   const ref = useRef(null);
   const isInView = useInView(ref, { margin: '-150px' });
@@ -129,6 +136,7 @@ export const SearchBox = () => {
                 ))
               ) : (
                 <Box padding={1}>
+                  {(isLoadingProvinces || isLoadingVenues) && <LoadingContainer />}
                   {provinces && provinces.length > 0 && (
                     <>
                       <Typography variant='body2' paddingX={1} paddingY={1} fontWeight={700}>
@@ -152,7 +160,7 @@ export const SearchBox = () => {
                       ))}
                     </>
                   )}
-                  {venues && venues.data.length > 0 && (
+                  {venues && venues.data && venues.data.length > 0 && (
                     <>
                       <Typography variant='body2' paddingX={1} paddingY={1} fontWeight={700}>
                         {formatMessage({ id: 'app.home.search.result.venue' })}
@@ -187,7 +195,7 @@ export const SearchBox = () => {
                       ))}
                     </>
                   )}
-                  {provinces?.length === 0 && venues?.data.length === 0 && (
+                  {provinces?.length === 0 && venues?.data && venues?.data.length === 0 && (
                     <Typography textAlign='center'>
                       {formatMessage({ id: 'app.home.search.result.no-result' })}
                     </Typography>
@@ -253,7 +261,7 @@ export const SearchBox = () => {
         >
           <Button variant='contained' onClick={searchHandler} sx={{ height: '100%', borderRadius: 3 }} fullWidth>
             <SearchIcon />
-            <Typography display={{ xs: 'none', md: 'none', lg: 'block' }} variant='body2' fontWeight={500}>
+            <Typography display={{ xs: 'none', md: 'none', lg: 'block' }} fontWeight={600}>
               {formatMessage({ id: 'app.home.search.button' })}
             </Typography>
           </Button>

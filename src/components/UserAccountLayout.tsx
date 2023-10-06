@@ -1,9 +1,10 @@
 import {
   AccountBoxOutlined,
-  EmojiEvents,
-  Lock,
+  EmojiEventsOutlined,
+  FavoriteBorderOutlined,
+  LockOutlined,
   LogoutOutlined,
-  Notifications,
+  NotificationsOutlined,
   RestoreOutlined,
 } from '@mui/icons-material';
 import { Avatar, Box, Divider, List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
@@ -31,10 +32,11 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
 
   return (
     profile && (
-      <Box sx={{ marginY: 8 }}>
+      <Box>
         <Box display='flex' flexDirection={{ xs: 'column', md: 'row' }} gap={4}>
           <Box
-            flex={{ xs: 1, md: 5 }}
+            flex={{ xs: 1, md: 4 }}
+            mb='auto'
             borderRadius={4}
             border={1}
             borderColor='secondary.light'
@@ -113,7 +115,7 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
                 }}
               >
                 <ListItemIcon sx={{ color: 'inherit' }}>
-                  <EmojiEvents />
+                  <EmojiEventsOutlined />
                 </ListItemIcon>
                 <ListItemText primary={formatMessage({ id: 'app.account.menu.tournament' })} />
               </ListItemButton>
@@ -125,9 +127,21 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
                 }}
               >
                 <ListItemIcon sx={{ color: 'inherit' }}>
-                  <Notifications />
+                  <NotificationsOutlined />
                 </ListItemIcon>
                 <ListItemText primary={formatMessage({ id: 'app.account.menu.notification' })} />
+              </ListItemButton>
+              <ListItemButton
+                onClick={() => navigate('/account/favorite')}
+                sx={{
+                  ...(pathname === '/account/favorite' && { color: 'primary.main' }),
+                  paddingX: { xs: 0, md: 1 },
+                }}
+              >
+                <ListItemIcon sx={{ color: 'inherit' }}>
+                  <FavoriteBorderOutlined />
+                </ListItemIcon>
+                <ListItemText primary={formatMessage({ id: 'app.account.menu.favorite' })} />
               </ListItemButton>
               <ListItemButton
                 onClick={() => navigate('/account/change-password')}
@@ -137,7 +151,7 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
                 }}
               >
                 <ListItemIcon sx={{ color: 'inherit' }}>
-                  <Lock />
+                  <LockOutlined />
                 </ListItemIcon>
                 <ListItemText primary={formatMessage({ id: 'app.account.menu.change-password' })} />
               </ListItemButton>
@@ -150,7 +164,7 @@ export const UserAccountLayout = ({ children }: PropsWithChildren) => {
               </ListItemButton>
             </List>
           </Box>
-          <Box flex={{ xs: 1, md: 7 }}>{children}</Box>
+          <Box flex={{ xs: 1, md: 8 }}>{children}</Box>
         </Box>
       </Box>
     )

@@ -62,8 +62,8 @@ export const AccountBooking = () => {
                 >{`${booking.pitch.venue.name}`}</Typography>
               </Box>
               <Divider />
-              <Grid container spacing={10} alignItems='center' paddingY={2}>
-                <Grid item xs={3}>
+              <Grid container spacing={2} alignItems='center' paddingY={2}>
+                <Grid item xs={12} md={3}>
                   <Box
                     component='img'
                     src={booking.pitch.venue.imageList?.[0].imagePath}
@@ -74,7 +74,7 @@ export const AccountBooking = () => {
                     borderRadius={2}
                   />
                 </Grid>
-                <Grid item xs={5}>
+                <Grid item xs={8} md={5}>
                   <Typography>{`${booking.pitch.pitchCategory.name} - ${booking.pitch.name}`}</Typography>
                   <Typography>
                     {formatMessage({ id: 'app.account.menu.my-booking.day' })}: {formatDate(booking.startTime)}
@@ -107,17 +107,19 @@ export const AccountBooking = () => {
                     {formatMessage({ id: 'app.account.menu.my-booking.rating' })}
                   </Button>
                 )}
-                <Button variant='text' color='secondary'>
+                {/* <Button variant="text" color="secondary">
                   {formatMessage({ id: 'app.account.menu.my-booking.detail' })}
-                </Button>
+                </Button> */}
               </Box>
             </Box>
           ))}
         </Box>
       ) : (
-        <Box marginY={2}>
-          <Box component='img' src={commonImages.noResult.src} alt={commonImages.noResult.name} />
-          <Typography>{formatMessage({ id: 'app.account.menu.my-booking.no-result' })}</Typography>
+        <Box display='flex' justifyContent='center'>
+          <Box marginY={2} textAlign='center'>
+            <Box component='img' src={commonImages.noResult.src} alt={commonImages.noResult.name} />
+            <Typography>{formatMessage({ id: 'app.account.menu.my-booking.no-result' })}</Typography>
+          </Box>
         </Box>
       )}
       {selectedBooking && (

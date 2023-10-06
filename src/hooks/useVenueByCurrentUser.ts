@@ -2,14 +2,14 @@ import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '.';
 import { venueKeys } from '@/services/venue/venue.query';
 
-export const useVenueByUser = () => {
+export const useVenueByCurrentUser = () => {
   const { profile } = useAuth();
 
-  const queryInstance = venueKeys.detail(profile?.venue.slug);
+  const queryInstance = venueKeys.currentUser();
   const { data, isLoading, refetch } = useQuery({
     ...queryInstance,
-    enabled: !!profile,
+    enabled: Boolean(profile),
   });
 
-  return { data, isLoading, profile, refetch };
+  return { data, isLoading, refetch };
 };

@@ -1,4 +1,5 @@
 import { TextareaAutosize, TextareaAutosizeProps, styled } from '@mui/material';
+import { forwardRef } from 'react';
 
 const blue = {
   100: '#DAECFF',
@@ -52,6 +53,6 @@ const StyledTextarea = styled(TextareaAutosize)(
 `,
 );
 
-export const TextArea = (props: TextareaAutosizeProps) => {
-  return <StyledTextarea {...props} />;
-};
+export const TextArea = forwardRef<HTMLTextAreaElement, TextareaAutosizeProps>((props: TextareaAutosizeProps, ref) => {
+  return <StyledTextarea ref={ref} {...props} />;
+});

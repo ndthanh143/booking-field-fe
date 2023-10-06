@@ -49,7 +49,9 @@ export const TournamentLayout = () => {
             </Tabs>
           </Box>
         </Box>
+        {/* <Box minHeight="100vh"> */}
         <Outlet />
+        {/* </Box> */}
       </Box>
     )
   );

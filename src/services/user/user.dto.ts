@@ -10,6 +10,8 @@ export type User = {
   email: string;
   phone: string;
   venue: Venue;
+  favorites?: Venue[];
+  role: RoleEnum;
 } & BaseData;
 
 export type SignInPayload = {
@@ -21,15 +23,22 @@ export type SignInPayload = {
   password: string;
 };
 
+export enum RoleEnum {
+  Admin = 'admin',
+  User = 'user',
+  Owner = 'owner',
+}
+
 export type UpdateUserPayload = {
   id: number;
   data: UpdateUserData;
 };
 
 export type UpdateUserData = {
-  firstName: string;
-  lastName: string;
-  phone: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  favorites?: Venue[];
 };
 
 export type ChangePasswordPayload = {

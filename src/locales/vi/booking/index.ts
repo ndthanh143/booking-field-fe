@@ -23,5 +23,5 @@ export const vi_booking = {
     'Bằng cách đặt hàng, bạn đồng ý với Điều khoản và Điều kiện & Chính sách quyền riêng tư của Playfinder cũng như điều khoản sử dụng của địa điểm',
 
   'app.booking.success.title': 'Đặt sân thành công',
-  'app.booking.success.go-to-homepage': 'Quay lại trang chủ',
+  'app.booking.success.go-to-booking': 'Xem thông tin đặt sân',
 };

@@ -1,6 +1,13 @@
 import { Pitch } from '../pitch/pitch.dto';
 import { Rating } from '../rating/rating.dto';
-import { BaseData, BasePaginationResponse, BaseResponse, PaginationQuery, SortQuery } from '@/common/dtos/base.dto';
+import {
+  BaseData,
+  BasePaginationResponse,
+  BaseQuery,
+  BaseResponse,
+  PaginationQuery,
+  SortQuery,
+} from '@/common/dtos/base.dto';
 
 export type VenuesResponse = BasePaginationResponse<Venue>;
 export type VenueResponse = BaseResponse<Venue>;
@@ -11,12 +18,28 @@ export type UpdateVenuePayload = {
   data: UpdateVenueData;
 };
 
+export type CreateVenuePayload = {
+  name: string;
+  description: string;
+  address: string;
+  province: string;
+  district: string;
+  openAt: string;
+  closeAt: string;
+  location: LocationMap;
+  user: number;
+};
+
 export type SearchVenueQuery = {
-  pitchCategory: number;
-  minPrice: number;
-  maxPrice: number;
-  location: string;
+  pitchCategory?: number;
+  minPrice?: number;
+  maxPrice?: number;
+  location?: string;
   sorts?: SortQuery[];
+  currentLat?: number;
+  currentLng?: number;
+  maxDistance?: number;
+  isProminant?: boolean;
 } & PaginationQuery;
 
 export type UpdateVenueData = {
@@ -43,8 +66,15 @@ export type Venue = {
   ratings: Rating[];
   openAt: string;
   closeAt: string;
+  status: VenueStatusEnum;
   slug: string;
 } & BaseData;
+
+export enum VenueStatusEnum {
+  Active = 'active',
+  Waiting = 'waiting',
+  Cancel = 'cancel',
+}
 
 export type LocationMap = {
   lat: number;
@@ -59,7 +89,10 @@ export type Price = {
 export type SearchVenueData = Venue & {
   price: number;
   averageRate: number;
+  averageServiceRate: number;
+  averageQualityRate: number;
   totalReview: number;
+  distance: number;
 };
 
 export type VenueImage = {
@@ -67,5 +100,6 @@ export type VenueImage = {
 };
 
 export type VenueQuery = {
-  location: string;
-};
+  status?: VenueStatusEnum;
+  userId?: number;
+} & BaseQuery;

@@ -8,12 +8,9 @@ const userService = {
     const { data } = await axiosInstance.post<AuthResponse>('/auth/register', payload);
 
     Cookies.set('access_token', data.data.accessToken);
-    Cookies.set('user', JSON.stringify(data.data.user));
   },
   updateUserInfo: async (id: number, payload: UpdateUserData) => {
     const { data } = await axiosInstance.put<UpdateUserResponse>(`/users/${id}`, payload);
-
-    Cookies.set('user', JSON.stringify(data.data));
 
     return data;
   },

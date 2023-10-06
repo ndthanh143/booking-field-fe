@@ -6,10 +6,10 @@ import { useEffect, useState } from 'react';
 import { IntlProvider } from 'react-intl';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { Seo, TournamentLayout, UserAccountLayout } from './components';
-import { MainLayout, SecondaryLayout } from './components/Layout';
-import { VenueManagementLayout } from './components/VenueManagementLayout';
+import { TournamentLayout, UserAccountLayout } from './components';
+import NotFound from './components/NotFound';
 import { useLocalStorage } from './hooks';
+import { VenueManagementLayout, Layout, AuthLayout } from './layouts';
 import { Locale, localeConfig } from './locales';
 import {
   AccountBooking,
@@ -34,6 +34,8 @@ import {
   TournamentTeamManagement,
   TournamentMatch,
   AccountTournament,
+  AccountFavorite,
+  RegisterVenue,
 } from './pages';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -52,19 +54,7 @@ const router = createBrowserRouter([
     path: '/',
     children: [
       {
-        element: (
-          <Seo title='Go2Play' description='Football venue booking app'>
-            <MainLayout />
-          </Seo>
-        ),
-        children: [
-          {
-            index: true,
-            element: <Home />,
-          },
-        ],
-      },
-      {
+        element: <AuthLayout />,
         children: [
           {
             path: 'login',
@@ -90,79 +80,6 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: 'search',
-        element: <SecondaryLayout />,
-        children: [
-          {
-            index: true,
-            element: <Search />,
-          },
-        ],
-      },
-      {
-        path: 'league',
-        element: <MainLayout />,
-        children: [
-          {
-            path: 'create-tournament',
-            element: <CreateTournament />,
-          },
-          {
-            path: ':id',
-            element: <TournamentLayout />,
-            children: [
-              {
-                path: 'schedule',
-                element: <TournamentSchedule />,
-              },
-              {
-                path: 'matches',
-                element: <TournamentMatch />,
-              },
-              {
-                path: 'team-management',
-                element: <TournamentTeamManagement />,
-              },
-              {
-                path: 'standing',
-                element: <TournamentStanding />,
-              },
-            ],
-          },
-        ],
-      },
-      {
-        path: 'venue',
-        element: <MainLayout />,
-        children: [
-          {
-            path: ':slug/create-tournament',
-          },
-          {
-            path: ':slug',
-            element: <VenueDetail />,
-          },
-        ],
-      },
-      {
-        path: 'booking',
-        children: [
-          {
-            element: <MainLayout />,
-            children: [
-              {
-                path: ':slug',
-                element: <Booking />,
-              },
-            ],
-          },
-          {
-            path: 'success',
-            element: <BookingComplete />,
-          },
-        ],
-      },
-      {
         path: 'venue-management',
         element: <VenueManagementLayout />,
         children: [
@@ -181,53 +98,142 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: 'account',
-        element: <SecondaryLayout />,
+        element: <Layout />,
         children: [
           {
-            path: 'profile',
-            element: (
-              <UserAccountLayout>
-                <AccountProfile />
-              </UserAccountLayout>
-            ),
+            index: true,
+            element: <Home />,
           },
           {
-            path: 'my-booking',
-            element: (
-              <UserAccountLayout>
-                <AccountBooking />
-              </UserAccountLayout>
-            ),
+            path: 'search',
+            children: [
+              {
+                index: true,
+                element: <Search />,
+              },
+            ],
           },
           {
-            path: 'notification',
-            element: (
-              <UserAccountLayout>
-                <AccountNotification />
-              </UserAccountLayout>
-            ),
+            path: 'league',
+            children: [
+              {
+                path: 'create-tournament',
+                element: <CreateTournament />,
+              },
+              {
+                path: ':id',
+                element: <TournamentLayout />,
+                children: [
+                  {
+                    path: 'schedule',
+                    element: <TournamentSchedule />,
+                  },
+                  {
+                    path: 'matches',
+                    element: <TournamentMatch />,
+                  },
+                  {
+                    path: 'team-management',
+                    element: <TournamentTeamManagement />,
+                  },
+                  {
+                    path: 'standing',
+                    element: <TournamentStanding />,
+                  },
+                ],
+              },
+            ],
           },
           {
-            path: 'my-league',
-            element: (
-              <UserAccountLayout>
-                <AccountTournament />
-              </UserAccountLayout>
-            ),
+            path: 'venue',
+            children: [
+              {
+                path: ':slug/create-tournament',
+              },
+              {
+                path: ':slug',
+                element: <VenueDetail />,
+              },
+            ],
           },
+          {
+            path: 'booking',
+            children: [
+              {
+                path: ':slug',
+                element: <Booking />,
+              },
+              {
+                path: 'success',
+                element: <BookingComplete />,
+              },
+            ],
+          },
+          {
+            path: 'account',
+            children: [
+              {
+                path: 'profile',
+                element: (
+                  <UserAccountLayout>
+                    <AccountProfile />
+                  </UserAccountLayout>
+                ),
+              },
+              {
+                path: 'my-booking',
+                element: (
+                  <UserAccountLayout>
+                    <AccountBooking />
+                  </UserAccountLayout>
+                ),
+              },
+              {
+                path: 'notification',
+                element: (
+                  <UserAccountLayout>
+                    <AccountNotification />
+                  </UserAccountLayout>
+                ),
+              },
+              {
+                path: 'favorite',
+                element: (
+                  <UserAccountLayout>
+                    <AccountFavorite />
+                  </UserAccountLayout>
+                ),
+              },
+              {
+                path: 'my-league',
+                element: (
+                  <UserAccountLayout>
+                    <AccountTournament />
+                  </UserAccountLayout>
+                ),
+              },
 
+              {
+                path: 'change-password',
+                element: (
+                  <UserAccountLayout>
+                    <AccountPassword />
+                  </UserAccountLayout>
+                ),
+              },
+            ],
+          },
           {
-            path: 'change-password',
-            element: (
-              <UserAccountLayout>
-                <AccountPassword />
-              </UserAccountLayout>
-            ),
+            path: 'register-venue',
+            element: <RegisterVenue />,
           },
         ],
       },
     ],
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ]);
 

@@ -16,6 +16,8 @@ export const enUS_venue_detail = {
   'app.venue.pitches.item.book': 'Book now',
 
   'app.venue.ratings.title': 'Rating',
+  'app.venue.ratings.services': 'Services',
+  'app.venue.ratings.quality': 'Quality',
   'app.venue.ratings.no-result': 'There is no rating yet',
 
   'app.venue.address.title': 'Address',

@@ -10,9 +10,9 @@ export interface TimeSelectionProps {
   timeRange: number[];
 }
 
+const minDistance = 1;
+const step = 0.5;
 export const TimeSelection = ({ isOpen, onClose, onSave, timeRange }: TimeSelectionProps) => {
-  const minDistance = 1;
-
   const [timeSelection, setTimeSelection] = useState<number[]>(timeRange);
 
   const valueLabelFormat = (value: number) => `${convertDecimalToTime(value)}`;
@@ -22,13 +22,27 @@ export const TimeSelection = ({ isOpen, onClose, onSave, timeRange }: TimeSelect
       return;
     }
 
-    if (newValue[1] - newValue[0] < minDistance) {
-      if (activeThumb === 0) {
-        const clamped = Math.min(newValue[0], 100 - minDistance);
-        setTimeSelection([clamped, clamped + minDistance]);
-      } else {
-        const clamped = Math.max(newValue[1], minDistance);
-        setTimeSelection([clamped - minDistance, clamped]);
+    const [start, end] = newValue;
+    const range = end - start;
+
+    if (range < minDistance) {
+      if (range === step) {
+        if (activeThumb === 0) {
+          const clamped = Math.min(start, 100 - minDistance);
+          if (timeRange[1] - step === clamped) {
+            setTimeSelection([timeRange[1] - 1, timeRange[1]]);
+          } else {
+            setTimeSelection([clamped, clamped + minDistance]);
+          }
+        } else {
+          const clamped = Math.max(end, minDistance);
+          setTimeSelection([clamped - minDistance, clamped]);
+          if (timeRange[0] + step === clamped) {
+            setTimeSelection([timeRange[0], timeRange[0] + 1]);
+          } else {
+            setTimeSelection([clamped - minDistance, clamped]);
+          }
+        }
       }
     } else {
       setTimeSelection(newValue as number[]);
@@ -74,12 +88,24 @@ export const TimeSelection = ({ isOpen, onClose, onSave, timeRange }: TimeSelect
               valueLabelFormat={valueLabelFormat}
               min={timeRange[0]}
               max={timeRange[1]}
-              step={0.5}
+              step={step}
               disableSwap
             />
             <Box display='flex' justifyContent='space-between' gap={2}>
-              <TextField value={`${convertDecimalToTime(timeSelection[0])}`} label='Giờ bắt đầu' />
-              <TextField value={`${convertDecimalToTime(timeSelection[1])}`} label='Giờ kết thúc' />
+              <TextField
+                InputProps={{
+                  readOnly: true,
+                }}
+                value={`${convertDecimalToTime(timeSelection[0])}`}
+                label='Giờ bắt đầu'
+              />
+              <TextField
+                InputProps={{
+                  readOnly: true,
+                }}
+                value={`${convertDecimalToTime(timeSelection[1])}`}
+                label='Giờ kết thúc'
+              />
             </Box>
           </Box>
 

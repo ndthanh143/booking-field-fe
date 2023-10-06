@@ -10,9 +10,14 @@ export const vi_search = {
   'search.tool.sort.title': 'Sắp xếp',
   'search.tool.sort.item.price.asc': 'Giá từ thấp đến cao',
   'search.tool.sort.item.price.desc': 'Giá từ cao đến thấp',
+  'search.result.result.title': 'Có {total} sân bóng phù hợp dành cho bạn',
   'search.result.result.item.unit': '1 giờ',
   'search.result.no-result.title': 'Không tìm thấy sân bóng',
   'search.result.result.item.rating': 'Đánh giá',
   'search.result.no-result.sub-title':
     'Rất tiếc, chúng tôi không tìm thấy sân bóng nào phù hợp. Bạn vui lòng thử lại với địa điểm hoặc loại sân khác.',
+
+  'search.map.info.overview': 'Tổng quan',
+  'search.map.info.review': 'Đánh giá',
+  'search.map.info.about': 'Thông tin',
 };

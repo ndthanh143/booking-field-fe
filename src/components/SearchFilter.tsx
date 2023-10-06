@@ -64,7 +64,14 @@ export const SearchFilter = ({ isOpen, priceRange, onClose }: SearchFilterProps)
         <Box padding={2}>
           <Box marginY={2}>
             <Typography variant='body1'> {formatMessage({ id: 'search.tool.filter.price.range' })}</Typography>
-            <PriceFilter priceRange={price} onChange={(value) => setPrice(value)} minDistance={100000} />
+            <PriceFilter
+              priceRange={price}
+              onChange={(value) => setPrice(value)}
+              minDistance={100000}
+              min={0}
+              max={1000000}
+              step={10000}
+            />
           </Box>
           <Divider />
           <Box marginY={2}>

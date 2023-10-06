@@ -16,10 +16,16 @@ declare module '@mui/material/styles' {
 
 export const theme = createTheme({
   palette: {
+    // primary: {
+    //   light: '#90EE90',
+    //   main: '#228B22',
+    //   dark: '#2E8B57',
+    //   contrastText: '#fff',
+    // },
     primary: {
-      light: '#90EE90',
+      light: '#bdfbbd',
       main: '#228B22',
-      dark: '#2E8B57',
+      dark: '#063c06',
       contrastText: '#fff',
     },
     secondary: {
@@ -67,6 +73,9 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 6,
+          fontStyle: 'normal',
+          textTransform: 'unset',
+          fontWeight: 600,
         },
       },
     },
@@ -89,8 +98,24 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: 'primary.main',
+          borderRadius: 6,
         },
       },
     },
+  },
+  typography: {
+    fontFamily: [
+      'Public Sans',
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
   },
 });

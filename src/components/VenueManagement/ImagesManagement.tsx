@@ -4,12 +4,12 @@ import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { ConfirmBox } from '../ConfirmBox';
 import { ImageUpload } from '../ImageUpload';
-import { useBoolean, useVenueByUser, useVenueMutation } from '@/hooks';
+import { useBoolean, useVenueByCurrentUser, useVenueMutation } from '@/hooks';
 import mediaService from '@/services/media/media.service';
 import { VenueImage } from '@/services/venue/venue.dto';
 
 export const ImagesManagement = () => {
-  const { data: venue } = useVenueByUser();
+  const { data: venue } = useVenueByCurrentUser();
 
   const { updateVenueMutation } = useVenueMutation();
 
