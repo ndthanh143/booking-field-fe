@@ -245,7 +245,7 @@ function App() {
   useEffect(() => {
     if (locale === 'en_US') {
       moment.locale('en');
-    } else if (locale === 'vi') {
+    } else {
       moment.locale('vi');
     }
   });
