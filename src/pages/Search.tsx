@@ -191,9 +191,13 @@ export const Search = () => {
         </Grid>
         <Grid
           item
+          xs={12}
           md={12}
           lg={4}
-          height={700}
+          height={{
+            md: 700,
+            xs: 400,
+          }}
           position='sticky'
           top={10}
           overflow='hidden'

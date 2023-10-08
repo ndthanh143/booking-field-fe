@@ -58,16 +58,6 @@ export const VenueCard = ({ data }: VenueCardProps) => {
               </Typography>
             )}
           </Box>
-
-          {/* <Box sx={{ my: 2 }}> */}
-          {/* <Typography>{data.description}</Typography> */}
-          {/* <IconButton sx={{ float: 'right', my: 1 }}>
-              <ArrowForward />
-            </IconButton> */}
-          {/* <Button fullWidth variant="contained" sx={{ mt: 3 }}>
-            Book now
-          </Button> */}
-          {/* </Box> */}
         </CardContent>
       </Card>
     </Link>

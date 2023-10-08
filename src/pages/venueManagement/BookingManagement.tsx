@@ -1,4 +1,4 @@
-import { Delete } from '@mui/icons-material';
+import { ArrowDropDown, ArrowDropUp, Delete } from '@mui/icons-material';
 import {
   Box,
   IconButton,
@@ -11,10 +11,11 @@ import {
   Typography,
 } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { commonImages } from '@/assets/images/common';
+import { OrderEnum } from '@/common/enums/order.enum';
 import { ConfirmBox } from '@/components';
 import { useAuth, useBoolean } from '@/hooks';
 import { Booking } from '@/services/booking/booking.dto';
@@ -22,6 +23,7 @@ import { bookingKeys } from '@/services/booking/booking.query';
 import bookingService from '@/services/booking/booking.service';
 import { formatDate, formatDateToTime } from '@/utils';
 
+const BOOKING_PAGE_LIMIT = 10;
 export const BookingManagement = () => {
   const navigate = useNavigate();
 
@@ -29,13 +31,21 @@ export const BookingManagement = () => {
 
   const { profile } = useAuth();
 
-  const bookingInstance = bookingKeys.list({ venueId: profile?.venue.id });
-  const { data, refetch } = useQuery({ ...bookingInstance, enabled: !!profile });
-
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [page, setPage] = useState<number>(1);
 
   const { value: isOpenConfirmBox, setFalse: closeConfirmBox, setTrue: openConfirmBox } = useBoolean(false);
+
+  const [currentField, setCurrentField] = useState<string>('createdAt');
+  const [order, setOrder] = useState<OrderEnum>(OrderEnum.Desc);
+
+  const bookingInstance = bookingKeys.list({
+    venueId: profile?.venue.id,
+    page: page,
+    limit: BOOKING_PAGE_LIMIT,
+    sorts: [{ field: currentField, order }],
+  });
+  const { data, refetch } = useQuery({ ...bookingInstance, enabled: !!profile });
 
   const { mutate: mutateDeleteBooking } = useMutation({
     mutationFn: (id: number) => bookingService.delete(id),
@@ -56,6 +66,27 @@ export const BookingManagement = () => {
     });
   }
 
+  const handleToggleOrder = () => {
+    if (order === OrderEnum.Asc) {
+      setOrder(OrderEnum.Desc);
+    } else {
+      setOrder(OrderEnum.Asc);
+    }
+  };
+
+  const handleSort = (field: string) => {
+    if (field === currentField) {
+      handleToggleOrder();
+    } else {
+      setCurrentField(field);
+      setOrder(OrderEnum.Desc);
+    }
+  };
+
+  useEffect(() => {
+    refetch();
+  }, [page, refetch, currentField, order]);
+
   return (
     profile &&
     data && (
@@ -65,8 +96,28 @@ export const BookingManagement = () => {
             <TableHead>
               <TableRow>
                 <TableCell>Sân</TableCell>
-                <TableCell>Loại</TableCell>
-                <TableCell>Ngày</TableCell>
+                <TableCell>
+                  <Box
+                    display='flex'
+                    justifyContent='space-between'
+                    sx={{ cursor: 'pointer' }}
+                    onClick={() => handleSort('pitchCategory')}
+                  >
+                    <Typography>Loại</Typography>
+                    {order === OrderEnum.Asc && currentField === 'pitchCategory' ? <ArrowDropDown /> : <ArrowDropUp />}
+                  </Box>
+                </TableCell>
+                <TableCell>
+                  <Box
+                    display='flex'
+                    justifyContent='space-between'
+                    sx={{ cursor: 'pointer' }}
+                    onClick={() => handleSort('createdAt')}
+                  >
+                    <Typography>Ngày</Typography>
+                    {order === OrderEnum.Asc && currentField === 'createdAt' ? <ArrowDropDown /> : <ArrowDropUp />}
+                  </Box>
+                </TableCell>
                 <TableCell>Thời gian</TableCell>
                 <TableCell>Người đặt</TableCell>
                 <TableCell>Thao tác</TableCell>

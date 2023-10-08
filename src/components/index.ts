@@ -42,3 +42,4 @@ export * from './VenueInfoMapPopup';
 export * from './VenueCard';
 export * from './NotFound';
 export * from './LangueSwitcher';
+export * from './SearchInput';

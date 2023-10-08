@@ -25,7 +25,7 @@ export const Home = () => {
   const pitchCategoryInstance = pitchCategoryKeys.list();
   const { data, isLoading } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
-  const [currentPosition, setCurrentPosition] = useState<LocationMap>();
+  const [currentPosition, setCurrentPosition] = useState<LocationMap | null | undefined>(null);
 
   useMemo(
     () =>
@@ -36,7 +36,7 @@ export const Home = () => {
   );
 
   const venueInstance = venueKeys.search({ page: 1, limit: 10, isProminant: true });
-  const { data: venues } = useQuery(venueInstance);
+  const { data: prominantVenues, isLoading: isLoadingProminantVenues } = useQuery(venueInstance);
 
   const venueNearByInstance = venueKeys.search({
     currentLat: currentPosition?.lat,
@@ -45,7 +45,7 @@ export const Home = () => {
     page: 1,
     limit: 20,
   });
-  const { data: nearByVenues } = useQuery({
+  const { data: nearByVenues, isLoading: isLoadingNearbyVenues } = useQuery({
     ...venueNearByInstance,
     enabled: Boolean(currentPosition),
     staleTime: Infinity,
@@ -84,9 +84,9 @@ export const Home = () => {
         },
       },
       {
-        breakpoint: 600,
+        breakpoint: 780,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 1,
           slidesToScroll: 1,
         },
       },
@@ -150,11 +150,11 @@ export const Home = () => {
               height={{ xs: 200, md: 300 }}
               onClick={() => {
                 if (profile) {
-                  navigate('/league/create-tournament');
+                  navigate(`/league/create-tournament?type=${item.label}`);
                 } else {
                   navigate('/login', {
                     state: {
-                      redirect: '/league/create-tournament',
+                      redirect: `/league/create-tournament?type=${item.label}`,
                     },
                   });
                 }
@@ -257,7 +257,19 @@ export const Home = () => {
           {formatMessage({ id: 'app.home.prominant.title' })}
         </Typography>
         <Slider {...sliderVenueSettings}>
-          {venues?.data.map((venue) => <VenueCard data={venue} key={venue.id} />)}
+          {!prominantVenues || isLoadingProminantVenues ? (
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6} lg={3}>
+                <Box width='100%' height={400} borderRadius={3} overflow='hidden'>
+                  <Skeleton variant='rectangular' width='100%' height={200} />
+                  <Skeleton variant='rectangular' width='50%' height={20} sx={{ marginY: 2 }} />
+                  <Skeleton variant='rectangular' width='100%' height={20} sx={{ marginY: 1 }} />
+                </Box>
+              </Grid>
+            </Grid>
+          ) : (
+            prominantVenues.data.map((venue) => <VenueCard data={venue} key={venue.id} />)
+          )}
         </Slider>
       </Box>
       <Box marginY={10}>
@@ -265,9 +277,21 @@ export const Home = () => {
           {formatMessage({ id: 'app.home.nearby.title' })}
         </Typography>
         <Slider {...sliderVenueSettings}>
-          {nearByVenues?.data.map((venue) => <VenueCard data={venue} key={venue.id} />)}
+          {!nearByVenues || isLoadingNearbyVenues ? (
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6} lg={3}>
+                <Box width='100%' height={400} borderRadius={3} overflow='hidden'>
+                  <Skeleton variant='rectangular' width='100%' height={200} />
+                  <Skeleton variant='rectangular' width='50%' height={20} sx={{ marginY: 2 }} />
+                  <Skeleton variant='rectangular' width='100%' height={20} sx={{ marginY: 1 }} />
+                </Box>
+              </Grid>
+            </Grid>
+          ) : (
+            nearByVenues.data.map((venue) => <VenueCard data={venue} key={venue.id} />)
+          )}
         </Slider>
-        {!currentPosition && (
+        {currentPosition === undefined && (
           <Box textAlign='center'>
             <Box
               component='img'
@@ -275,7 +299,7 @@ export const Home = () => {
               alt='maps'
               sx={{ objectFit: 'cover', height: 100 }}
             />
-            <Typography my={1}>Open location permisstion to get venues near you</Typography>
+            <Typography my={1}>{formatMessage({ id: 'app.home.nearby.suggest' })}</Typography>
           </Box>
         )}
       </Box>

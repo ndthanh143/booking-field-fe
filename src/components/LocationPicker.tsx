@@ -46,7 +46,8 @@ export const LocationPicker = ({ location, onChange }: LocationPickerProps) => {
         <GoogleMap
           mapContainerStyle={{
             width: '100%',
-            height: 400,
+            height: '100%',
+            minHeight: 400,
             borderRadius: 10,
           }}
           center={location}
