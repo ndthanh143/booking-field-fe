@@ -134,7 +134,7 @@ export const VenueDetail = () => {
           </Grid>
           <Grid item xs={12} md={10} order={3} display='flex'>
             <PlaceIcon sx={{ marginRight: 1, color: 'primary.main' }} />
-            <Typography variant='body1'>{`${venue.address}, ${venue.district}, ${venue.province}`}</Typography>
+            <Typography variant='body1'>{venue.address}</Typography>
           </Grid>
           <Grid
             item

@@ -12,7 +12,7 @@ export const VenueManagementLayout = () => {
 
   const { profile, isFetched } = useAuth();
 
-  const { value: open, setFalse: closeDrawer, toggle: toggleDrawer } = useBoolean(false);
+  const { value: open, toggle: toggleDrawer } = useBoolean(true);
 
   const { formatMessage } = useLocale();
 
@@ -114,7 +114,6 @@ export const VenueManagementLayout = () => {
                     },
                   }}
                   onClick={() => {
-                    closeDrawer();
                     navigate(`/venue-management/${item.href}`);
                   }}
                 >
@@ -157,9 +156,10 @@ export const VenueManagementLayout = () => {
               sx={{
                 backgroundColor: (theme) =>
                   theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
-                borderTopLeftRadius: 3,
-                borderTopRightRadius: 3,
+                borderTopLeftRadius: 6,
+                borderTopRightRadius: 6,
                 overflowY: 'scroll',
+                mx: 2,
               }}
               flex={1}
               height='100%'

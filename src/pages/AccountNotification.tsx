@@ -38,7 +38,7 @@ export const AccountNotification = () => {
     if (profile) {
       refetchNotification();
     }
-  }, [page, refetchNotification]);
+  }, [page, refetchNotification, profile]);
 
   return (
     <>

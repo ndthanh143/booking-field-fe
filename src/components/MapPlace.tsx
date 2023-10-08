@@ -1,9 +1,5 @@
 import { LocationOn } from '@mui/icons-material';
-import Autocomplete from '@mui/material/Autocomplete';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
+import { Autocomplete, TextField, Box, Grid, Typography } from '@mui/material';
 import { debounce } from '@mui/material/utils';
 import parse from 'autosuggest-highlight/parse';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -20,8 +16,6 @@ function loadScript(src: string, position: HTMLElement | null, id: string) {
   script.src = src;
   position.appendChild(script);
 }
-
-const autocompleteService = { current: null };
 
 interface MainTextMatchedSubstrings {
   offset: number;
@@ -40,14 +34,17 @@ interface PlaceType {
 }
 
 interface MapPlaceProps {
-  onChange: (locationValue: LocationMap | null) => void;
+  onInputChange?: (inputValue: string) => void;
+  onChange?: (locationValue: LocationMap | null) => void;
+  placeholder?: string;
 }
 
-export const MapPlace = ({ onChange }: MapPlaceProps) => {
+export const MapPlace = ({ onChange, onInputChange, placeholder: placeHolder }: MapPlaceProps) => {
   const [value, setValue] = useState<PlaceType | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState<readonly PlaceType[]>([]);
   const loaded = useRef(false);
+  const autocompleteService = { current: null };
 
   if (typeof window !== 'undefined' && !loaded.current) {
     if (!document.querySelector('#google-maps')) {
@@ -64,7 +61,7 @@ export const MapPlace = ({ onChange }: MapPlaceProps) => {
   const fetch = useMemo(
     () =>
       debounce((request: { input: string }, callback: (results?: readonly PlaceType[]) => void) => {
-        (autocompleteService.current as any).getPlacePredictions(request, callback);
+        (autocompleteService.current as any)?.getPlacePredictions(request, callback);
       }, 400),
     [],
   );
@@ -72,7 +69,7 @@ export const MapPlace = ({ onChange }: MapPlaceProps) => {
   useEffect(() => {
     let active = true;
 
-    if (!autocompleteService.current && window.google) {
+    if (!autocompleteService.current && window.google && new window.google.maps.places.AutocompleteService()) {
       autocompleteService['current'] = new window.google.maps.places.AutocompleteService() as any;
     }
     if (!autocompleteService.current) {
@@ -107,8 +104,6 @@ export const MapPlace = ({ onChange }: MapPlaceProps) => {
 
   return (
     <Autocomplete
-      id='google-map-demo'
-      sx={{ maxWidth: 320 }}
       fullWidth
       getOptionLabel={(option) => (typeof option === 'string' ? option : option.description)}
       filterOptions={(x) => x}
@@ -117,6 +112,7 @@ export const MapPlace = ({ onChange }: MapPlaceProps) => {
       includeInputInList
       filterSelectedOptions
       value={value}
+      size='small'
       noOptionsText='No locations'
       onChange={(_, newValue: PlaceType | null) => {
         setOptions(newValue ? [newValue, ...options] : options);
@@ -128,17 +124,18 @@ export const MapPlace = ({ onChange }: MapPlaceProps) => {
             if (place?.geometry?.location) {
               const lat = place.geometry.location.lat();
               const lng = place.geometry.location.lng();
-              onChange({ lat, lng });
+              onChange && onChange({ lat, lng });
             }
           });
         } else {
-          onChange(null);
+          onChange && onChange(null);
         }
       }}
       onInputChange={(_, newInputValue) => {
         setInputValue(newInputValue);
+        onInputChange && onInputChange(newInputValue);
       }}
-      renderInput={(params) => <TextField {...params} label='Add a location' fullWidth />}
+      renderInput={(params) => <TextField {...params} fullWidth placeholder={placeHolder} />}
       renderOption={(props, option) => {
         const matches = option.structured_formatting.main_text_matched_substrings || [];
 

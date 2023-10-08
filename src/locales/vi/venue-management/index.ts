@@ -6,6 +6,7 @@ export const vi_venue_management = {
   'app.dashboard.totalIncome': 'Tổng thu nhập',
   'app.dashboard.totalBooking': 'Số lượng đơn đặt sân',
   'app.dashboard.monthly-income.title': 'Thu nhập hàng tháng',
+  'app.dashboard.monthly-income.total': 'Tổng',
   'app.dashboard.monthly-income.sub-title': 'Tổng thu nhập theo từng tháng',
   'app.dashboard.monthly-income.option': '{month} tháng gần đây',
   'app.dashboard.monthly-income.chart.title': 'Thu nhập thường ngày',
