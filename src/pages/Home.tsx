@@ -1,6 +1,6 @@
 import { Box, Card, CardContent, CardMedia, Grid, Skeleton, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { bannerImages } from '@/assets/images/banner';
 import { tournamentImages } from '@/assets/images/tournament';
@@ -25,15 +25,18 @@ export const Home = () => {
   const pitchCategoryInstance = pitchCategoryKeys.list();
   const { data, isLoading } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
-  const [currentPosition, setCurrentPosition] = useState<LocationMap | null | undefined>(null);
+  const [currentPosition, setCurrentPosition] = useState<LocationMap | undefined | null>();
 
-  useMemo(
-    () =>
-      navigator.geolocation.getCurrentPosition((position) =>
-        setCurrentPosition({ lat: position.coords.latitude, lng: position.coords.longitude }),
-      ),
-    [],
-  );
+  useMemo(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => setCurrentPosition({ lat: position.coords.latitude, lng: position.coords.longitude }),
+        (_) => {
+          setCurrentPosition(null);
+        },
+      );
+    }
+  }, []);
 
   const venueInstance = venueKeys.search({ page: 1, limit: 10, isProminant: true });
   const { data: prominantVenues, isLoading: isLoadingProminantVenues } = useQuery(venueInstance);
@@ -277,21 +280,19 @@ export const Home = () => {
           {formatMessage({ id: 'app.home.nearby.title' })}
         </Typography>
         <Slider {...sliderVenueSettings}>
-          {isFetchingNearbyVenues ? (
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6} lg={3}>
-                <Box width='100%' height={400} borderRadius={3} overflow='hidden'>
-                  <Skeleton variant='rectangular' width='100%' height={200} />
-                  <Skeleton variant='rectangular' width='50%' height={20} sx={{ marginY: 2 }} />
-                  <Skeleton variant='rectangular' width='100%' height={20} sx={{ marginY: 1 }} />
-                </Box>
-              </Grid>
-            </Grid>
-          ) : (
-            nearByVenues?.data.map((venue) => <VenueCard data={venue} key={venue.id} />)
-          )}
+          {isFetchingNearbyVenues
+            ? Array(4)
+                .fill(null)
+                .map((index) => (
+                  <Box width='100%' height={400} borderRadius={3} overflow='hidden' key={index}>
+                    <Skeleton variant='rectangular' width='100%' height={200} />
+                    <Skeleton variant='rectangular' width='50%' height={20} sx={{ marginY: 2 }} />
+                    <Skeleton variant='rectangular' width='100%' height={20} sx={{ marginY: 1 }} />
+                  </Box>
+                ))
+            : nearByVenues?.data.map((venue) => <VenueCard data={venue} key={venue.id} />)}
         </Slider>
-        {currentPosition === undefined && (
+        {currentPosition === null && (
           <Box textAlign='center'>
             <Box
               component='img'
