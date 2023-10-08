@@ -1,6 +1,6 @@
 import { Box, Card, CardContent, CardMedia, Grid, Skeleton, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { bannerImages } from '@/assets/images/banner';
 import { tournamentImages } from '@/assets/images/tournament';
