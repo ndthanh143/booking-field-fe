@@ -37,11 +37,11 @@ export const MenuNotification = () => {
   });
   const { data: notifications, refetch: notificationRefetch } = useQuery({
     ...notificationInstance,
-    enabled: !!profile,
+    enabled: Boolean(profile),
   });
 
   useEffect(() => {
-    if (!profile) {
+    if (profile) {
       notificationRefetch();
     }
   }, [profile, notificationRefetch]);
