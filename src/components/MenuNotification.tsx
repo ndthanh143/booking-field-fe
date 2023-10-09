@@ -44,7 +44,7 @@ export const MenuNotification = () => {
   });
 
   const countNotSeenNotificationsInstance = notificationKeys.countNotSeen();
-  const { data: countNotSeen } = useQuery({
+  const { data: countNotSeen, isLoading: isLoadingCountNotSeen } = useQuery({
     ...countNotSeenNotificationsInstance,
     enabled: Boolean(profile),
   });
@@ -56,11 +56,13 @@ export const MenuNotification = () => {
     },
   });
 
+  console.log(countNotSeen);
+
   useEffect(() => {
     if (profile) {
       notificationRefetch();
     }
-  }, [profile, notificationRefetch]);
+  }, [profile, notificationRefetch, isLoadingCountNotSeen]);
 
   return profile && notifications ? (
     <>
