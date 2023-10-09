@@ -32,7 +32,7 @@ export const LocationManagement = () => {
   return (
     venue && (
       <>
-        <Box display='flex' justifyContent='space-between' gap={2}>
+        <Box display='flex' justifyContent='space-between' gap={2} mb={2}>
           <MapPlace onChange={(locationValue) => locationValue && setSelectedLatLng(locationValue)} />
           <Button variant='contained' size='small' onClick={handleSaveLocation} disabled={!selectedLatLng}>
             {formatMessage({ id: 'app.your-venue.tabs.address.save' })}

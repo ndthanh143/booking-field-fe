@@ -75,7 +75,7 @@ export const Home = () => {
       {
         breakpoint: 1280,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 2,
           slidesToScroll: 1,
         },
       },
@@ -260,19 +260,17 @@ export const Home = () => {
           {formatMessage({ id: 'app.home.prominant.title' })}
         </Typography>
         <Slider {...sliderVenueSettings}>
-          {!prominantVenues || isLoadingProminantVenues ? (
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6} lg={3}>
-                <Box width='100%' height={400} borderRadius={3} overflow='hidden'>
-                  <Skeleton variant='rectangular' width='100%' height={200} />
-                  <Skeleton variant='rectangular' width='50%' height={20} sx={{ marginY: 2 }} />
-                  <Skeleton variant='rectangular' width='100%' height={20} sx={{ marginY: 1 }} />
-                </Box>
-              </Grid>
-            </Grid>
-          ) : (
-            prominantVenues.data.map((venue) => <VenueCard data={venue} key={venue.id} />)
-          )}
+          {!prominantVenues || isLoadingProminantVenues
+            ? Array(4)
+                .fill(null)
+                .map((index) => (
+                  <Box width='100%' height={400} borderRadius={3} overflow='hidden' key={index}>
+                    <Skeleton variant='rectangular' width='100%' height={200} />
+                    <Skeleton variant='rectangular' width='50%' height={20} sx={{ marginY: 2 }} />
+                    <Skeleton variant='rectangular' width='100%' height={20} sx={{ marginY: 1 }} />
+                  </Box>
+                ))
+            : prominantVenues.data.map((venue) => <VenueCard data={venue} key={venue.id} />)}
         </Slider>
       </Box>
       <Box marginY={10}>

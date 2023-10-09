@@ -20,7 +20,7 @@ export const vi_venue_management = {
   'app.your-venue.tabs.images': 'Hình ảnh',
   'app.your-venue.tabs.images.add.title': 'Thêm mới',
   'app.your-venue.tabs.address': 'Địa chỉ',
-  'app.your-venue.tabs.address.save': 'Lưu địa chỉ',
+  'app.your-venue.tabs.address.save': 'Lưu',
 
   'app.your-venue.tabs.pitch': 'Sân bóng',
   'app.your-venue.tabs.pitch.add-box.title': 'Thêm sân',

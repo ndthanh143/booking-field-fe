@@ -2,20 +2,8 @@ import { LocationOn } from '@mui/icons-material';
 import { Autocomplete, TextField, Box, Grid, Typography } from '@mui/material';
 import { debounce } from '@mui/material/utils';
 import parse from 'autosuggest-highlight/parse';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { LocationMap } from '@/services/venue/venue.dto';
-
-function loadScript(src: string, position: HTMLElement | null, id: string) {
-  if (!position) {
-    return;
-  }
-
-  const script = document.createElement('script');
-  script.setAttribute('async', '');
-  script.setAttribute('id', id);
-  script.src = src;
-  position.appendChild(script);
-}
 
 interface MainTextMatchedSubstrings {
   offset: number;
@@ -43,20 +31,7 @@ export const MapPlace = ({ onChange, onInputChange, placeholder: placeHolder }: 
   const [value, setValue] = useState<PlaceType | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState<readonly PlaceType[]>([]);
-  const loaded = useRef(false);
   const autocompleteService = { current: null };
-
-  if (typeof window !== 'undefined' && !loaded.current) {
-    if (!document.querySelector('#google-maps')) {
-      loadScript(
-        `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}&libraries=places`,
-        document.querySelector('head'),
-        'google-maps',
-      );
-    }
-
-    loaded.current = true;
-  }
 
   const fetch = useMemo(
     () =>
@@ -113,7 +88,7 @@ export const MapPlace = ({ onChange, onInputChange, placeholder: placeHolder }: 
       filterSelectedOptions
       value={value}
       size='small'
-      noOptionsText='No locations'
+      noOptionsText='No results'
       onChange={(_, newValue: PlaceType | null) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setValue(newValue);
