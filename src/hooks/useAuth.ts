@@ -51,7 +51,7 @@ export const useAuth = () => {
         icon: '/logo.png',
         timeout: 4000,
       });
-      queryClient.invalidateQueries([notificationKeys.lists(), notificationKeys.countNotSeens()]);
+      queryClient.invalidateQueries(notificationKeys.all);
     });
 
     socket?.on('update_venue_status', (message) => {
@@ -60,7 +60,7 @@ export const useAuth = () => {
         icon: '/logo.png',
         timeout: 4000,
       });
-      queryClient.invalidateQueries([notificationKeys.lists(), notificationKeys.countNotSeens()]);
+      queryClient.invalidateQueries(notificationKeys.all);
     });
 
     return () => {
