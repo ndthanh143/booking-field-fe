@@ -1,4 +1,4 @@
-import { ArrowDropDown, Check } from '@mui/icons-material';
+import { ArrowDropDown } from '@mui/icons-material';
 import { Box, Button, Menu, MenuItem, Typography } from '@mui/material';
 import { LanguageImages } from '@/assets/images/language';
 import { useLocalStorage, useMenu } from '@/hooks';
