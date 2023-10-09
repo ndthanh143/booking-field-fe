@@ -68,7 +68,6 @@ export const LangueSwitcher = () => {
               closeTranslationMenu();
               setCurrentLocale(item.locale);
             }}
-            sx={{ paddingRight: 6 }}
             key={item.locale}
           >
             <Box
@@ -82,12 +81,6 @@ export const LangueSwitcher = () => {
               marginRight={1}
             />
             <Typography>{item.title}</Typography>
-
-            {currentLocale === item.locale && (
-              <Box position='absolute' right={12}>
-                <Check fontSize='small' />
-              </Box>
-            )}
           </MenuItem>
         ))}
       </Menu>

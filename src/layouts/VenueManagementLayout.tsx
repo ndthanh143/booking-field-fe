@@ -129,7 +129,7 @@ export const VenueManagementLayout = () => {
               ))}
             </List>
           </Box>
-          <Box display='flex' flexDirection='column' height='100vh' mr={0} width='100%'>
+          <Box display='flex' flexDirection='column' height='100vh' width='100%'>
             <Box display='flex' alignItems='center' justifyContent={{ xs: 'space-between', md: 'end' }} m={1}>
               <IconButton
                 color='primary'
@@ -158,7 +158,7 @@ export const VenueManagementLayout = () => {
                   theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
                 borderTopLeftRadius: 6,
                 borderTopRightRadius: 6,
-                overflowY: 'scroll',
+                // overflowY: 'scroll',
                 mx: 2,
               }}
               flex={1}

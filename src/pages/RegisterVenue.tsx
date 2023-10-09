@@ -61,6 +61,8 @@ export const RegisterVenue = () => {
     mutationFn: venueService.create,
     onSuccess: () => {
       reset();
+      setCurrentDistrict([]);
+      setCurrentProvince('');
       setOpen(null);
       setClose(null);
       toast.success('Request successfully');
