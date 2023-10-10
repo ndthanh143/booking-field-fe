@@ -30,16 +30,9 @@ interface MapPlaceProps {
   size?: 'small' | 'medium';
 }
 
-export const MapPlace = ({
-  onChange,
-  onInputChange,
-  placeholder,
-  defaultInputValue,
-  disabled,
-  size,
-}: MapPlaceProps) => {
+export const MapPlace = ({ onChange, onInputChange, placeholder, disabled, size }: MapPlaceProps) => {
   const [value, setValue] = useState<PlaceType | null>(null);
-  const [inputValue, setInputValue] = useState(defaultInputValue || '');
+  const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState<readonly PlaceType[]>([]);
   const autocompleteService = { current: null };
 
@@ -103,6 +96,7 @@ export const MapPlace = ({
       onChange={(_, newValue: PlaceType | null) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setValue(newValue);
+        newValue && setInputValue(newValue.description);
 
         if (newValue) {
           const placeService = new google.maps.places.PlacesService(document.createElement('div'));
@@ -117,19 +111,11 @@ export const MapPlace = ({
           onChange && onChange(null);
         }
       }}
-      inputValue={inputValue}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          fullWidth
-          placeholder={placeholder}
-          value={inputValue}
-          onChange={(e) => {
-            setInputValue(e.target.value);
-            onInputChange && onInputChange(e.target.value);
-          }}
-        />
-      )}
+      onInputChange={(_, newValue) => {
+        setInputValue(newValue);
+        onInputChange && onInputChange(newValue);
+      }}
+      renderInput={(params) => <TextField {...params} fullWidth placeholder={placeholder} />}
       renderOption={(props, option) => {
         const matches = option.structured_formatting.main_text_matched_substrings || [];
 

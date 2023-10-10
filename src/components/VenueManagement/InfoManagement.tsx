@@ -130,7 +130,7 @@ export const InfoManagement = () => {
               onChange={(value) => value && setValue('location', value)}
               onInputChange={(value) => setValue('address', value)}
               defaultInputValue={venue.address}
-              placeholder={formatMessage({ id: 'app.register-venue.venue.address' })}
+              placeholder={venue.address}
               size='medium'
               disabled={!isFixingMode}
             />
