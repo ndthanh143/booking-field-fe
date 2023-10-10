@@ -238,8 +238,6 @@ const router = createBrowserRouter([
   },
 ]);
 
-moment.locale('vi');
-
 function App() {
   const [queryClient] = useState(() => new QueryClient({}));
 
