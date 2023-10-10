@@ -56,8 +56,6 @@ export const MenuNotification = () => {
     },
   });
 
-  console.log(countNotSeen);
-
   useEffect(() => {
     if (profile) {
       notificationRefetch();

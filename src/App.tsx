@@ -238,6 +238,8 @@ const router = createBrowserRouter([
   },
 ]);
 
+moment.locale('vi');
+
 function App() {
   const [queryClient] = useState(() => new QueryClient({}));
 
@@ -249,7 +251,7 @@ function App() {
     } else if (locale === 'vi') {
       moment.locale('vi');
     }
-  });
+  }, [locale]);
 
   return (
     <QueryClientProvider client={queryClient}>

@@ -13,3 +13,4 @@ export * from './convertRoundName';
 export * from './averageRate';
 export * from './convertDistance';
 export * from './timeStringToFloat';
+export * from './timeStringToDate';

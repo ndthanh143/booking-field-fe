@@ -158,7 +158,6 @@ export const VenueManagementLayout = () => {
                   theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
                 borderTopLeftRadius: 6,
                 borderTopRightRadius: 6,
-                // overflowY: 'scroll',
                 mx: 2,
               }}
               flex={1}

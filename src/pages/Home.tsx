@@ -51,7 +51,6 @@ export const Home = () => {
   const { data: nearByVenues, isFetching: isFetchingNearbyVenues } = useQuery({
     ...venueNearByInstance,
     enabled: Boolean(currentPosition),
-    staleTime: Infinity,
   });
 
   const sliderSettings: SliderProps = {
