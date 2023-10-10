@@ -15,7 +15,7 @@ export const AccountNotification = () => {
 
   const [page, setPage] = useState(DEFAULT_NOTIFICATION_PAGE);
 
-  const notificationInstance = notificationKeys.list({
+  const notificationInstance = notificationKeys.currentUser({
     page,
     limit: DEFAULT_NOTIFICATION_LIMIT,
     sorts: [

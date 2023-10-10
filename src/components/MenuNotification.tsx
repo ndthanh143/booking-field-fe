@@ -28,7 +28,7 @@ export const MenuNotification = () => {
     onOpen: openNotification,
   } = useMenu();
 
-  const notificationInstance = notificationKeys.list({
+  const notificationInstance = notificationKeys.currentUser({
     page: DEFAULT_NOTIFICATION_PAGE,
     limit: DEFAULT_NOTIFICATION_LIMIT,
     sorts: [

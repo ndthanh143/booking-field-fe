@@ -8,6 +8,12 @@ const notificationService = {
     return data;
   },
 
+  async getByCurrentUser(query: getNotificationsQuery) {
+    const { data } = await axiosInstance.get<NotificationsResponse>('/notifications/me', { params: query });
+
+    return data;
+  },
+
   async getCountNotSeen() {
     const { data } = await axiosInstance.get('/notifications/count-not-seen');
 
