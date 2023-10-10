@@ -6,11 +6,12 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { object, string } from 'yup';
+import { mixed, object, string } from 'yup';
+import { MapPlace } from '..';
 import { useBoolean, useVenueByCurrentUser } from '@/hooks';
 import { useLocale } from '@/locales';
 import { locationKeys } from '@/services/location/location.query';
-import { UpdateVenueData } from '@/services/venue/venue.dto';
+import { LocationMap, UpdateVenueData } from '@/services/venue/venue.dto';
 import venueService from '@/services/venue/venue.service';
 import { timeStringToDate } from '@/utils';
 
@@ -20,6 +21,7 @@ const schema = object({
   openAt: string(),
   closeAt: string(),
   address: string(),
+  location: mixed<LocationMap>(),
   province: string(),
   district: string(),
 });
@@ -124,12 +126,13 @@ export const InfoManagement = () => {
 
           <Grid item marginY={2} xs={12}>
             <Typography variant='body2'>{formatMessage({ id: 'app.register-venue.venue.address' })}</Typography>
-            <TextField
+            <MapPlace
+              onChange={(value) => value && setValue('location', value)}
+              onInputChange={(value) => setValue('address', value)}
+              defaultInputValue={venue.address}
+              placeholder={formatMessage({ id: 'app.register-venue.venue.address' })}
+              size='medium'
               disabled={!isFixingMode}
-              variant='outlined'
-              defaultValue={venue.address}
-              {...register('address')}
-              fullWidth
             />
           </Grid>
           <Grid item marginY={2} xs={12} display='flex' gap={4}>

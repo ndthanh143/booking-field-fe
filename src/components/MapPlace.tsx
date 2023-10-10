@@ -25,11 +25,21 @@ interface MapPlaceProps {
   onInputChange?: (inputValue: string) => void;
   onChange?: (locationValue: LocationMap | null) => void;
   placeholder?: string;
+  defaultInputValue?: string;
+  disabled?: boolean;
+  size?: 'small' | 'medium';
 }
 
-export const MapPlace = ({ onChange, onInputChange, placeholder: placeHolder }: MapPlaceProps) => {
+export const MapPlace = ({
+  onChange,
+  onInputChange,
+  placeholder,
+  defaultInputValue,
+  disabled,
+  size,
+}: MapPlaceProps) => {
   const [value, setValue] = useState<PlaceType | null>(null);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(defaultInputValue || '');
   const [options, setOptions] = useState<readonly PlaceType[]>([]);
   const autocompleteService = { current: null };
 
@@ -87,7 +97,8 @@ export const MapPlace = ({ onChange, onInputChange, placeholder: placeHolder }: 
       includeInputInList
       filterSelectedOptions
       value={value}
-      size='small'
+      size={size || 'small'}
+      disabled={disabled}
       noOptionsText='No results'
       onChange={(_, newValue: PlaceType | null) => {
         setOptions(newValue ? [newValue, ...options] : options);
@@ -106,11 +117,19 @@ export const MapPlace = ({ onChange, onInputChange, placeholder: placeHolder }: 
           onChange && onChange(null);
         }
       }}
-      onInputChange={(_, newInputValue) => {
-        setInputValue(newInputValue);
-        onInputChange && onInputChange(newInputValue);
-      }}
-      renderInput={(params) => <TextField {...params} fullWidth placeholder={placeHolder} />}
+      inputValue={inputValue}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          fullWidth
+          placeholder={placeholder}
+          value={inputValue}
+          onChange={(e) => {
+            setInputValue(e.target.value);
+            onInputChange && onInputChange(e.target.value);
+          }}
+        />
+      )}
       renderOption={(props, option) => {
         const matches = option.structured_formatting.main_text_matched_substrings || [];
 
