@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { number, object, string } from 'yup';
-import { PitchCategoryEnum } from '@/common/enums/pitch-category.enum';
 import { useLocale } from '@/locales';
 import { CreatePitchDto } from '@/services/pitch/pitch.dto';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
