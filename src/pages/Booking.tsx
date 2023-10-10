@@ -1,15 +1,15 @@
 import { ReportOutlined } from '@mui/icons-material';
 import { Alert, Box, Button, Divider, Grid, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { OrderEnum } from '@/common/enums/order.enum';
-import { Stepper, TimeSelect, StripeContainer } from '@/components';
+import { Stepper, TimeSelect, StripeContainer, LoadingContainer } from '@/components';
+import NotFound from '@/components/NotFound';
 import { useAuth } from '@/hooks';
 import { useLocale } from '@/locales';
-import { CreateBookingDto } from '@/services/booking/booking.dto';
 import { bookingKeys } from '@/services/booking/booking.query';
 import bookingService from '@/services/booking/booking.service';
 import { Pitch } from '@/services/pitch/pitch.dto';
@@ -31,7 +31,7 @@ export const Booking = () => {
 
   const { pathname, search } = useLocation();
 
-  const { profile, socket } = useAuth();
+  const { profile } = useAuth();
 
   const { slug } = useParams();
 
@@ -44,7 +44,7 @@ export const Booking = () => {
   const [selectedPitch, setSelectedPitch] = useState<Pitch>();
 
   const venueInstance = venueKeys.detail(slug);
-  const { data: venue, refetch: refetchVenue } = useQuery({ ...venueInstance, enabled: !!slug });
+  const { data: venue } = useQuery({ ...venueInstance, enabled: Boolean(slug) });
 
   const bookingInstance = bookingKeys.list({
     pitchId: selectedPitch?.id,
@@ -54,14 +54,11 @@ export const Booking = () => {
 
   const { data: bookings, refetch: refetchBookings } = useQuery({
     ...bookingInstance,
-    enabled: !!selectedPitch && !!selectedDate,
+    enabled: Boolean(selectedPitch && selectedDate),
   });
 
   const { mutate: createBookingMutate } = useMutation({
-    mutationFn: (payload: CreateBookingDto) => bookingService.create(payload),
-    onSuccess: (data) => {
-      socket?.emit('booking', data.data);
-    },
+    mutationFn: bookingService.create,
   });
 
   const pitchCategoryId = Number(searchParams.get('pitchCategory'));
@@ -120,10 +117,6 @@ export const Booking = () => {
   };
 
   useEffect(() => {
-    refetchVenue();
-  }, [slug, refetchVenue]);
-
-  useEffect(() => {
     if (selectedPitch && selectedTime) {
       setTotalPrice(selectedPitch.price * (selectedTime[1] - selectedTime[0]));
     }
@@ -143,6 +136,12 @@ export const Booking = () => {
       },
     });
   }
+
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    queryClient.setQueryData(bookingInstance.queryKey, null);
+  }, [slug]);
 
   return (
     pitches &&

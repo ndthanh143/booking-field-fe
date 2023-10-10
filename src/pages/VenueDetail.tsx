@@ -20,15 +20,7 @@ import { ratingKeys } from '@/services/rating/rating.query';
 import { UpdateUserPayload } from '@/services/user/user.dto';
 import userService from '@/services/user/user.service';
 import { venueKeys } from '@/services/venue/venue.query';
-import {
-  averageQualityRate,
-  averageRate,
-  averageServiceRate,
-  convertCurrency,
-  convertToAMPM,
-  formatDate,
-  groupBy,
-} from '@/utils';
+import { averageQualityRate, averageRate, averageServiceRate, convertCurrency, formatDate, groupBy } from '@/utils';
 
 const defaultLocation = { lat: 10.161512, lng: 106.23212311 };
 export const VenueDetail = () => {
@@ -156,13 +148,13 @@ export const VenueDetail = () => {
               <Box display='flex' alignItems='center' gap={1} flexDirection={{ xs: 'column', md: 'row' }}>
                 <Typography>{formatMessage({ id: 'app.venue.work-time.open' })}:</Typography>
                 <Typography fontWeight={500} variant='body1'>
-                  {convertToAMPM(venue.openAt)}
+                  {venue.openAt}
                 </Typography>
               </Box>
               <Box display='flex' alignItems='center' gap={1} flexDirection={{ xs: 'column', md: 'row' }}>
                 <Typography>{formatMessage({ id: 'app.venue.work-time.close' })}:</Typography>
                 <Typography fontWeight={500} variant='body1'>
-                  {convertToAMPM(venue.closeAt)}
+                  {venue.closeAt}
                 </Typography>
               </Box>
               <Box display='flex' alignItems='center' gap={1} flexDirection={{ xs: 'column', md: 'row' }}>

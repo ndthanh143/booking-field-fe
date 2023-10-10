@@ -1,7 +1,6 @@
 export * from './acronym';
 export * from './convertCurrency';
 export * from './convertDecimalToTime';
-export * from './convertToAMPM';
 export * from './convertToDate';
 export * from './dateToTimeFloat';
 export * from './defineQuery';

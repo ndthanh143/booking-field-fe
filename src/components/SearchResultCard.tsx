@@ -8,7 +8,7 @@ import { Link } from './Link';
 import { useLocale } from '@/locales';
 import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
 import { SearchVenueData } from '@/services/venue/venue.dto';
-import { convertToAMPM } from '@/utils';
+import {} from '@/utils';
 
 export interface SearchResultCardProps {
   data: SearchVenueData;
@@ -82,13 +82,13 @@ export const SearchResultCard = ({ data, ...props }: SearchResultCardProps) => {
                   {formatMessage({ id: 'app.search.card.open' })}:
                 </Typography>
 
-                <Chip label={convertToAMPM(data.openAt)} />
+                <Chip label={data.openAt} />
               </Box>
               <Box display='flex' alignItems='center' gap={1} marginY={1}>
                 <Typography variant='body2' fontWeight={500}>
                   {formatMessage({ id: 'app.search.card.close' })}:
                 </Typography>
-                <Chip label={convertToAMPM(data.closeAt)} />
+                <Chip label={data.closeAt} />
               </Box>
             </Box>
           </Box>
