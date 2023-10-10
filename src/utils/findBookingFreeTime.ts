@@ -12,6 +12,8 @@ export const findFreeTime = (bookings: Booking[], venue: Venue) => {
   const open = timeStringToFloat(venue.openAt);
   const close = timeStringToFloat(venue.closeAt);
 
+  console.log(open, close);
+
   const freeTime: FreeTimeBooking[] = [
     {
       isFreeTime: false,
