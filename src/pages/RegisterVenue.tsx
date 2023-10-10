@@ -69,6 +69,14 @@ export const RegisterVenue = () => {
     },
   });
 
+  const handleClearInput = () => {
+    reset();
+    setCurrentDistrict([]);
+    setCurrentProvince('');
+    setOpen(null);
+    setClose(null);
+  };
+
   const onSubmitHandler = (data: CreateVenuePayload) => mutateVenue(data);
 
   useEffect(() => {
@@ -91,6 +99,7 @@ export const RegisterVenue = () => {
 
   return (
     <Box component='form' onSubmit={handleSubmit(onSubmitHandler)}>
+      <Button onClick={handleClearInput}></Button>
       <Typography variant='h5'>{formatMessage({ id: 'app.register-venue.title' })}</Typography>
       <Typography variant='body2'>{formatMessage({ id: 'app.register-venue.sub-title' })}</Typography>
       {isMutateVenueSuccess && (
@@ -102,7 +111,7 @@ export const RegisterVenue = () => {
         <Grid container spacing={2} flex={{ xs: 1, md: 7 }}>
           <Grid item xs={12}>
             <Typography variant='body2'>{formatMessage({ id: 'app.register-venue.venue.name' })}</Typography>
-            <TextField {...register('name')} fullWidth size='small' />
+            <TextField {...register('name')} fullWidth size='small' placeholder='Sân bóng Lữ Đoàn' />
             {errors.name && (
               <Typography variant='body2' color='error.main'>
                 {errors.name.message}
@@ -112,7 +121,7 @@ export const RegisterVenue = () => {
 
           <Grid item xs={12}>
             <Typography variant='body2'>{formatMessage({ id: 'app.register-venue.venue.description' })}</Typography>
-            <TextArea minRows={3} {...register('description')} />
+            <TextArea minRows={3} {...register('description')} placeholder='...' />
             {errors.description && (
               <Typography variant='body2' color='error.main'>
                 {errors.description.message}

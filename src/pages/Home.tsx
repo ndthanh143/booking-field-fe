@@ -48,7 +48,7 @@ export const Home = () => {
     page: 1,
     limit: 20,
   });
-  const { data: nearByVenues, isFetching: isFetchingNearbyVenues } = useQuery({
+  const { data: nearByVenues, isLoading: isLoadingNearbyVenues } = useQuery({
     ...venueNearByInstance,
     enabled: Boolean(currentPosition),
   });
@@ -277,7 +277,7 @@ export const Home = () => {
           {formatMessage({ id: 'app.home.nearby.title' })}
         </Typography>
         <Slider {...sliderVenueSettings}>
-          {isFetchingNearbyVenues
+          {isLoadingNearbyVenues && Boolean(currentPosition)
             ? Array(4)
                 .fill(null)
                 .map((index) => (
