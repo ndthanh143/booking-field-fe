@@ -72,7 +72,7 @@ export const AccountNotification = () => {
       {notifications && notifications.pageInfo.pageCount > 1 && (
         <Pagination
           sx={{ display: 'flex', justifyContent: 'center', paddingY: 2 }}
-          count={notifications.pageInfo.count}
+          count={notifications.pageInfo.pageCount}
           page={page}
           onChange={(_, value) => setPage(value)}
         />
