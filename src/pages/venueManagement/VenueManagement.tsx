@@ -1,13 +1,6 @@
 import { Box, Tab, Tabs } from '@mui/material';
 import { SyntheticEvent, useState } from 'react';
-import {
-  CustomTabPanel,
-  ImagesManagement,
-  InfoManagement,
-  LoadingContainer,
-  LocationManagement,
-  PitchesManagement,
-} from '@/components';
+import { CustomTabPanel, ImagesManagement, InfoManagement, LoadingContainer, PitchesManagement } from '@/components';
 import { useVenueByCurrentUser } from '@/hooks';
 import { useLocale } from '@/locales';
 
@@ -32,7 +25,6 @@ export const VenueManagement = () => {
         <Tabs value={tabIndex} onChange={handleChangeTab} aria-label='basic tabs example' variant='scrollable'>
           <Tab label={formatMessage({ id: 'app.your-venue.tabs.info' })} />
           <Tab label={formatMessage({ id: 'app.your-venue.tabs.images' })} />
-          <Tab label={formatMessage({ id: 'app.your-venue.tabs.address' })} />
           <Tab label={formatMessage({ id: 'app.your-venue.tabs.pitch' })} />
         </Tabs>
       </Box>
@@ -43,9 +35,6 @@ export const VenueManagement = () => {
         <ImagesManagement />
       </CustomTabPanel>
       <CustomTabPanel value={tabIndex} index={2}>
-        <LocationManagement />
-      </CustomTabPanel>
-      <CustomTabPanel value={tabIndex} index={3}>
         <PitchesManagement />
       </CustomTabPanel>
     </Box>
