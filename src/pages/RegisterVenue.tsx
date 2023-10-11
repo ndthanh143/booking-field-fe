@@ -117,7 +117,7 @@ export const RegisterVenue = () => {
 
           <Grid item xs={12}>
             <Typography variant='body2'>{formatMessage({ id: 'app.register-venue.venue.description' })}</Typography>
-            <TextArea minRows={3} {...register('description')} placeholder='...' />
+            <TextArea minRows={3} {...register('description')} placeholder='Thêm mô tả...' />
             {errors.description && (
               <Typography variant='body2' color='error.main'>
                 {errors.description.message}
