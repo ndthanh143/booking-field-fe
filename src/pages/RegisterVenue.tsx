@@ -52,6 +52,7 @@ export const RegisterVenue = () => {
   const [currentProvince, setCurrentProvince] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState('');
   const [currentDistrict, setCurrentDistrict] = useState<string[]>();
+  const [addressValue, setAddressValue] = useState('');
   const [close, setClose] = useState<Date | null>();
   const [open, setOpen] = useState<Date | null>();
 
@@ -70,6 +71,7 @@ export const RegisterVenue = () => {
     reset();
     setCurrentProvince('');
     setSelectedDistrict('');
+    setAddressValue('');
     setOpen(null);
     setClose(null);
   };
@@ -180,7 +182,13 @@ export const RegisterVenue = () => {
             <Typography variant='body2'>{formatMessage({ id: 'app.register-venue.venue.address' })}</Typography>
             <MapPlace
               onChange={(value) => value && setValue('location', value)}
-              onInputChange={(value) => setValue('address', value)}
+              textValue={addressValue}
+              onInputChange={(value) => {
+                if (value) {
+                  setAddressValue(value);
+                  setValue('address', value);
+                }
+              }}
               placeholder={formatMessage({ id: 'app.register-venue.venue.address' })}
             />
             {errors.address && (
