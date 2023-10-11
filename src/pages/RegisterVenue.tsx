@@ -9,7 +9,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { mixed, number, object, string } from 'yup';
 import { defaultLocation } from '@/common/constants';
-import { MapPlace, PlaceType, TextArea } from '@/components';
+import { MapPlace, TextArea } from '@/components';
 import { LocationPicker } from '@/components/LocationPicker';
 import { useAuth } from '@/hooks';
 import { useLocale } from '@/locales';
