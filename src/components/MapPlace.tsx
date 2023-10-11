@@ -14,7 +14,7 @@ interface StructuredFormatting {
   secondary_text: string;
   main_text_matched_substrings?: readonly MainTextMatchedSubstrings[];
 }
-interface PlaceType {
+export interface PlaceType {
   description: string;
   structured_formatting: StructuredFormatting;
   place_id: string;
@@ -28,12 +28,21 @@ interface MapPlaceProps {
   defaultInputValue?: string;
   disabled?: boolean;
   size?: 'small' | 'medium';
-  textValue?: string;
+  valuePlaceType?: PlaceType | null;
+  onChangeValue?: (value: PlaceType | null) => void;
 }
 
-export const MapPlace = ({ onChange, onInputChange, placeholder, disabled, size, textValue = '' }: MapPlaceProps) => {
-  const [value, setValue] = useState<PlaceType | null>(null);
-  const [inputValue, setInputValue] = useState(textValue);
+export const MapPlace = ({
+  onChange,
+  onInputChange,
+  placeholder,
+  disabled,
+  size,
+  valuePlaceType = null,
+  onChangeValue,
+}: MapPlaceProps) => {
+  const [value, setValue] = useState<PlaceType | null>(valuePlaceType);
+  const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState<readonly PlaceType[]>([]);
   const autocompleteService = { current: null };
 
@@ -96,7 +105,7 @@ export const MapPlace = ({ onChange, onInputChange, placeholder, disabled, size,
       noOptionsText='No results'
       onChange={(_, newValue: PlaceType | null) => {
         setOptions(newValue ? [newValue, ...options] : options);
-        setValue(newValue);
+        onChangeValue ? onChangeValue(newValue) : setValue(newValue);
         newValue && setInputValue(newValue.description);
 
         if (newValue) {

@@ -9,7 +9,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { mixed, number, object, string } from 'yup';
 import { defaultLocation } from '@/common/constants';
-import { MapPlace, TextArea } from '@/components';
+import { MapPlace, PlaceType, TextArea } from '@/components';
 import { LocationPicker } from '@/components/LocationPicker';
 import { useAuth } from '@/hooks';
 import { useLocale } from '@/locales';
@@ -52,7 +52,7 @@ export const RegisterVenue = () => {
   const [currentProvince, setCurrentProvince] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState('');
   const [currentDistrict, setCurrentDistrict] = useState<string[]>();
-  const [addressValue, setAddressValue] = useState('');
+  const [valuePlaceType, setValuePlaceType] = useState<PlaceType | null>();
   const [close, setClose] = useState<Date | null>();
   const [open, setOpen] = useState<Date | null>();
 
@@ -71,7 +71,7 @@ export const RegisterVenue = () => {
     reset();
     setCurrentProvince('');
     setSelectedDistrict('');
-    setAddressValue('');
+    setValuePlaceType(null);
     setOpen(null);
     setClose(null);
   };
@@ -182,10 +182,10 @@ export const RegisterVenue = () => {
             <Typography variant='body2'>{formatMessage({ id: 'app.register-venue.venue.address' })}</Typography>
             <MapPlace
               onChange={(value) => value && setValue('location', value)}
-              textValue={addressValue}
+              valuePlaceType={valuePlaceType}
+              onChangeValue={setValuePlaceType}
               onInputChange={(value) => {
                 if (value) {
-                  setAddressValue(value);
                   setValue('address', value);
                 }
               }}
