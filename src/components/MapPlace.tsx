@@ -32,16 +32,8 @@ interface MapPlaceProps {
   onChangeValue?: (value: PlaceType | null) => void;
 }
 
-export const MapPlace = ({
-  onChange,
-  onInputChange,
-  placeholder,
-  disabled,
-  size,
-  valuePlaceType = null,
-  onChangeValue,
-}: MapPlaceProps) => {
-  const [value, setValue] = useState<PlaceType | null>(valuePlaceType);
+export const MapPlace = ({ onChange, onInputChange, placeholder, disabled, size }: MapPlaceProps) => {
+  const [value, setValue] = useState<PlaceType | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState<readonly PlaceType[]>([]);
   const autocompleteService = { current: null };
@@ -105,7 +97,7 @@ export const MapPlace = ({
       noOptionsText='No results'
       onChange={(_, newValue: PlaceType | null) => {
         setOptions(newValue ? [newValue, ...options] : options);
-        onChangeValue ? onChangeValue(newValue) : setValue(newValue);
+        setValue(newValue);
         newValue && setInputValue(newValue.description);
 
         if (newValue) {
