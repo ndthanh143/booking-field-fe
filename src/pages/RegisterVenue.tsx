@@ -49,7 +49,8 @@ export const RegisterVenue = () => {
     defaultValues: { location: defaultLocation, user: profile?.id },
   });
 
-  const [currentProvince, setCurrentProvince] = useState<string>();
+  const [currentProvince, setCurrentProvince] = useState('');
+  const [selectedDistrict, setSelectedDistrict] = useState('');
   const [currentDistrict, setCurrentDistrict] = useState<string[]>();
   const [close, setClose] = useState<Date | null>();
   const [open, setOpen] = useState<Date | null>();
@@ -60,19 +61,15 @@ export const RegisterVenue = () => {
   const { mutate: mutateVenue, isSuccess: isMutateVenueSuccess } = useMutation({
     mutationFn: venueService.create,
     onSuccess: () => {
-      reset();
-      setCurrentDistrict([]);
-      setCurrentProvince('');
-      setOpen(null);
-      setClose(null);
+      handleClearInput();
       toast.success('Request successfully');
     },
   });
 
   const handleClearInput = () => {
     reset();
-    setCurrentDistrict([]);
     setCurrentProvince('');
+    setSelectedDistrict('');
     setOpen(null);
     setClose(null);
   };
@@ -99,7 +96,6 @@ export const RegisterVenue = () => {
 
   return (
     <Box component='form' onSubmit={handleSubmit(onSubmitHandler)}>
-      <Button onClick={handleClearInput}></Button>
       <Typography variant='h5'>{formatMessage({ id: 'app.register-venue.title' })}</Typography>
       <Typography variant='body2'>{formatMessage({ id: 'app.register-venue.sub-title' })}</Typography>
       {isMutateVenueSuccess && (
@@ -133,12 +129,16 @@ export const RegisterVenue = () => {
             <Autocomplete
               size='small'
               options={provinces?.map((province) => province.name) || []}
-              onInputChange={(_, value) => setCurrentProvince(value)}
+              onChange={(_, value) => {
+                if (value) {
+                  setCurrentProvince(value);
+                  setValue('province', value);
+                }
+              }}
+              value={currentProvince}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  value={currentProvince}
-                  {...register('province')}
                   fullWidth
                   placeholder={formatMessage({ id: 'app.register-venue.venue.province' })}
                 />
@@ -155,10 +155,16 @@ export const RegisterVenue = () => {
             <Autocomplete
               size='small'
               options={currentDistrict || []}
+              onChange={(_, value) => {
+                if (value) {
+                  setSelectedDistrict(value);
+                  setValue('district', value);
+                }
+              }}
+              value={selectedDistrict}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  {...register('district')}
                   fullWidth
                   placeholder={formatMessage({ id: 'app.register-venue.venue.district' })}
                 />
