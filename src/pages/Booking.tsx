@@ -14,7 +14,7 @@ import bookingService from '@/services/booking/booking.service';
 import { Pitch } from '@/services/pitch/pitch.dto';
 import { pitchKeys } from '@/services/pitch/pitch.query';
 import { venueKeys } from '@/services/venue/venue.query';
-import { convertCurrency, formatDate, timeStringToFloat } from '@/utils';
+import { convertCurrency, formatDate } from '@/utils';
 import { convertDecimalToTime, findFreeTime, convertToDate } from '@/utils';
 
 export const Booking = () => {
