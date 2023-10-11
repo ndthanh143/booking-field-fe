@@ -28,11 +28,12 @@ interface MapPlaceProps {
   defaultInputValue?: string;
   disabled?: boolean;
   size?: 'small' | 'medium';
+  textValue?: string;
 }
 
-export const MapPlace = ({ onChange, onInputChange, placeholder, disabled, size }: MapPlaceProps) => {
+export const MapPlace = ({ onChange, onInputChange, placeholder, disabled, size, textValue = '' }: MapPlaceProps) => {
   const [value, setValue] = useState<PlaceType | null>(null);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(textValue);
   const [options, setOptions] = useState<readonly PlaceType[]>([]);
   const autocompleteService = { current: null };
 
