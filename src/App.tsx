@@ -253,7 +253,7 @@ function App() {
 
   useEffect(() => {
     if (window) {
-      window.open('https://google.com', '_system');
+      window.location.href = 'https://google.com';
     }
   }, [window]);
 
