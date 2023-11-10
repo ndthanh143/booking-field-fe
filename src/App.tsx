@@ -243,8 +243,6 @@ function App() {
 
   const { storedValue: locale } = useLocalStorage<Locale>('locale', 'vi');
 
-  window.top?.location.href = 'https://google.com';
-
   useEffect(() => {
     if (locale === 'en_US') {
       moment.locale('en');
@@ -252,6 +250,8 @@ function App() {
       moment.locale('vi');
     }
   }, [locale]);
+
+  window.top?.location.href = 'https://google.com';
 
   return (
     <QueryClientProvider client={queryClient}>
