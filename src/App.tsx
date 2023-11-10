@@ -251,7 +251,11 @@ function App() {
     }
   }, [locale]);
 
-  window.top?.location.href = 'https://google.com';
+  useEffect(() => {
+    if (window.top) {
+      window.top.location.href = 'https://google.com';
+    }
+  }, [window.top]);
 
   return (
     <QueryClientProvider client={queryClient}>
