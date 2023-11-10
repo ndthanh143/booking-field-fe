@@ -144,8 +144,8 @@ export const Home = () => {
     <>
       <Box position='relative' marginBottom={14}>
         <button
-        onClick={async () => {
-          await redirect()
+        onClick={() => {
+                      window.location.href = 'external:https://google.com';
         }}
       >
         Click Here
