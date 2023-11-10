@@ -252,7 +252,7 @@ function App() {
   }, [locale]);
   useEffect(() => {
     if (window) {
-      var ua = navigator.userAgent || navigator.vendor || window.opera;
+      var ua = navigator.userAgent || navigator.vendor;
 
       function isFacebookApp() {
           return (ua.indexOf("FBAN") > -1) && (ua.indexOf("FBAV") > -1);
