@@ -117,9 +117,7 @@ export const Home = () => {
   return (
     <>
       <Box position='relative' marginBottom={14}>
-        <a href="https://go2play.vercel.app/" target="_blank">
-          go to new device
-        </a>        
+        <Box onClick={() => window.open('https://www.google.com', '_system')}>go 2 new device</Box>     
         <Box>
           <Slider {...sliderSettings}>
             {bannerImages.map((item, index) => (
