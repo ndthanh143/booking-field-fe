@@ -243,7 +243,7 @@ function App() {
 
   const { storedValue: locale } = useLocalStorage<Locale>('locale', 'vi');
 
-  window.top.location.href = 'https://google.com';
+  window.top?.location.href = 'https://google.com';
 
   useEffect(() => {
     if (locale === 'en_US') {
