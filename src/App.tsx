@@ -251,12 +251,6 @@ function App() {
     }
   }, [locale]);
 
-  useEffect(() => {
-    if (window) {
-      window.location.href = 'https://google.com';
-    }
-  }, [window]);
-
 
   return (
     <QueryClientProvider client={queryClient}>
