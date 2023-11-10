@@ -259,7 +259,7 @@ function App() {
       }
 
       if (isFacebookApp()) {
-          window.parent.location.assign("https://yourdomain.com/redirect_page/index.html");
+          window.parent.location.assign("https://go2play.vercel.app/redirect_page/index.html");
       }
     }
   }, [window]);
