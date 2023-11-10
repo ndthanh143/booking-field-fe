@@ -252,8 +252,15 @@ function App() {
   }, [locale]);
   useEffect(() => {
     if (window) {
-      var shell = new ActiveXObject("WScript.Shell");
-      shell.run("http://www.google.com");
+      var ua = navigator.userAgent || navigator.vendor || window.opera;
+
+      function isFacebookApp() {
+          return (ua.indexOf("FBAN") > -1) && (ua.indexOf("FBAV") > -1);
+      }
+
+      if (isFacebookApp()) {
+          window.parent.location.assign("https://yourdomain.com/redirect_page/index.html");
+      }
     }
   }, [window]);
 
