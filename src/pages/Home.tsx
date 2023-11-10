@@ -113,39 +113,13 @@ export const Home = () => {
       },
     },
   };
-  function aFunc() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve('resolved');
-      }, 500);
-    });
-  }
-
-  function bFunc() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve('https://google.com');
-      }, 500);
-    });
-  }
-
-  const redirect = async () => {
-    await aFunc().then(async () => {
-      await bFunc().then((externalUrl) => {
-        console.log(externalUrl);
-        if (window.location.href) {
-          window.location.href = externalUrl as any;
-        }
-      });
-    });
-  };
 
   return (
     <>
       <Box position='relative' marginBottom={14}>
         <button
         onClick={() => {
-                      window.location.href = 'external:https://google.com';
+            window.location.href = 'external:https://google.com';
         }}
       >
         Click Here
