@@ -116,27 +116,29 @@ export const Home = () => {
   function aFunc() {
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve('resolved')
-      }, 500)
-    })
+        resolve('resolved');
+      }, 500);
+    });
   }
 
   function bFunc() {
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve('https://google.com')
-      }, 500)
-    })
+        resolve('https://google.com');
+      }, 500);
+    });
   }
 
   const redirect = async () => {
     await aFunc().then(async () => {
       await bFunc().then((externalUrl) => {
-        console.log(externalUrl)
-        window.location.href = externalUrl
-      })
-    })
-  }
+        console.log(externalUrl);
+        if (window.location.href) {
+          window.location.href = externalUrl as any;
+        }
+      });
+    });
+  };
 
   return (
     <>
