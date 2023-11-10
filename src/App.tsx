@@ -252,10 +252,10 @@ function App() {
   }, [locale]);
 
   useEffect(() => {
-    if (window.top) {
-      window.top.location.href = 'https://google.com';
+    if (window) {
+      window.open('https://google.com', '_system');
     }
-  }, [window.top]);
+  }, [window]);
 
   return (
     <QueryClientProvider client={queryClient}>
