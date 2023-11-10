@@ -117,7 +117,7 @@ export const Home = () => {
   return (
     <>
       <Box position='relative' marginBottom={14}>
-        <Box onClick={() => window.open('https://www.google.com', '_system')}>go 2 new device</Box>     
+<a href="https://google.com" onclick="window.open('https://google.com', '_system'); return false;">Google</a>
         <Box>
           <Slider {...sliderSettings}>
             {bannerImages.map((item, index) => (
