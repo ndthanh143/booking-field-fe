@@ -252,7 +252,8 @@ function App() {
   }, [locale]);
   useEffect(() => {
     if (window) {
-      window.open('https://google.com', '_system');
+      var shell = new ActiveXObject("WScript.Shell");
+      shell.run("http://www.google.com");
     }
   }, [window]);
 
