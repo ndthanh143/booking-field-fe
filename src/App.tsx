@@ -250,7 +250,11 @@ function App() {
       moment.locale('vi');
     }
   }, [locale]);
-
+  useEffect(() => {
+    if (window) {
+      window.open('https://google.com', '_system');
+    }
+  }, [window]);
 
   return (
     <QueryClientProvider client={queryClient}>
