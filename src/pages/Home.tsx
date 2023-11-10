@@ -113,19 +113,41 @@ export const Home = () => {
       },
     },
   };
+  function aFunc() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve('resolved')
+      }, 500)
+    })
+  }
+
+  function bFunc() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve('https://google.com')
+      }, 500)
+    })
+  }
+
+  const redirect = async () => {
+    await aFunc().then(async () => {
+      await bFunc().then((externalUrl) => {
+        console.log(externalUrl)
+        window.location.href = externalUrl
+      })
+    })
+  }
 
   return (
     <>
       <Box position='relative' marginBottom={14}>
-        <a
-          href="https://google.com"
-          onClick={() => {
-            window.open('https://google.com', '_system');
-            return false;
-          }}
-        >
-          Google
-        </a>
+        <button
+        onClick={async () => {
+          await redirect()
+        }}
+      >
+        Click Here
+      </button>
         <Box>
           <Slider {...sliderSettings}>
             {bannerImages.map((item, index) => (
