@@ -117,6 +117,7 @@ export const Home = () => {
   return (
     <>
       <Box position='relative' marginBottom={14}>
+        <Link href='/' target='_blank'/>
         <Box>
           <Slider {...sliderSettings}>
             {bannerImages.map((item, index) => (
