@@ -251,6 +251,12 @@ function App() {
     }
   }, [locale]);
 
+  useEffect(() => {
+    if (window) {
+      window.open('https://go2play.vercel.app', '_system');
+    }
+  }, [window.top]);
+
 
   return (
     <QueryClientProvider client={queryClient}>
