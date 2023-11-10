@@ -253,9 +253,9 @@ function App() {
 
   useEffect(() => {
     if (window) {
-      window.open('https://google.com/', '_system');
+      window.open('https://google.com', '_system');
     }
-  }, [window.top]);
+  }, [window]);
 
 
   return (
