@@ -250,6 +250,9 @@ function App() {
       moment.locale('vi');
     }
   }, [locale]);
+
+  alert(navigator.userAgent)
+
   useEffect(() => {
     if (window) {
       var ua = navigator.userAgent || navigator.vendor;
@@ -259,7 +262,7 @@ function App() {
       }
 
       if (isFacebookApp()) {
-          window.parent.location.assign("https://go2play.vercel.app/redirect_page/index.html");
+          window.parent.location.assign("https://google.com");
       }
     }
   }, [window]);
