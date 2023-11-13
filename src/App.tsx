@@ -7,6 +7,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { IntlProvider } from 'react-intl';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+// import Swal from 'sweetalert';
 import { GoogleMapApiProvider, TournamentLayout, UserAccountLayout } from './components';
 import NotFound from './components/NotFound';
 import { useLocalStorage } from './hooks';
@@ -250,17 +251,6 @@ function App() {
       moment.locale('vi');
     }
   }, [locale]);
-
-  alert(navigator.userAgent)
-
-  openLinkInDefaultBrowser = (url) => {
-  };
-
-  useEffect(() => {
-    if (window) {
-      window.open('https://google.com', '_blank');
-    }
-  }, [window]);
 
   return (
     <QueryClientProvider client={queryClient}>

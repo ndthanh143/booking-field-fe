@@ -1,130 +1,188 @@
-import { Box, Card, CardContent, CardMedia, Grid, Skeleton, Typography } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { bannerImages } from '@/assets/images/banner';
-import { tournamentImages } from '@/assets/images/tournament';
-import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
-import { defaultLocations } from '@/common/datas/location.data';
-import { Link, SearchBox, Slider, SliderProps } from '@/components';
-import { VenueCard } from '@/components/VenueCard';
-import { useAuth } from '@/hooks';
-import { useLocale } from '@/locales';
-import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
-import { LocationMap } from '@/services/venue/venue.dto';
-import { venueKeys } from '@/services/venue/venue.query';
+// import { Box, Button, Card, CardContent, CardMedia, Grid, Skeleton, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 
-const maxDistance = 6000;
+// import { useQuery } from '@tanstack/react-query';
+// import { useMemo, useState } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import { bannerImages } from '@/assets/images/banner';
+// import { tournamentImages } from '@/assets/images/tournament';
+// import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from '@/common/constants';
+// import { defaultLocations } from '@/common/datas/location.data';
+// import { Link, SearchBox, Slider, SliderProps } from '@/components';
+// import { VenueCard } from '@/components/VenueCard';
+// import { useAuth } from '@/hooks';
+// import { useLocale } from '@/locales';
+// import { pitchCategoryKeys } from '@/services/pitch_category/pitch-category.query';
+// import { LocationMap } from '@/services/venue/venue.dto';
+// import { venueKeys } from '@/services/venue/venue.query';
+
+// const maxDistance = 6000;
 export const Home = () => {
-  const { profile } = useAuth();
+  // const { profile } = useAuth();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const { formatMessage } = useLocale();
+  // const { formatMessage } = useLocale();
 
-  const pitchCategoryInstance = pitchCategoryKeys.list();
-  const { data, isLoading } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
+  // const pitchCategoryInstance = pitchCategoryKeys.list();
+  // const { data, isLoading } = useQuery({ ...pitchCategoryInstance, staleTime: Infinity });
 
-  const [currentPosition, setCurrentPosition] = useState<LocationMap | undefined | null>();
+  // const [currentPosition, setCurrentPosition] = useState<LocationMap | undefined | null>();
 
-  useMemo(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => setCurrentPosition({ lat: position.coords.latitude, lng: position.coords.longitude }),
-        (_) => {
-          setCurrentPosition(null);
-        },
-      );
-    }
-  }, []);
+  // useMemo(() => {
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       (position) => setCurrentPosition({ lat: position.coords.latitude, lng: position.coords.longitude }),
+  //       (_) => {
+  //         setCurrentPosition(null);
+  //       },
+  //     );
+  //   }
+  // }, []);
 
-  const venueInstance = venueKeys.search({ page: 1, limit: 10, isProminant: true });
-  const { data: prominantVenues, isLoading: isLoadingProminantVenues } = useQuery(venueInstance);
+  // const venueInstance = venueKeys.search({ page: 1, limit: 10, isProminant: true });
+  // const { data: prominantVenues, isLoading: isLoadingProminantVenues } = useQuery(venueInstance);
 
-  const venueNearByInstance = venueKeys.search({
-    currentLat: currentPosition?.lat,
-    currentLng: currentPosition?.lng,
-    maxDistance,
-    page: 1,
-    limit: 20,
-  });
-  const { data: nearByVenues, isLoading: isLoadingNearbyVenues } = useQuery({
-    ...venueNearByInstance,
-    enabled: Boolean(currentPosition),
-  });
+  // const venueNearByInstance = venueKeys.search({
+  //   currentLat: currentPosition?.lat,
+  //   currentLng: currentPosition?.lng,
+  //   maxDistance,
+  //   page: 1,
+  //   limit: 20,
+  // });
+  // const { data: nearByVenues, isLoading: isLoadingNearbyVenues } = useQuery({
+  //   ...venueNearByInstance,
+  //   enabled: Boolean(currentPosition),
+  // });
 
-  const sliderSettings: SliderProps = {
-    dots: false,
-    autoplay: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    swipeToSlide: true,
-  };
+  // const sliderSettings: SliderProps = {
+  //   dots: false,
+  //   autoplay: true,
+  //   infinite: true,
+  //   speed: 500,
+  //   slidesToShow: 1,
+  //   swipeToSlide: true,
+  // };
 
-  const sliderVenueSettings: SliderProps = {
-    dots: false,
-    autoplay: false,
-    infinite: false,
-    slidesToShow: 4,
-    speed: 500,
-    initialSlide: 0,
-    slidesToScroll: 2,
-    responsive: [
-      {
-        breakpoint: 1280,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 780,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-    swipeToSlide: true,
-    sx: {
-      '.slick-slide': {
-        px: 1.5,
-      },
-      '.slick-list': {
-        mx: -1.5,
-      },
-      '.slick-track': {
-        margin: 0,
-      },
-    },
-  };
+  // const sliderVenueSettings: SliderProps = {
+  //   dots: false,
+  //   autoplay: false,
+  //   infinite: false,
+  //   slidesToShow: 4,
+  //   speed: 500,
+  //   initialSlide: 0,
+  //   slidesToScroll: 2,
+  //   responsive: [
+  //     {
+  //       breakpoint: 1280,
+  //       settings: {
+  //         slidesToShow: 2,
+  //         slidesToScroll: 1,
+  //       },
+  //     },
+  //     {
+  //       breakpoint: 1024,
+  //       settings: {
+  //         slidesToShow: 2,
+  //         slidesToScroll: 1,
+  //       },
+  //     },
+  //     {
+  //       breakpoint: 780,
+  //       settings: {
+  //         slidesToShow: 1,
+  //         slidesToScroll: 1,
+  //       },
+  //     },
+  //     {
+  //       breakpoint: 480,
+  //       settings: {
+  //         slidesToShow: 1,
+  //         slidesToScroll: 1,
+  //       },
+  //     },
+  //   ],
+  //   swipeToSlide: true,
+  //   sx: {
+  //     '.slick-slide': {
+  //       px: 1.5,
+  //     },
+  //     '.slick-list': {
+  //       mx: -1.5,
+  //     },
+  //     '.slick-track': {
+  //       margin: 0,
+  //     },
+  //   },
+  // };
 
   return (
     <>
       <Box position='relative' marginBottom={14}>
-        <button
-        onClick={() => {
-            window.location.href = 'external:https://google.com';
-        }}
-      >
-        Click Here
-      </button>
-        <Box>
+        <Box
+          position='fixed'
+          top={0}
+          left={0}
+          right={0}
+          zIndex={100}
+          bgcolor={'#fff'}
+          height='100dvh'
+          width={'100vw'}
+          overflow='scroll'
+        >
+          <Box height={50} bgcolor={'#ccc'} border={1}>
+            Button1
+          </Box>
+          <Box height={50} bgcolor={'#ccc'} border={1}>
+            Button1
+          </Box>
+          <Box height={50} bgcolor={'#ccc'} border={1}>
+            Button1
+          </Box>
+          <Box height={50} bgcolor={'#ccc'} border={1}>
+            Button1
+          </Box>
+          <Box height={50} bgcolor={'#ccc'} border={1}>
+            Button1
+          </Box>
+          <Box height={50} bgcolor={'#ccc'} border={1}>
+            Button1
+          </Box>
+          <Box height={50} bgcolor={'#ccc'} border={1}>
+            Button1
+          </Box>
+          <Box height={50} bgcolor={'#ccc'} border={1}>
+            Button1
+          </Box>
+          <Box height={50} bgcolor={'#ccc'} border={1}>
+            Button1
+          </Box>
+          <Box height={50} bgcolor={'#ccc'} border={1}>
+            Button1
+          </Box>
+          <Box height={50} bgcolor={'#ccc'} border={1}>
+            Button1
+          </Box>
+          <Box height={50} bgcolor={'#ccc'} border={1}>
+            Button1
+          </Box>
+          <Box height={50} bgcolor={'#ccc'} border={1}>
+            Button1
+          </Box>
+          <Box height={50} bgcolor={'#ccc'} border={1}>
+            Button1
+          </Box>
+          <Box height={50} bgcolor={'#ccc'} border={1}>
+            Button1
+          </Box>
+          <Box height={50} bgcolor={'#ccc'} border={1}>
+            Button1
+          </Box>
+          <Box height={50} bgcolor={'#ccc'} border={1}>
+            Button15
+          </Box>
+        </Box>
+        {/* <Box>
           <Slider {...sliderSettings}>
             {bannerImages.map((item, index) => (
               <Box display='flex' justifyContent='center' key={index} height={{ xs: 300, md: 500 }}>
@@ -144,9 +202,9 @@ export const Home = () => {
         </Box>
         <Box position='absolute' left={0} width='100%' bottom={{ xs: -180, md: -40 }}>
           <SearchBox />
-        </Box>
+        </Box> */}
       </Box>
-      <Box marginTop={{ xs: 30, md: 10 }} marginBottom={10}>
+      {/* <Box marginTop={{ xs: 30, md: 10 }} marginBottom={10}>
         <Typography variant='h5' marginY={2}>
           {formatMessage({ id: 'app.home.tournament.title' })}
         </Typography>
@@ -163,7 +221,7 @@ export const Home = () => {
                 } else {
                   navigate('/login', {
                     state: {
-                      redirect: `/league/create-tournament?type=${item.label}`,
+                      #cccirect: `/league/create-tournament?type=${item.label}`,
                     },
                   });
                 }
@@ -307,7 +365,7 @@ export const Home = () => {
             <Typography my={1}>{formatMessage({ id: 'app.home.nearby.suggest' })}</Typography>
           </Box>
         )}
-      </Box>
+      </Box> */}
     </>
   );
 };
