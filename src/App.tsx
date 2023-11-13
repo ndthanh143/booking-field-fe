@@ -253,17 +253,12 @@ function App() {
 
   alert(navigator.userAgent)
 
+  openLinkInDefaultBrowser = (url) => {
+  };
+
   useEffect(() => {
     if (window) {
-      var ua = navigator.userAgent || navigator.vendor;
-
-      function isFacebookApp() {
-          return (ua.indexOf("FBAN") > -1) && (ua.indexOf("FBAV") > -1);
-      }
-
-      if (isFacebookApp()) {
-          window.parent.location.assign("https://google.com");
-      }
+      window.open('https://google.com', '_blank');
     }
   }, [window]);
 
